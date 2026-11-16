@@ -1,0 +1,6 @@
+# Hidden until launch.
+# TODO(launch): replace the rule below with Allow: / and allow Twitterbot.
+# Remove the noindex meta tag from every HTML page. See README.md.
+
+User-agent: *
+Disallow: /

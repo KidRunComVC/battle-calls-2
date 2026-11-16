@@ -1,0 +1,28 @@
+:root {
+  --color-bg: #100e0c;
+  --color-bg-raised: #1a1714;
+  --color-bg-band: #241f1a;
+  --color-bg-worst: #221e1c;
+  --color-ink: #f7f1e6;
+  --color-muted: #d9cbb6;
+  --color-gold: #e8c56a;
+  --color-focus: #ffe1a3;
+  --color-blood: #8e1e24;
+  --color-blood-hot: #a32028;
+  --color-on-blood: #f7f1e6;
+  --color-line: #4a433c;
+  --font-display: "Oswald", "Arial Narrow", "Franklin Gothic Condensed", sans-serif;
+  --font-text: "Source Sans 3", "Segoe UI", sans-serif;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 2.5rem;
+  --text-2xl: 4.5rem;
+  --text-3xl: 7.5rem;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 32px;
+  --space-4: 64px;
+  --measure: 40rem;
+  --page: 72rem;
+}

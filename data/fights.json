@@ -1,0 +1,524 @@
+{
+  "site": {
+    "name": "Battle Calls",
+    "fullName": "Battle Calls: the unauthorized fight card",
+    "tagline": "Two calls enter. One walks out.",
+    "referee": "Scored weekly against the chart. No advice. No grudges. Nobody's permission.",
+    "rulesBlurb": "Their words, not ours. The market is the referee. No grudges, no advice, no edits after the bell.",
+    "postFight": "Respect to both corners. Putting a number on the record in public takes guts.",
+    "affiliation": "Independent commentary. Not affiliated with, endorsed by, or sponsored by X or anyone featured. All names and marks belong to their owners.",
+    "footerLine": "Unauthorized. Not affiliated with or endorsed by anyone on the card. Entertainment only, not financial advice.",
+    "teaser": "Read the fine print before the bell.",
+    "unauthorized": "\"Unauthorized\" means the people on the card did not participate in this site and did not agree to be scored here.",
+    "advice": "Entertainment and education only. This is not financial, investment, or trading advice.",
+    "skill": "A single call says nothing about overall skill.",
+    "fairUse": "Posts are quoted under fair use and linked to the original. A later edit does not replace the locked wording. A deleted post is noted and is not republished.",
+    "position": "Position disclosure: this site does not publish an editor's book, and no position is stated here. Nothing on the card is a recommendation to buy, sell, or hold.",
+    "shareLine": "Quotes are brief and for commentary; please read and share the original post, not a copy from this site."
+  },
+  "fights": [
+    {
+      "id": "round-2-silver",
+      "round": 2,
+      "role": "undercard",
+      "status": "pending",
+      "label": "EXHIBITION",
+      "posterWord": "Silver",
+      "ticker": "SI",
+      "instrumentName": "COMEX silver front-month futures",
+      "ogDate": "Nov 16, 2026",
+      "ogAlt": "@PeterLBrandt vs. @PeterSchiff, SILVER, Nov 16, 2026",
+      "cardText": "Round 2: @PeterLBrandt vs. @PeterSchiff on SI. Two opposite calls, one chart, scored weekly.",
+      "firstBell": "Nov 16, 2026",
+      "finalBell": "Dec 31, 2026",
+      "finalBellDetail": "Dec 31, 2026 CME daily settle. The horizon was set by Battle Calls. It is arbitrary. Neither man agreed to it.",
+      "lede": "Weighing in with a bear call first thrown at 10:40:42 AM ET on Nov 16, 2026. The bull call went on the record at 12:21:45 PM ET the same day. No take-backs.",
+      "instrumentDetail": "COMEX silver front-month futures, official CME daily settle (SIZ26), rolling to SIH27 the business day before first notice. SLV is for display only.",
+      "dataSource": "Official CME daily settle for COMEX silver front-month futures (SIZ26), rolling to SIH27 the business day before first notice. Entries are the open of the first 1-minute bar after each post, locked on Nov 16, 2026: Peter Brandt $46.53 at the bar after 10:40:42 AM ET (15:40:42 UTC); Peter Schiff $47.06 at the bar after 12:21:45 PM ET (17:21:45 UTC). SLV display-only prints: 42.09 and 42.53. These are locked prints for judging, not a live quote. Daily settles only, no intraday.",
+      "koSummary": "Brandt wins on a settle at or below $34.00 (−26.9%). Schiff wins on a settle at or above $59.70 (+26.9%, symmetric). Daily settles only, no intraday. A wick through either level does not count.",
+      "decisionSummary": "If neither KO level is settled: percent change from each man's own entry; the bigger favorable move wins. Reported in percent and in points, to two decimals.",
+      "drawBand": "±1.2%",
+      "drawDetail": "Draw band: ±1.2%. A finish inside the band is a draw.",
+      "exhibitionWhy": "Exhibition. At least one call is hedged, and Battle Calls set the horizon and the levels before judging. Neither man agreed to them. This is not the official title fight.",
+      "checkins": [],
+      "caveats": [
+        {
+          "parts": [
+            "Hedge to disclose: in a same-day reply Brandt says his long-term target is \"in the hundreds.\" ",
+            {
+              "text": "The reply",
+              "href": "https://x.com/PeterLBrandt/status/2122399928718885303"
+            },
+            "."
+          ]
+        },
+        "Battle Calls set the Dec 31, 2026 horizon and the KO levels ($34.00 and $59.70) before judging. Neither man agreed to them.",
+        "Schiff's post names no price and no date. It is scored as a bullish direction call. Per his X bio, he is chief economist and global strategist at Euro Pacific and chairman of SchiffGold, which sells precious metals.",
+        "Judging uses the official CME daily settle only. There is no intraday touch on this bout.",
+        "SLV prices are display only and are not the instrument being scored.",
+        "Entries differ. Brandt $46.53. Schiff $47.06. Each man is scored from his own entry."
+      ],
+      "corners": [
+        {
+          "side": "bear",
+          "cornerLabel": "Bear corner",
+          "handle": "PeterLBrandt",
+          "name": "Peter Brandt",
+          "initials": "PB",
+          "profileUrl": "https://x.com/PeterLBrandt",
+          "postUrl": "https://x.com/PeterLBrandt/status/2122354178995679365",
+          "postId": "2122354178995679365",
+          "calledAtEt": "10:40:42 AM ET, Nov 16, 2026",
+          "calledAtUtc": "2026-11-16T15:40:42Z",
+          "calledAtNote": "15:40:42 UTC",
+          "postState": "live",
+          "quotes": [
+            {
+              "contiguous": true,
+              "texts": [
+                "The BIG mistake many trolls and aspiring traders make it to use charts dogmatically, as if a chart analysis is stamped in stone. Not the case.",
+                "Charts morph, but until they do we can only talk about the chart structure at a point in time",
+                "This chart structure suggests that low $30s is possible $SI_F"
+              ],
+              "postUrl": "https://x.com/PeterLBrandt/status/2122354178995679365",
+              "postId": "2122354178995679365",
+              "calledAtEt": "10:40:42 AM ET, Nov 16, 2026",
+              "calledAtUtc": "2026-11-16T15:40:42Z",
+              "calledAtNote": "15:40:42 UTC",
+              "postState": "live",
+              "linkText": "Original post by @PeterLBrandt"
+            }
+          ],
+          "archiveUrl": "",
+          "entryDisplay": "$46.53",
+          "entryNote": "Open of the first 1-minute bar after the post. SLV display only: 42.09.",
+          "targetInWords": "low $30s",
+          "koLine": "Settle at or below $34.00 (−26.9%)",
+          "record": "0-0-0",
+          "asides": [
+            {
+              "text": "Hedge to disclose: in a same-day reply he says his long-term target is \"in the hundreds.\"",
+              "href": "https://x.com/PeterLBrandt/status/2122399928718885303",
+              "linkText": "The reply"
+            }
+          ],
+          "posterCall": "Low $30s is possible",
+          "posterKo": "Settle at or below $34.00"
+        },
+        {
+          "side": "bull",
+          "cornerLabel": "Bull corner",
+          "handle": "PeterSchiff",
+          "name": "Peter Schiff",
+          "initials": "PS",
+          "profileUrl": "https://x.com/PeterSchiff",
+          "postUrl": "https://x.com/PeterSchiff/status/2122379608268116082",
+          "postId": "2122379608268116082",
+          "calledAtEt": "12:21:45 PM ET, Nov 16, 2026",
+          "calledAtUtc": "2026-11-16T17:21:45Z",
+          "calledAtNote": "17:21:45 UTC",
+          "quote": "Gold and silver prices are under pressure again today as investors sell just about everything. But unlike most assets investors are dumping, what is causing them to sell is actually bullish for precious metals. This disconnect creates a buying opportunity.",
+          "postState": "live",
+          "archiveUrl": "",
+          "entryDisplay": "$47.06",
+          "entryNote": "Open of the first 1-minute bar after the post. SLV display only: 42.53.",
+          "targetInWords": "No price target is named. The post calls it a buying opportunity.",
+          "koLine": "Settle at or above $59.70 (+26.9%, symmetric)",
+          "record": "0-0-0",
+          "asides": [
+            {
+              "text": "Per his X bio, he is chief economist and global strategist at Euro Pacific and chairman of SchiffGold, which sells precious metals."
+            }
+          ],
+          "posterCall": "A buying opportunity",
+          "posterKo": "Settle at or above $59.70"
+        }
+      ],
+      "finishStates": [
+        "KO",
+        "Decision",
+        "Draw",
+        "No contest"
+      ],
+      "meter": {
+        "caption": "No close posted yet.",
+        "source": "Official CME daily settle. The marks are the locked KO lines and each entry. No close has been posted on this card.",
+        "current": null,
+        "marks": [
+          {
+            "value": 34,
+            "label": "$34.00",
+            "kind": "line",
+            "side": "bear",
+            "name": "Brandt KO"
+          },
+          {
+            "value": 46.53,
+            "label": "$46.53",
+            "kind": "entry",
+            "side": "bear",
+            "name": "Brandt entry"
+          },
+          {
+            "value": 47.06,
+            "label": "$47.06",
+            "kind": "entry",
+            "side": "bull",
+            "name": "Schiff entry"
+          },
+          {
+            "value": 59.7,
+            "label": "$59.70",
+            "kind": "line",
+            "side": "bull",
+            "name": "Schiff KO"
+          }
+        ]
+      }
+    },
+    {
+      "id": "round-3-bitcoin",
+      "round": 3,
+      "role": "undercard",
+      "status": "pending",
+      "label": "EXHIBITION",
+      "posterWord": "Bitcoin",
+      "ticker": "BTC",
+      "instrumentName": "Coinbase BTC-USD spot",
+      "ogDate": "Nov 16, 2026",
+      "ogAlt": "@DrJStrategy vs. @benjamincowen, BITCOIN, Nov 16, 2026",
+      "cardText": "Round 3: @DrJStrategy vs. @benjamincowen on BTC. Two opposite calls, one chart, scored weekly.",
+      "firstBell": "Nov 14, 2026 and Nov 16, 2026",
+      "finalBell": "Dec 12, 2026",
+      "finalBellDetail": "The Dec 12, 2026 Coinbase daily close (00:00 UTC, 7 PM ET). That is the date Cowen named. The bout tests only Thorne's near-term call, not his 2027 targets. The horizon and the levels were set by Battle Calls before judging.",
+      "lede": "Weighing in with a bull call first thrown at 2:43:13 PM ET on Nov 14, 2026. The bear call went on the record at 10:24:58 AM ET on Nov 16, 2026. No take-backs. Only near-term direction into Dec 12 is on this card.",
+      "instrumentDetail": "Coinbase BTC-USD spot. The daily close is the Coinbase daily candle close at 00:00 UTC (7 PM ET).",
+      "dataSource": "Coinbase BTC-USD spot. The daily close is the Coinbase daily candle close at 00:00 UTC (7 PM ET). Entries are the open of the first full 1-minute bar after each post: James Thorne $65,715.21 at Nov 14, 2026 19:44 UTC (call at 2:43:13 PM ET); Benjamin Cowen $64,184.30 at Nov 16, 2026 15:25 UTC (call at 10:24:58 AM ET). Each man is scored from his own entry. These are locked prints for judging, not a live quote. First daily close; no wicks.",
+      "koSummary": "First daily close; no wicks. Cowen wins on a close below $57,000 (Thorne's own \"I'm wrong\" level, −13.3%). Thorne wins on a close above $73,000 (his \"reclaim\" level, +11.1%).",
+      "decisionSummary": "If neither KO close prints: the Dec 12, 2026 close versus each man's own entry; the bigger favorable percent move wins. Reported in percent and in points, to two decimals.",
+      "drawBand": "±1.0%",
+      "drawDetail": "Draw band ±1.0% (half of BTC's 20-day average absolute daily move, 1.99%). A finish inside the band is a draw.",
+      "exhibitionWhy": "Exhibition. Cowen's post is a hedged analog with no price level, and Battle Calls set the horizon and the levels before judging. Neither man agreed to them. This is not the official title fight.",
+      "checkins": [],
+      "caveats": [
+        "Cowen's post is a hedged analog (\"potentially\", \"normally\") with no price level.",
+        "Battle Calls set the horizon and levels before judging; neither man agreed to them.",
+        "Only near-term direction into Dec 12 is judged.",
+        "Thorne's entry is on a Saturday, 1.5 days before Cowen's. The entries differ by $1,531 (2.3%).",
+        {
+          "parts": [
+            "Source: Coinbase; daily close at 00:00 UTC; ",
+            {
+              "text": "corrections log",
+              "href": "/corrections.html"
+            },
+            " linked."
+          ]
+        },
+        "Not investment advice; no affiliation with either account."
+      ],
+      "corners": [
+        {
+          "side": "bull",
+          "cornerLabel": "Bull corner",
+          "handle": "DrJStrategy",
+          "name": "James Thorne",
+          "initials": "JT",
+          "profileUrl": "https://x.com/DrJStrategy",
+          "postUrl": "https://x.com/DrJStrategy/status/2121690433180876802",
+          "postId": "2121690433180876802",
+          "calledAtEt": "2:43:13 PM ET, Nov 14, 2026",
+          "calledAtUtc": "2026-11-14T19:43:13Z",
+          "calledAtNote": "19:43:13 UTC",
+          "quote": "Reclaim $73k. Confirm above $87k. Target $117k by mid-2027 […] Buy the fear. Below $57k, I'm wrong.",
+          "spacingNote": "(spacing normalized)",
+          "postState": "live",
+          "archiveUrl": "",
+          "entryDisplay": "$65,715.21",
+          "entryNote": "Nov 14, 2026, 19:44 UTC. Open of the first full 1-minute bar after the post.",
+          "targetInWords": "Reclaim $73k. Confirm above $87k. Target $117k by mid-2027. The 2027 target is not what this bout scores.",
+          "koLine": "Close above $73,000 (+11.1%, his reclaim level)",
+          "record": "0-0-0",
+          "asides": [],
+          "posterCall": "Reclaim $73k",
+          "posterKo": "Close above $73,000"
+        },
+        {
+          "side": "bear",
+          "cornerLabel": "Bear corner",
+          "handle": "benjamincowen",
+          "name": "Benjamin Cowen",
+          "initials": "BC",
+          "profileUrl": "https://x.com/benjamincowen",
+          "postUrl": "https://x.com/benjamincowen/status/2122350218196951421",
+          "postId": "2122350218196951421",
+          "calledAtEt": "10:24:58 AM ET, Nov 16, 2026",
+          "calledAtUtc": "2026-11-16T15:24:58Z",
+          "calledAtNote": "15:24:58 UTC",
+          "quote": "The next US government shutdown is potentially December 12th […] Bitcoin normally drops *before* the shutdown (which it has already started doing)",
+          "postState": "live",
+          "archiveUrl": "",
+          "entryDisplay": "$64,184.30",
+          "entryNote": "Nov 16, 2026, 15:25 UTC. Open of the first full 1-minute bar after the post.",
+          "targetInWords": "No price level is named.",
+          "koLine": "Close below $57,000 (−13.3%, Thorne's own \"I'm wrong\" level)",
+          "record": "0-0-0",
+          "asides": [
+            {
+              "text": "The post is a historical analog to the average of 7 past shutdowns. It names no price level."
+            }
+          ],
+          "posterCall": "potentially December 12th; normally drops before the shutdown",
+          "posterKo": "Close below $57,000"
+        }
+      ],
+      "finishStates": [
+        "KO",
+        "Decision",
+        "Draw",
+        "No contest"
+      ],
+      "meter": {
+        "caption": "No close posted yet.",
+        "source": "Coinbase BTC-USD daily close at 00:00 UTC. The marks are the locked KO lines and each entry. No close has been posted on this card.",
+        "current": null,
+        "marks": [
+          {
+            "value": 57000,
+            "label": "$57,000",
+            "kind": "line",
+            "side": "bear",
+            "name": "Cowen KO"
+          },
+          {
+            "value": 64184.3,
+            "label": "$64,184.30",
+            "kind": "entry",
+            "side": "bear",
+            "name": "Cowen entry"
+          },
+          {
+            "value": 65715.21,
+            "label": "$65,715.21",
+            "kind": "entry",
+            "side": "bull",
+            "name": "Thorne entry"
+          },
+          {
+            "value": 73000,
+            "label": "$73,000",
+            "kind": "line",
+            "side": "bull",
+            "name": "Thorne KO"
+          }
+        ]
+      }
+    },
+    {
+      "id": "round-4-spx",
+      "round": 4,
+      "role": "main",
+      "status": "in_progress",
+      "label": "OFFICIAL TITLE FIGHT",
+      "posterWord": "S&P 500",
+      "ticker": "SPX",
+      "instrumentName": "S&P 500",
+      "ogDate": "Nov 16, 2026",
+      "ogAlt": "@markminervini vs. Ed Yardeni, S&P 500, Nov 16, 2026",
+      "cardText": "Round 4: @markminervini vs. Ed Yardeni on SPX. Two opposite calls, one chart, scored weekly.",
+      "firstBell": "Nov 5, 2026 and Nov 11, 2026",
+      "finalBell": "Dec 31, 2026",
+      "finalBellDetail": "Through the Dec 31, 2026 official SPX close.",
+      "lede": "In the bear corner, @markminervini, with the net-short stance and the stop first posted at 7:49:52 AM ET on Nov 11, 2026. In the bull corner, Ed Yardeni, on a TV call. No take-backs. The spoken wording of the TV call is not treated as locked until a tape check.",
+      "instrumentDetail": "Minervini's stop is judged in SPY; Yardeni's target and all decisions are judged on the official S&P 500 (SPX) close (S&P Dow Jones Indices). No conversion between the two.",
+      "entriesSentence": "Entries (that day's official open): Yardeni SPX 7,678.72 (Nov 5). Minervini SPY 756.80 / SPX 7,586.65 (Nov 11). His claimed Oct 15 entry is shown only as his own statement, not scored.",
+      "dataSource": "S&P Dow Jones Indices official SPX closes, and the SPY consolidated tape. Entries are that day's official open. Yardeni: SPX 7,678.72 on Nov 5, after a call at 6:42 AM ET (11:42 UTC). Minervini: SPY 756.80 / SPX 7,586.65 on Nov 11, after the locked call at 7:49:52 AM ET (12:49:52 UTC). These are locked prints for judging, not a live quote. No conversion between SPY and SPX.",
+      "checkOrder": [
+        "Yardeni KO: any official SPX close ≥ 7,900.00.",
+        "Yardeni TKO: SPY trades intraday at or above Minervini's latest posted stop (now 769.64). A newer posted stop applies from its post time on. A posted cover above his entry counts the same.",
+        "Minervini gets no KO. If he posts a cover below 756.80 SPY, the bout ends and is scored as a decision at that day's SPX close."
+      ],
+      "koSummary": "Yardeni KO: any official SPX close ≥ 7,900.00. Minervini gets no KO.",
+      "tkoSummary": "Yardeni TKO: SPY trades intraday at or above Minervini's latest posted stop (now 769.64). A newer posted stop applies from its post time on. A posted cover above his entry counts the same.",
+      "decisionSummary": "Decision at Dec 31: Minervini wins if SPX ≤ 7,548.72 (more than 0.5% under his entry). Yardeni wins on points if SPX ≥ 7,717.11. Anything in between is a DRAW. If Minervini posts a cover below 756.80 SPY, the bout ends and is scored as a decision at that day's SPX close. Reported in percent and in points, to two decimals.",
+      "drawBand": "±0.5%",
+      "drawDetail": "Draw band ±0.5% (half the SPX 20-day average absolute daily move of 0.93%). Anything between the two decision levels is a DRAW.",
+      "officialWhy": "Official title fight. The calls are opposite on the S&P 500, and the horizon runs through the same Dec 31 close. Battle Calls set the entries, horizon, KO levels and draw band before judging. Neither man agreed to them. This is the belt. The silver and Bitcoin bouts stay exhibitions.",
+      "score": {
+        "asOf": "as of Nov 16 close",
+        "source": "S&P Dow Jones Indices official SPX close; SPY consolidated tape.",
+        "lines": [
+          "SPX 7,416.59 (−3.4% vs Yardeni's entry, −2.2% vs Minervini's); SPY 739.99, 4.0% under the stop.",
+          "Minervini leads on the scorecard."
+        ]
+      },
+      "checkins": [
+        {
+          "date": "as of Nov 16 close",
+          "print": "SPX 7,416.59; SPY 739.99",
+          "note": "Minervini leads on the scorecard."
+        }
+      ],
+      "caveats": [
+        "The bull side is labeled as a TV call, the CNBC video is linked, and the exact spoken wording is pending a tape check.",
+        "A deleted post is noted on the tape and is not reprinted.",
+        "Minervini partly describes the short as a hedge (Nov 12 memo); the bout scores his posted net-short stance and stop, not his whole portfolio.",
+        "Battle Calls set the entries, horizon, KO levels and draw band before judging. Neither man agreed to them.",
+        "The stop sits well below Yardeni's target, so a rally of about 4% probably ends the bout early on a Yardeni TKO.",
+        {
+          "parts": [
+            "Sources: S&P DJI official SPX closes, SPY consolidated tape, CNBC video; ",
+            {
+              "text": "corrections log",
+              "href": "/corrections.html"
+            },
+            " linked."
+          ]
+        },
+        "Not investment advice; no affiliation with either person."
+      ],
+      "corners": [
+        {
+          "side": "bear",
+          "cornerLabel": "Bear corner",
+          "handle": "markminervini",
+          "name": "Mark Minervini",
+          "initials": "MM",
+          "profileUrl": "https://x.com/markminervini",
+          "calledAtEt": "7:49:52 AM ET, Nov 11, 2026",
+          "calledAtUtc": "2026-11-11T12:49:52Z",
+          "calledAtNote": "12:49:52 UTC",
+          "entryDisplay": "SPY 756.80 / SPX 7,586.65",
+          "entryNote": "That day's official open, Nov 11. His claimed Oct 15 entry is his own statement, not scored.",
+          "targetInWords": "A net-short stance, with the stop improved to the breakeven price of 769.64.",
+          "koLine": "Minervini gets no KO. A posted cover below 756.80 SPY ends the bout and is scored as a decision at that day's SPX close.",
+          "record": "0-0-0",
+          "asides": [],
+          "quotes": [
+            {
+              "label": "Locked call",
+              "texts": [
+                "By default, as our long exposure came down, the $SPY short transitioned from being a hedge to leaving us net short the market.",
+                "I have now improved that stop to our breakeven price of 769.64, eliminating stop-loss risk on the position."
+              ],
+              "postUrl": "https://x.com/markminervini/status/2120499249733423221",
+              "postId": "2120499249733423221",
+              "calledAtEt": "7:49:52 AM ET, Wed Nov 11, 2026",
+              "calledAtUtc": "2026-11-11T12:49:52Z",
+              "calledAtNote": "12:49:52 UTC",
+              "postState": "live",
+              "linkText": "Original post by @markminervini"
+            },
+            {
+              "label": "Nov 12 memo",
+              "texts": [
+                "Yesterday, we doubled our already profitable S&P 500 short exposure because we believe the potential for further downside remains worth the miniscule risk we are taking."
+              ],
+              "postUrl": "https://x.com/markminervini/status/2120883843221573909",
+              "postId": "2120883843221573909",
+              "calledAtEt": "Nov 12, 2026",
+              "postState": "live",
+              "linkText": "Nov 12 memo by @markminervini"
+            },
+            {
+              "label": "Still short",
+              "texts": [
+                "Our market short positions are doing well. We have not yet covered and remain overweight short. As I posted on Thursday, on 11/11 we doubled our already profitable $SPY short position initiated on 10/15."
+              ],
+              "postUrl": "https://x.com/markminervini/status/2122449293466570902",
+              "postId": "2122449293466570902",
+              "calledAtEt": "4:58:39 PM ET, Mon Nov 16",
+              "calledAtUtc": "2026-11-16T21:58:39Z",
+              "calledAtNote": "21:58:39 UTC",
+              "postState": "live",
+              "linkText": "Original post by @markminervini"
+            }
+          ],
+          "deletedNotice": "Since deleted: Minervini deleted a Nov 16 post and reposted it at 4:58 PM ET to fix a date typo; the repost is linked above. It isn't used for scoring.",
+          "posterCall": "Net short. Stop 769.64.",
+          "posterKo": "No KO"
+        },
+        {
+          "side": "bull",
+          "cornerLabel": "Bull corner",
+          "handle": "",
+          "name": "Ed Yardeni",
+          "org": "Yardeni Research",
+          "initials": "EY",
+          "profileUrl": "",
+          "tvLabel": "TV CALL: CNBC Squawk Box, Thu Nov 5, 2026, 6:42 AM ET",
+          "noX": "The call was made on TV. There is no X post for it.",
+          "calledAtEt": "6:42 AM ET, Nov 5, 2026",
+          "calledAtUtc": "2026-11-05T11:42:00Z",
+          "calledAtNote": "11:42 UTC",
+          "entryDisplay": "SPX 7,678.72",
+          "entryNote": "That day's official open, Nov 5.",
+          "targetInWords": "7,900 S&P 500 year-end target, as named in the CNBC headline.",
+          "koLine": "Any official SPX close ≥ 7,900.00. TKO if SPY trades at or above 769.64, Minervini's latest posted stop.",
+          "record": "0-0-0",
+          "asides": [],
+          "quotes": [
+            {
+              "label": "TV CALL: CNBC Squawk Box, Thu Nov 5, 2026, 6:42 AM ET",
+              "texts": [
+                "Ed Yardeni on his 7,900 S&P 500 year-end target: 'Santa is coming'"
+              ],
+              "quoteNote": "Exact spoken wording pending a tape check.",
+              "postUrl": "https://www.cnbc.com/video/2026/11/05/ed-yardeni-on-his-7900-sp-500-year-end-target-santa-is-coming.html",
+              "calledAtEt": "6:42 AM ET, Thu Nov 5, 2026",
+              "calledAtUtc": "2026-11-05T11:42:00Z",
+              "calledAtNote": "11:42 UTC",
+              "postState": "live",
+              "linkText": "CNBC video",
+              "kind": "headline"
+            }
+          ],
+          "posterCall": "7,900 year-end target",
+          "posterKo": "KO at SPX 7,900.00"
+        }
+      ],
+      "finishStates": [
+        "KO",
+        "TKO (stop hit)",
+        "Decision",
+        "Draw"
+      ],
+      "meter": {
+        "caption": "as of Nov 16 close",
+        "source": "S&P Dow Jones Indices official SPX close. This ring is SPX only. The SPY stop is not on this scale.",
+        "current": 7416.59,
+        "currentLabel": "7,416.59",
+        "marks": [
+          {
+            "value": 7548.72,
+            "label": "7,548.72",
+            "kind": "line",
+            "side": "bear",
+            "name": "Minervini decision"
+          },
+          {
+            "value": 7586.65,
+            "label": "7,586.65",
+            "kind": "entry",
+            "side": "bear",
+            "name": "Minervini entry"
+          },
+          {
+            "value": 7678.72,
+            "label": "7,678.72",
+            "kind": "entry",
+            "side": "bull",
+            "name": "Yardeni entry"
+          },
+          {
+            "value": 7900,
+            "label": "7,900.00",
+            "kind": "line",
+            "side": "bull",
+            "name": "Yardeni KO"
+          }
+        ]
+      }
+    }
+  ]
+}

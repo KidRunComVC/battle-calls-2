@@ -1,0 +1,5 @@
+#!/bin/sh
+# Refuse a push whose files or history expose a personal email or a denylist term.
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+node scripts/privacy-scan.mjs
