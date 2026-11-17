@@ -1,4 +1,5 @@
 import { createLayout } from "./card-layout.mjs";
+import { fightPageRel, fightPath, ORIGINAL_WEEK } from "./load-card.mjs";
 
 const CSP =
   "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests";
@@ -21,7 +22,13 @@ const NAV = [
   ["/methodology.html", "Methodology"],
   ["/corrections.html", "Corrections"],
   ["/about.html", "About"],
+  ["/archive/", "Archive"],
 ];
+
+function navCurrent(href, current) {
+  if (href === current) return true;
+  return href === "/archive/" && current.startsWith("/archive");
+}
 
 export function escapeText(value) {
   return String(value).replace(/[&<>]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[ch]);
@@ -389,7 +396,28 @@ function ropes() {
 }
 
 export function renderMeterCss(data) {
-  return layout.renderMeterCss(data.fights);
+  const fights = data.weeks ? data.weeks.flatMap((week) => week.fights) : data.fights;
+  return layout.renderMeterCss(fights);
+}
+
+function publicField(value) {
+  const text = value == null ? "" : String(value).trim();
+  return text || "Pending";
+}
+
+function publicResult(fight) {
+  const result = fight.publicResult || {};
+  const rows = [
+    ["Winner", publicField(result.winner)],
+    ["Final price", publicField(result.finalPrice)],
+    ["Why", publicField(result.why)],
+  ];
+  return `<section class="public-result" aria-labelledby="${fight.id}-public-result">
+    <h2 id="${fight.id}-public-result" class="display-heading">Public result</h2>
+    <dl class="rules">${rows
+      .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
+      .join("")}</dl>
+  </section>`;
 }
 
 export function renderFight(data, fight) {
@@ -411,14 +439,17 @@ export function renderFight(data, fight) {
       ${copyBlock(renderCaveats(fight))}
       ${ropes()}
       ${copyBlock(renderDisclosures(fight, site))}
+      ${ropes()}
+      ${copyBlock(publicResult(fight))}
     </article>
   </main>`;
+  const week = fight.weekId || ORIGINAL_WEEK;
   return document({
     title: `Round ${fight.round}: ${matchup(fight)} on ${fight.ticker} — Battle Calls`,
     description: fight.cardText,
-    path: `/fights/${fight.id}.html`,
-    image: `/assets/og/${fight.id}.png`,
-    imageAlt: fight.ogAlt,
+    path: fightPath(fight),
+    image: week === ORIGINAL_WEEK ? `/assets/og/${fight.id}.png` : "/assets/og/site.png",
+    imageAlt: fight.ogAlt || `${data.site.fullName}. ${data.site.tagline}`,
     main,
   });
 }
@@ -428,12 +459,12 @@ function orderedFights(data) {
 }
 
 function roundNav(data) {
-  return orderedFights(data).map((fight) => [`/fights/${fight.id}.html`, `Round ${fight.round}`]);
+  return orderedFights(data).map((fight) => [fightPath(fight), `Round ${fight.round}`]);
 }
 
 function roundList(data) {
   const items = orderedFights(data)
-    .map((fight) => `<li>${link(`/fights/${fight.id}.html`, `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
+    .map((fight) => `<li>${link(fightPath(fight), `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
     .join("");
   return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list">${items}</ol></section>`;
 }
@@ -442,7 +473,7 @@ function renderListedFight(fight, site, { lead = false } = {}) {
   const poster = layout.renderPoster(fight, {
     level: lead ? "h1" : "h2",
     tile: true,
-    cta: `<p>${link(`/fights/${fight.id}.html`, "Open the fight card", { className: "cta" })}</p>`,
+    cta: `<p>${link(fightPath(fight), "Open the fight card", { className: "cta" })}</p>`,
     teaserHtml: teaser(site),
   });
   const headliner = fight.role === "main" ? " card-headliner" : "";
@@ -670,7 +701,7 @@ export function renderNotFound(data) {
 
 function header(current, extra = []) {
   const items = [...NAV, ...extra].map(([href, label]) => {
-    const currentAttr = href === current ? ` aria-current="page"` : "";
+    const currentAttr = navCurrent(href, current) ? ` aria-current="page"` : "";
     return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
   }).join("");
   return `<header class="site-header">
@@ -700,7 +731,7 @@ function footer(site, current, extra = []) {
     ["/fine-print.html", "Fine print"],
   ]
     .map(([href, label]) => {
-      const currentAttr = href === current ? ` aria-current="page"` : "";
+      const currentAttr = navCurrent(href, current) ? ` aria-current="page"` : "";
       return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
     })
     .join("");
@@ -774,17 +805,111 @@ export function renderDocument(site, page) {
   return shell(site, page);
 }
 
+function weekLabel(week) {
+  return `Week of ${week.week}`;
+}
+
+function boutLine(fight) {
+  return `Round ${fight.round}: ${fight.posterWord || fight.ticker || "Bout"}`;
+}
+
+export function renderArchiveIndex(data) {
+  const weeks = [...(data.weeks || [])].sort((a, b) => b.week.localeCompare(a.week));
+  const items = weeks.length
+    ? `<ol class="archive-list">${weeks
+        .map((week) => {
+          const names = week.fights.map((fight) => boutLine(fight)).join(". ");
+          const mark = week.week === data.currentWeek ? " Current card." : "";
+          const summary = names || "No bouts filed for this week yet.";
+          return `<li><p>${link(`/archive/${week.week}/`, weekLabel(week))}${escapeText(mark)}</p><p>${escapeText(summary)}</p></li>`;
+        })
+        .join("")}</ol>`
+    : `<p class="empty">No weeks on file.</p>`;
+  const main = `<main id="content" tabindex="-1">
+    <article class="sheet">
+      <div class="wrap sheet-copy">
+      <h1>Archive</h1>
+      <p>Cards on file, newest week first. The live card is the week named in the current pointer. A finished bout shows its public result. Empty fields stay Pending.</p>
+      ${items}
+      <p>${link("/", "Back to the card")}</p>
+      </div>
+    </article>
+  </main>`;
+  return document({
+    title: "Archive — Battle Calls",
+    description: "Past Battle Calls cards, newest week first.",
+    path: "/archive/",
+    image: "/assets/og/site.png",
+    imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
+    main,
+    fights: data.fights,
+  });
+}
+
+export function renderArchiveWeek(data, week) {
+  const current = week.week === data.currentWeek;
+  const cards = week.fights.length
+    ? week.fights
+        .map((fight) => {
+          const calls = (fight.corners || [])
+            .map((corner) => {
+              const who = corner.handle ? `@${corner.handle}` : corner.name;
+              const line = corner.posterCall || corner.koLine || "";
+              return `<p>${escapeText(who)}: ${escapeText(line)}</p>`;
+            })
+            .join("");
+          return `<section class="archive-bout" aria-labelledby="${fight.id}-archive">
+            <h2 id="${fight.id}-archive" class="display-heading">${escapeText(boutLine(fight))}</h2>
+            <p>${escapeText(fight.label || "")}</p>
+            ${calls}
+            ${publicResult(fight)}
+            <p>${link(fightPath(fight), "Open the fight card")}</p>
+          </section>`;
+        })
+        .join("")
+    : `<p class="empty">No bouts filed for this week yet.</p>`;
+  const main = `<main id="content" tabindex="-1">
+    <article class="sheet">
+      <div class="wrap sheet-copy">
+      <h1>${escapeText(weekLabel(week))}</h1>
+      <p>${current ? "This is the current card. It is also listed here." : "This card has left the homepage."}</p>
+      ${cards}
+      <p>${link("/archive/", "All weeks")}</p>
+      </div>
+    </article>
+  </main>`;
+  return document({
+    title: `${weekLabel(week)} — Battle Calls`,
+    description: `${weekLabel(week)} on Battle Calls.`,
+    path: `/archive/${week.week}/`,
+    image: "/assets/og/site.png",
+    imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
+    main,
+    fights: data.fights,
+  });
+}
+
 export function renderPages(data, finePrint, corrections = { entries: [] }) {
   const site = data.site;
   const pages = new Map();
+  const navFights = data.fights || [];
   pages.set("index.html", shell(site, renderHome(data)));
   pages.set("methodology.html", shell(site, renderMethodology(data)));
-  pages.set("corrections.html", shell(site, { ...renderCorrections(data, corrections), fights: data.fights }));
+  pages.set("corrections.html", shell(site, { ...renderCorrections(data, corrections), fights: navFights }));
   pages.set("about.html", shell(site, renderAbout(data)));
-  pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: data.fights }));
+  pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: navFights }));
   pages.set("404.html", shell(site, renderNotFound(data)));
-  for (const fight of orderedFights(data)) {
-    pages.set(`fights/${fight.id}.html`, shell(site, { ...renderFight(data, fight), fights: data.fights }));
+  pages.set("archive/index.html", shell(site, renderArchiveIndex(data)));
+  for (const week of data.weeks || []) {
+    pages.set(`archive/${week.week}/index.html`, shell(site, renderArchiveWeek(data, week)));
+    for (const fight of week.fights) {
+      pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
+    }
+  }
+  if (!data.weeks) {
+    for (const fight of orderedFights(data)) {
+      pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
+    }
   }
   return pages;
 }

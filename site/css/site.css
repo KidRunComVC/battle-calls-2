@@ -786,8 +786,18 @@ blockquote {
   padding-left: 1.25em;
 }
 
-.round-list li + li {
+.round-list li + li,
+.archive-list li + li {
   margin-top: var(--space-1);
+}
+
+.archive-list {
+  margin: var(--space-2) 0 0;
+  padding-left: 1.25em;
+}
+
+.archive-bout + .archive-bout {
+  margin-top: var(--space-4);
 }
 
 .undercard .poster-word {
