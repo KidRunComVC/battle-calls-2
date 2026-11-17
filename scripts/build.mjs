@@ -1,6 +1,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadCard } from "./load-card.mjs";
 import { renderMeterCss, renderPages } from "./render.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,7 +21,7 @@ const stale = [
 ];
 
 export function build() {
-  const data = JSON.parse(readFileSync(join(root, "data/fights.json"), "utf8"));
+  const data = loadCard(root);
   const corrections = JSON.parse(readFileSync(join(root, "data/corrections.json"), "utf8"));
   const finePrint = readFileSync(join(root, "data/fine-print.txt"), "utf8");
   const pages = renderPages(data, finePrint, corrections);

@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
-import { escapeText, renderCorrections, renderDocument, renderFight, renderHome, renderPages } from "./render.mjs";
+import { loadCard } from "./load-card.mjs";
+import { escapeText, renderArchiveIndex, renderCorrections, renderDocument, renderFight, renderHome, renderPages } from "./render.mjs";
 
 const root = join(import.meta.dirname, "..");
-const data = JSON.parse(readFileSync(join(root, "data/fights.json"), "utf8"));
+const data = loadCard(root);
 const corrections = JSON.parse(readFileSync(join(root, "data/corrections.json"), "utf8"));
 const finePrint = readFileSync(join(root, "data/fine-print.txt"), "utf8");
 const pages = renderPages(data, finePrint, corrections);
@@ -179,4 +180,50 @@ test("scorecard finishes and edge states", () => {
     }),
   );
   assert.ok(logged.indexOf("Later") < logged.indexOf("Earlier"));
+});
+
+test("archive lists weeks and keeps the original bout URLs", () => {
+  const archive = pages.get("archive/index.html");
+  const week = pages.get("archive/2026-11-16/index.html");
+  assert.match(archive, /href="\/battle-calls-2\/archive\/2026-11-16\/"/);
+  assert.match(archive, /Week of Nov 16, 2026/);
+  assert.match(archive, /Every week's fight card, newest first/);
+  assert.doesNotMatch(archive, /current pointer/);
+  assert.match(archive, /Silver: @PeterLBrandt vs @PeterSchiff/);
+  assert.match(week, /This week's card/);
+  assert.doesNotMatch(week, /also listed here/);
+  assert.match(week, /Result: pending, final bell Dec 31, 2026/);
+  assert.doesNotMatch(week, />Pending</);
+  assert.match(week, /href="\/battle-calls-2\/fights\/round-1-silver\.html"/);
+  assert.match(silver, /Result: pending, final bell Dec 31, 2026/);
+  assert.match(home, /href="\/battle-calls-2\/archive\/"/);
+  const fake = structuredClone(data);
+  fake.weeks = [
+    {
+      week: "2026-11-09",
+      fights: [
+        {
+          ...structuredClone(data.fights[0]),
+          id: "fake-week-round-1",
+          weekId: "2026-11-09",
+          round: 1,
+          label: "FAKE WEEK",
+          posterWord: "Not a real bout",
+          publicResult: { winner: "Nobody", finalPrice: "Not a price", why: "Test fixture only." },
+        },
+      ],
+    },
+    ...data.weeks,
+  ];
+  const rendered = renderPages(fake, finePrint, corrections);
+  assert.match(rendered.get("archive/index.html"), /2026-11-16/);
+  assert.ok(
+    rendered.get("archive/index.html").indexOf("2026-11-16") <
+      rendered.get("archive/index.html").indexOf("2026-11-09"),
+  );
+  assert.match(rendered.get("fights/2026-11-09/round-1.html"), /Not a real bout/);
+  assert.match(rendered.get("fights/round-1-silver.html"), /Silver/);
+  assert.doesNotMatch(rendered.get("fights/round-1-silver.html"), /Not a real bout/);
+  const indexOnly = renderDocument(data.site, renderArchiveIndex(fake));
+  assert.match(indexOnly, /FAKE WEEK|Not a real bout/);
 });

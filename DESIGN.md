@@ -91,7 +91,7 @@ The card, the rules, and the about page stay formal. The fine print is a separat
 
 ## Definition of done
 
-- Pages render from `data/fights.json` with no runtime fetch
+- Pages render from `data/site.json`, `data/current.json`, and `data/weeks/` with no runtime fetch
 - Quotes, levels, and caveats match the locked card
 - Contrast pairs above pass
 - Keyboard focus is visible, the skip link works, and status is not color alone

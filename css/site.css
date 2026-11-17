@@ -437,6 +437,11 @@ main {
   line-height: 1;
 }
 
+.stamp-title {
+  background: var(--color-gold);
+  color: var(--color-bg);
+}
+
 .stamp-pending,
 .stamp-draw,
 .stamp-no-contest {
@@ -788,6 +793,118 @@ blockquote {
 
 .round-list li + li {
   margin-top: var(--space-1);
+}
+
+.sheet-copy a.week-card {
+  display: block;
+  max-width: none;
+  min-height: 44px;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-gold);
+  box-shadow: inset 0 0 0 1px var(--color-blood);
+  color: inherit;
+  text-decoration: none;
+}
+
+.sheet-copy a.week-card:hover {
+  color: inherit;
+  border-color: var(--color-focus);
+}
+
+.week-card-title {
+  margin-bottom: var(--space-2);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+}
+
+.week-card-bouts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.week-card-bouts li + li {
+  margin-top: var(--space-1);
+}
+
+.week-card-status {
+  margin-top: var(--space-2);
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.sheet-copy h1.archive-week-title {
+  max-width: none;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.archive-card {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-bg-raised);
+  border: 8px solid var(--color-blood);
+  box-shadow: 0 0 0 3px var(--color-gold);
+}
+
+.archive-round-title {
+  margin: var(--space-2) 0;
+  font-size: clamp(2.25rem, 9vw, 3.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.archive-matchup {
+  margin-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.archive-callers {
+  margin-top: var(--space-2);
+}
+
+.archive-caller + .archive-vs,
+.archive-vs + .archive-caller {
+  margin-top: var(--space-2);
+}
+
+.archive-vs {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.archive-result {
+  margin-top: var(--space-3);
+}
+
+.archive-result-label {
+  margin-bottom: var(--space-1);
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.archive-result-line {
+  margin-top: 0;
+}
+
+.archive-open {
+  margin-top: var(--space-3);
 }
 
 .undercard .poster-word {

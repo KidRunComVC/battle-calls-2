@@ -1,4 +1,5 @@
 import { createLayout } from "./card-layout.mjs";
+import { fightPageRel, fightPath, ORIGINAL_WEEK } from "./load-card.mjs";
 
 const CSP =
   "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests";
@@ -21,7 +22,13 @@ const NAV = [
   ["/methodology.html", "Methodology"],
   ["/corrections.html", "Corrections"],
   ["/about.html", "About"],
+  ["/archive/", "Archive"],
 ];
+
+function navCurrent(href, current) {
+  if (href === current) return true;
+  return href === "/archive/" && current.startsWith("/archive");
+}
 
 export function escapeText(value) {
   return String(value).replace(/[&<>]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[ch]);
@@ -389,7 +396,39 @@ function ropes() {
 }
 
 export function renderMeterCss(data) {
-  return layout.renderMeterCss(data.fights);
+  const fights = data.weeks ? data.weeks.flatMap((week) => week.fights) : data.fights;
+  return layout.renderMeterCss(fights);
+}
+
+function filled(value) {
+  return value != null && String(value).trim() !== "";
+}
+
+function resultRows(fight) {
+  const result = fight.publicResult || {};
+  return [
+    ["Winner", result.winner],
+    ["Final price", result.finalPrice],
+    ["Why", result.why],
+  ].filter(([, value]) => filled(value));
+}
+
+function pendingLine(fight) {
+  const bell = filled(fight.finalBell) ? `, final bell ${fight.finalBell}` : "";
+  return `Result: pending${bell}`;
+}
+
+function publicResult(fight) {
+  const rows = resultRows(fight);
+  const body = rows.length
+    ? `<dl class="rules">${rows
+        .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
+        .join("")}</dl>`
+    : `<p>${escapeText(pendingLine(fight))}</p>`;
+  return `<section class="public-result" aria-labelledby="${fight.id}-public-result">
+    <h2 id="${fight.id}-public-result" class="display-heading">Result</h2>
+    ${body}
+  </section>`;
 }
 
 export function renderFight(data, fight) {
@@ -411,14 +450,17 @@ export function renderFight(data, fight) {
       ${copyBlock(renderCaveats(fight))}
       ${ropes()}
       ${copyBlock(renderDisclosures(fight, site))}
+      ${ropes()}
+      ${copyBlock(publicResult(fight))}
     </article>
   </main>`;
+  const week = fight.weekId || ORIGINAL_WEEK;
   return document({
     title: `Round ${fight.round}: ${matchup(fight)} on ${fight.ticker} — Battle Calls`,
     description: fight.cardText,
-    path: `/fights/${fight.id}.html`,
-    image: `/assets/og/${fight.id}.png`,
-    imageAlt: fight.ogAlt,
+    path: fightPath(fight),
+    image: week === ORIGINAL_WEEK ? `/assets/og/${fight.id}.png` : "/assets/og/site.png",
+    imageAlt: fight.ogAlt || `${data.site.fullName}. ${data.site.tagline}`,
     main,
   });
 }
@@ -428,12 +470,12 @@ function orderedFights(data) {
 }
 
 function roundNav(data) {
-  return orderedFights(data).map((fight) => [`/fights/${fight.id}.html`, `Round ${fight.round}`]);
+  return orderedFights(data).map((fight) => [fightPath(fight), `Round ${fight.round}`]);
 }
 
 function roundList(data) {
   const items = orderedFights(data)
-    .map((fight) => `<li>${link(`/fights/${fight.id}.html`, `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
+    .map((fight) => `<li>${link(fightPath(fight), `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
     .join("");
   return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list">${items}</ol></section>`;
 }
@@ -442,7 +484,7 @@ function renderListedFight(fight, site, { lead = false } = {}) {
   const poster = layout.renderPoster(fight, {
     level: lead ? "h1" : "h2",
     tile: true,
-    cta: `<p>${link(`/fights/${fight.id}.html`, "Open the fight card", { className: "cta" })}</p>`,
+    cta: `<p>${link(fightPath(fight), "Open the fight card", { className: "cta" })}</p>`,
     teaserHtml: teaser(site),
   });
   const headliner = fight.role === "main" ? " card-headliner" : "";
@@ -670,7 +712,7 @@ export function renderNotFound(data) {
 
 function header(current, extra = []) {
   const items = [...NAV, ...extra].map(([href, label]) => {
-    const currentAttr = href === current ? ` aria-current="page"` : "";
+    const currentAttr = navCurrent(href, current) ? ` aria-current="page"` : "";
     return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
   }).join("");
   return `<header class="site-header">
@@ -700,7 +742,7 @@ function footer(site, current, extra = []) {
     ["/fine-print.html", "Fine print"],
   ]
     .map(([href, label]) => {
-      const currentAttr = href === current ? ` aria-current="page"` : "";
+      const currentAttr = navCurrent(href, current) ? ` aria-current="page"` : "";
       return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
     })
     .join("");
@@ -774,17 +816,176 @@ export function renderDocument(site, page) {
   return shell(site, page);
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function humanDate(iso) {
+  const [year, month, day] = String(iso).split("-").map(Number);
+  if (!year || !month || !day) return String(iso);
+  return `${MONTHS[month - 1]} ${day}, ${year}`;
+}
+
+function weekLabel(week) {
+  return `Week of ${humanDate(week.week)}`;
+}
+
+function cornerWho(corner) {
+  return corner.handle ? `@${corner.handle}` : corner.name || "";
+}
+
+function orderedCorners(fight) {
+  const bear = (fight.corners || []).find((corner) => corner.side === "bear");
+  const bull = (fight.corners || []).find((corner) => corner.side === "bull");
+  const ordered = [bear, bull].filter(Boolean);
+  return ordered.length ? ordered : fight.corners || [];
+}
+
+function matchupLine(fight) {
+  const names = orderedCorners(fight).map(cornerWho).filter(Boolean);
+  const word = fight.posterWord ? `${fight.posterWord}: ` : "";
+  return `${word}${names.join(" vs ")}`;
+}
+
+function cardTag(fight) {
+  const title = fight.role === "main" || /title/i.test(fight.label || "");
+  return title
+    ? { text: "Title fight", className: "stamp stamp-title" }
+    : { text: "Exhibition", className: "stamp" };
+}
+
+function weekStatus(week, currentWeek) {
+  if (week.week === currentWeek) return "This week's card";
+  if (!week.fights.length) return "No bouts yet";
+  if (week.fights.some((fight) => resultRows(fight).length)) return "Results posted";
+  return "No results yet";
+}
+
+function callerBlock(fight) {
+  const corners = orderedCorners(fight);
+  const lines = corners
+    .map((corner) => {
+      const quote = corner.posterCall || corner.koLine || "";
+      return `<p class="archive-caller"><span class="who">${escapeText(cornerWho(corner))}</span> ${escapeText(quote)}</p>`;
+    })
+    .join(`<p class="archive-vs">vs</p>`);
+  const names = corners.map(cornerWho).filter(Boolean).join(" vs ");
+  return `<p class="archive-matchup">${escapeText(names)}</p><div class="archive-callers">${lines}</div>`;
+}
+
+function archiveResult(fight) {
+  const rows = resultRows(fight);
+  if (!rows.length) {
+    return `<div class="archive-result"><p class="archive-result-line">${escapeText(pendingLine(fight))}</p></div>`;
+  }
+  return `<div class="archive-result">
+    <h3 class="archive-result-label">Result</h3>
+    <dl class="rules">${rows
+      .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
+      .join("")}</dl>
+  </div>`;
+}
+
+export function renderArchiveIndex(data) {
+  const weeks = [...(data.weeks || [])].sort((a, b) => b.week.localeCompare(a.week));
+  const items = weeks.length
+    ? `<div class="archive-index">${weeks
+        .map((week) => {
+          const bouts = week.fights.length
+            ? `<ul class="week-card-bouts">${week.fights
+                .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
+                .join("")}</ul>`
+            : `<p>No bouts filed for this week yet.</p>`;
+          return `<a class="week-card" href="${withBase(`/archive/${week.week}/`)}">
+            <h2 class="week-card-title">${escapeText(weekLabel(week))}</h2>
+            ${bouts}
+            <p class="week-card-status">${escapeText(weekStatus(week, data.currentWeek))}</p>
+          </a>`;
+        })
+        .join("")}</div>`
+    : `<p class="empty">No weeks on file.</p>`;
+  const main = `<main id="content" tabindex="-1">
+    <article class="sheet">
+      <div class="wrap sheet-copy">
+      <h1>Archive</h1>
+      <p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>
+      ${items}
+      <p>${link("/", "Back to the card")}</p>
+      </div>
+    </article>
+  </main>`;
+  return document({
+    title: "Archive — Battle Calls",
+    description: "Every week's fight card, newest first.",
+    path: "/archive/",
+    image: "/assets/og/site.png",
+    imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
+    main,
+    fights: data.fights,
+  });
+}
+
+export function renderArchiveWeek(data, week) {
+  const current = week.week === data.currentWeek;
+  const badge = current ? `<p class="stamp stamp-title">This week's card</p>` : `<p>An earlier card.</p>`;
+  const cards = week.fights.length
+    ? week.fights
+        .map((fight) => {
+          const tag = cardTag(fight);
+          return `<article class="archive-card" aria-labelledby="${fight.id}-archive">
+            <p class="kicker"><span>Round ${fight.round}</span> <span class="${tag.className}">${escapeText(tag.text)}</span></p>
+            <h2 id="${fight.id}-archive" class="archive-round-title">${escapeText(fight.posterWord || boutWord(fight))}</h2>
+            ${callerBlock(fight)}
+            ${archiveResult(fight)}
+            <p class="archive-open">${link(fightPath(fight), "Open the fight card")}</p>
+          </article>`;
+        })
+        .join("")
+    : `<p class="empty">No bouts filed for this week yet.</p>`;
+  const main = `<main id="content" tabindex="-1">
+    <article class="sheet">
+      <div class="wrap sheet-copy">
+      <h1 class="archive-week-title">${escapeText(weekLabel(week))}</h1>
+      ${badge}
+      ${cards}
+      <p>${link("/archive/", "All weeks")}</p>
+      </div>
+    </article>
+  </main>`;
+  return document({
+    title: `${weekLabel(week)} — Battle Calls`,
+    description: `${weekLabel(week)} on Battle Calls.`,
+    path: `/archive/${week.week}/`,
+    image: "/assets/og/site.png",
+    imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
+    main,
+    fights: data.fights,
+  });
+}
+
+function boutWord(fight) {
+  return fight.ticker || "Bout";
+}
+
 export function renderPages(data, finePrint, corrections = { entries: [] }) {
   const site = data.site;
   const pages = new Map();
+  const navFights = data.fights || [];
   pages.set("index.html", shell(site, renderHome(data)));
   pages.set("methodology.html", shell(site, renderMethodology(data)));
-  pages.set("corrections.html", shell(site, { ...renderCorrections(data, corrections), fights: data.fights }));
+  pages.set("corrections.html", shell(site, { ...renderCorrections(data, corrections), fights: navFights }));
   pages.set("about.html", shell(site, renderAbout(data)));
-  pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: data.fights }));
+  pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: navFights }));
   pages.set("404.html", shell(site, renderNotFound(data)));
-  for (const fight of orderedFights(data)) {
-    pages.set(`fights/${fight.id}.html`, shell(site, { ...renderFight(data, fight), fights: data.fights }));
+  pages.set("archive/index.html", shell(site, renderArchiveIndex(data)));
+  for (const week of data.weeks || []) {
+    pages.set(`archive/${week.week}/index.html`, shell(site, renderArchiveWeek(data, week)));
+    for (const fight of week.fights) {
+      pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
+    }
+  }
+  if (!data.weeks) {
+    for (const fight of orderedFights(data)) {
+      pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
+    }
   }
   return pages;
 }

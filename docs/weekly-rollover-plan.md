@@ -58,6 +58,8 @@ Open Graph image and page titles stay per bout. The homepage keeps the site-wide
 
 ## 3. Sunday switch
 
+Joey's decision: new fights are searched on Fridays. The site is never auto-published. Joey approves each card and publishes it himself on Sunday. There is no scheduled deploy workflow. The steps are in `docs/weekly-runbook.md`.
+
 The site is static. Nothing on the server flips at midnight by itself. A new homepage appears only after a build is deployed. `pages.yml` runs only when someone starts it, and a deploy still needs Joey's go-ahead.
 
 The card for next week can be merged early without going live. The new week file sits in `data/weeks/`. `data/current.json` still names the week that is live. The homepage does not change until the pointer changes and the site is deployed.
