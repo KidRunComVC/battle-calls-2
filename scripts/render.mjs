@@ -392,39 +392,50 @@ export function renderFight(data, fight) {
   });
 }
 
-function renderUndercard(fight, site) {
-  return `<article class="undercard-bout" id="${fight.id}">
-    ${layout.renderPoster(fight, {
-      level: "h3",
-      cta: `<p>${link(`/fights/${fight.id}.html`, `Open the ${fight.posterWord} card`, { className: "text-link" })}</p>`,
-      teaserHtml: teaser(site),
-    })}
-  </article>`;
+function orderedFights(data) {
+  return [...data.fights].sort((a, b) => a.round - b.round);
+}
+
+function roundNav(data) {
+  return orderedFights(data).map((fight) => [`/fights/${fight.id}.html`, `Round ${fight.round}`]);
+}
+
+function roundList(data) {
+  const items = orderedFights(data)
+    .map((fight) => `<li>${link(`/fights/${fight.id}.html`, `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
+    .join("");
+  return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list">${items}</ol></section>`;
+}
+
+function renderListedFight(fight, site, { lead = false } = {}) {
+  const poster = layout.renderPoster(fight, {
+    level: lead ? "h1" : "h2",
+    extra: lead
+      ? `<p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p>`
+      : "",
+    cta: `<p>${link(
+      `/fights/${fight.id}.html`,
+      lead ? "Open the fight card" : `Open the ${fight.posterWord} card`,
+      { className: lead ? "cta" : "text-link" },
+    )}</p>`,
+    teaserHtml: teaser(site),
+  });
+  return `<article class="${lead ? "card-lead" : "undercard-bout"}" id="${fight.id}">${poster}</article>`;
 }
 
 export function renderHome(data) {
   const site = data.site;
-  const mainEvent = data.fights.find((fight) => fight.role === "main");
-  const undercard = data.fights
-    .filter((fight) => fight.role !== "main")
-    .sort((a, b) => b.round - a.round);
-  const hero = mainEvent
-    ? layout.renderPoster(mainEvent, {
-        level: "h1",
-        extra: `<p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p>`,
-        cta: `<p>${link(`/fights/${mainEvent.id}.html`, "Open the fight card", { className: "cta" })}</p>`,
-        teaserHtml: teaser(site),
-      })
-    : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
-  const under = undercard.length
-    ? `<section class="undercard" aria-labelledby="undercard-heading">
-        <h2 id="undercard-heading" class="display-heading">Undercard</h2>
-        ${undercard.map((fight) => renderUndercard(fight, site)).join("")}
+  const ordered = orderedFights(data);
+  const [lead, ...rest] = ordered;
+  const list = lead
+    ? `<section class="card-list" aria-label="The card, in ascending round order">
+        ${renderListedFight(lead, site, { lead: true })}
+        ${rest.length ? `<div class="undercard">${rest.map((fight) => renderListedFight(fight, site)).join("")}</div>` : ""}
       </section>`
-    : "";
-  const image = mainEvent ? `/assets/og/${mainEvent.id}.png` : "/assets/og/site.png";
-  const imageAlt = mainEvent ? mainEvent.ogAlt : `${site.fullName}. ${site.tagline}`;
-  const description = mainEvent ? mainEvent.cardText : site.tagline;
+    : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
+  const image = lead ? `/assets/og/${lead.id}.png` : "/assets/og/site.png";
+  const imageAlt = lead ? lead.ogAlt : `${site.fullName}. ${site.tagline}`;
+  const description = lead ? lead.cardText : site.tagline;
   return document({
     title: site.fullName,
     description,
@@ -432,15 +443,15 @@ export function renderHome(data) {
     image,
     imageAlt,
     main: `<main id="content" tabindex="-1">
-      ${hero}
-      ${mainEvent ? ropes() : ""}
-      ${under}
+      ${list}
+      ${lead ? ropes() : ""}
       <section class="band" aria-labelledby="rules-home">
         <h2 id="rules-home" class="display-heading">The rules, in one line</h2>
         <p class="rules-blurb">${escapeText(site.rulesBlurb)}</p>
         <p>${link("/methodology.html", "Methodology")}</p>
       </section>
     </main>`,
+    fights: data.fights,
   });
 }
 
@@ -451,6 +462,7 @@ export function renderMethodology(data) {
         <h1>Methodology</h1>
         <p>Battle Calls locks a call before it is judged. The market is the referee. The horizon is chosen before the result, and it is not moved afterward.</p>
       </header>
+      ${roundList(data)}
       <section aria-labelledby="lock">
         <h2 id="lock" class="display-heading">Lock the call</h2>
         <p>Each call is archived before judging: the URL when one exists, the post ID, the time in UTC and in ET, and the wording copied exactly. If the post is edited later, the locked wording is what gets judged. A deleted post is noted on the card and is not republished. The note says it was deleted, and it is not used for scoring in place of the repost.</p>
@@ -509,6 +521,7 @@ export function renderMethodology(data) {
     image: "/assets/og/site.png",
     imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
     main,
+    fights: data.fights,
   });
 }
 
@@ -548,6 +561,7 @@ export function renderAbout(data) {
     <article class="sheet">
       <h1>About</h1>
       <p>${escapeText(site.fullName)} puts opposing public market calls on a card and scores them against the chart. The call wins or loses. The person is not the subject.</p>
+      ${roundList(data)}
       <h2 class="display-heading">What unauthorized means</h2>
       <p>${escapeText(site.unauthorized)}</p>
       <h2 class="display-heading">What this is</h2>
@@ -577,6 +591,7 @@ export function renderAbout(data) {
     image: "/assets/og/site.png",
     imageAlt: `${site.fullName}. ${site.tagline}`,
     main,
+    fights: data.fights,
   });
 }
 
@@ -603,6 +618,7 @@ export function renderNotFound(data) {
     <article class="sheet">
       <h1>Not on the card</h1>
       <p>That page is not a bout, a rule, or a correction.</p>
+      ${roundList(data)}
       <p>${link("/", "Back to the card")}</p>
     </article>
   </main>`;
@@ -613,11 +629,12 @@ export function renderNotFound(data) {
     image: "/assets/og/site.png",
     imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
     main,
+    fights: data.fights,
   });
 }
 
-function header(current) {
-  const items = NAV.map(([href, label]) => {
+function header(current, extra = []) {
+  const items = [...NAV, ...extra].map(([href, label]) => {
     const currentAttr = href === current ? ` aria-current="page"` : "";
     return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
   }).join("");
@@ -634,9 +651,10 @@ function header(current) {
   </header>`;
 }
 
-function footer(site, current) {
+function footer(site, current, extra = []) {
   const links = [
     ...NAV,
+    ...extra,
     ["/fine-print.html", "Fine print"],
   ]
     .map(([href, label]) => {
@@ -653,12 +671,13 @@ function footer(site, current) {
   </footer>`;
 }
 
-function document({ title, description, path, image, imageAlt, main }) {
-  return { title, description, path, image, imageAlt, main };
+function document({ title, description, path, image, imageAlt, main, fights = [] }) {
+  return { title, description, path, image, imageAlt, main, fights };
 }
 
 function shell(site, page) {
-  const head = header(page.path).replace(
+  const rounds = roundNav({ fights: page.fights || [] });
+  const head = header(page.path, rounds).replace(
     "<p class=\"affiliation\">PLACEHOLDER</p>",
     `<p class="affiliation">${escapeText(site.affiliation)}</p>`,
   );
@@ -703,7 +722,7 @@ function shell(site, page) {
 <a class="skip-link" href="#content">Skip to content</a>
 ${head}
 ${page.main}
-${footer(site, page.path)}
+${footer(site, page.path, rounds)}
 </body>
 </html>
 `;
@@ -718,12 +737,12 @@ export function renderPages(data, finePrint, corrections = { entries: [] }) {
   const pages = new Map();
   pages.set("index.html", shell(site, renderHome(data)));
   pages.set("methodology.html", shell(site, renderMethodology(data)));
-  pages.set("corrections.html", shell(site, renderCorrections(data, corrections)));
+  pages.set("corrections.html", shell(site, { ...renderCorrections(data, corrections), fights: data.fights }));
   pages.set("about.html", shell(site, renderAbout(data)));
-  pages.set("fine-print.html", shell(site, renderFinePrint(data, finePrint)));
+  pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: data.fights }));
   pages.set("404.html", shell(site, renderNotFound(data)));
-  for (const fight of data.fights) {
-    pages.set(`fights/${fight.id}.html`, shell(site, renderFight(data, fight)));
+  for (const fight of orderedFights(data)) {
+    pages.set(`fights/${fight.id}.html`, shell(site, { ...renderFight(data, fight), fights: data.fights }));
   }
   return pages;
 }

@@ -11,9 +11,9 @@ const finePrint = readFileSync(join(root, "data/fine-print.txt"), "utf8");
 const pages = renderPages(data, finePrint, corrections);
 const all = [...pages.values()].join("\n");
 const home = pages.get("index.html");
-const official = pages.get("fights/round-4-spx.html");
-const silver = pages.get("fights/round-2-silver.html");
-const bitcoin = pages.get("fights/round-3-bitcoin.html");
+const official = pages.get("fights/round-3-spx.html");
+const silver = pages.get("fights/round-1-silver.html");
+const bitcoin = pages.get("fights/round-2-bitcoin.html");
 
 test("every page carries the required head, footer, and fine-print link", () => {
   for (const html of pages.values()) {
@@ -47,18 +47,31 @@ test("fine print is verbatim and additional", () => {
   assert.match(all, new RegExp(data.site.teaser.replace(/[.]/g, "\\.")));
 });
 
-test("home leads with the official bout and lists the undercard newest first", () => {
+test("home lists rounds in ascending order starting at Round 1", () => {
   assert.equal(home.split('class="cta"').length - 1, 1);
   assert.match(home, /Open the fight card/);
   assert.doesNotMatch(home, /coming soon/i);
-  assert.ok(home.indexOf("fights/round-4-spx.html") < home.indexOf("fights/round-3-bitcoin.html"));
-  assert.ok(home.indexOf("fights/round-3-bitcoin.html") < home.indexOf("fights/round-2-silver.html"));
+  assert.doesNotMatch(home, /Undercard/);
+  assert.doesNotMatch(all, /Round 4/);
+  assert.doesNotMatch(all, /round-4-spx|round-2-silver|round-3-bitcoin/);
+  const silverAt = home.indexOf("fights/round-1-silver.html");
+  const bitcoinAt = home.indexOf("fights/round-2-bitcoin.html");
+  const officialAt = home.indexOf("fights/round-3-spx.html");
+  assert.ok(silverAt >= 0 && silverAt < bitcoinAt && bitcoinAt < officialAt);
   assert.equal(home.split(data.site.teaser).length - 1, 3);
   assert.match(home, /OFFICIAL TITLE FIGHT/);
-  assert.match(home, /Undercard/);
+  assert.match(home, /Round 1/);
   assert.match(home, new RegExp(data.site.tagline));
   assert.match(home, new RegExp(data.site.referee));
   assert.match(home, new RegExp(data.site.rulesBlurb));
+  for (const html of [pages.get("methodology.html"), pages.get("about.html"), pages.get("404.html")]) {
+    const one = html.indexOf("Round 1: Silver");
+    const two = html.indexOf("Round 2: Bitcoin");
+    const three = html.indexOf("Round 3: S&amp;P 500");
+    assert.ok(one >= 0 && one < two && two < three);
+  }
+  assert.match(home, /href="\/battle-calls-2\/fights\/round-1-silver\.html"/);
+  assert.match(silver, /rel="canonical" href="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/fights\/round-1-silver\.html"/);
 });
 
 test("launch quotes, numbers, and caveats are verbatim", () => {
