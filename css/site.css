@@ -174,37 +174,47 @@ a:hover {
 }
 
 .header-brand {
-  display: flex;
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
 }
 
 .header-copy {
-  flex: 1 1 54%;
   min-width: 0;
+  max-width: 52cqi;
+}
+
+.header-banner-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100%;
 }
 
 .header-banner {
   display: block;
-  flex: 0 1 46%;
   width: auto;
   height: auto;
-  max-width: 46%;
+  max-width: min(46cqi, 84%);
   max-height: 220px;
   object-fit: contain;
-  object-position: center;
+  object-position: center center;
 }
 
 @media (max-width: 759px) {
   .header-brand {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-2);
+  }
+
+  .header-copy {
+    max-width: none;
   }
 
   .header-banner {
-    align-self: center;
-    width: 100%;
+    margin-inline: auto;
     max-width: 100%;
     max-height: 140px;
   }

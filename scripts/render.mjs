@@ -648,7 +648,9 @@ function header(current, extra = []) {
           </a>
           <p class="affiliation">PLACEHOLDER</p>
         </div>
-        <img class="header-banner" src="${withBase("/assets/img/header-banner.webp")}" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager">
+        <div class="header-banner-slot">
+          <img class="header-banner" src="${withBase("/assets/img/header-banner.webp")}" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager">
+        </div>
       </div>
       <nav class="site-nav" aria-label="Primary"><ul>${items}</ul></nav>
     </div>
