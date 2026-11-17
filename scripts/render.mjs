@@ -3,6 +3,19 @@ import { createLayout } from "./card-layout.mjs";
 const CSP =
   "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests";
 
+const SITE_BASE = "/battle-calls-2";
+const SITE_ORIGIN = "https://kidruncomvc.github.io";
+
+function withBase(href) {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  if (href === "/") return `${SITE_BASE}/`;
+  return `${SITE_BASE}${href}`;
+}
+
+function publicUrl(path) {
+  return `${SITE_ORIGIN}${withBase(path)}`;
+}
+
 const NAV = [
   ["/", "The card"],
   ["/methodology.html", "Methodology"],
@@ -25,9 +38,10 @@ function assertHref(href) {
 
 function link(href, text, { external = false, className = "" } = {}) {
   assertHref(href);
+  const resolved = href.startsWith("/") ? withBase(href) : href;
   const cls = className ? ` class="${escapeAttr(className)}"` : "";
   const ext = external ? ` target="_blank" rel="noopener noreferrer"` : "";
-  return `<a href="${escapeAttr(href)}"${cls}${ext}>${escapeText(text)}</a>`;
+  return `<a href="${escapeAttr(resolved)}"${cls}${ext}>${escapeText(text)}</a>`;
 }
 
 function rich(node) {
@@ -605,11 +619,11 @@ export function renderNotFound(data) {
 function header(current) {
   const items = NAV.map(([href, label]) => {
     const currentAttr = href === current ? ` aria-current="page"` : "";
-    return `<li><a href="${href}"${currentAttr}>${label}</a></li>`;
+    return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
   }).join("");
   return `<header class="site-header">
     <div class="wrap">
-      <a class="site-name" href="/">
+      <a class="site-name" href="${withBase("/")}">
         <span class="site-name-main">Battle Calls</span>
         <span class="site-name-sub">the unauthorized fight card</span>
       </a>
@@ -627,7 +641,7 @@ function footer(site, current) {
   ]
     .map(([href, label]) => {
       const currentAttr = href === current ? ` aria-current="page"` : "";
-      return `<li><a href="${href}"${currentAttr}>${label}</a></li>`;
+      return `<li><a href="${withBase(href)}"${currentAttr}>${label}</a></li>`;
     })
     .join("");
   return `<footer class="site-footer">
@@ -648,6 +662,8 @@ function shell(site, page) {
     "<p class=\"affiliation\">PLACEHOLDER</p>",
     `<p class="affiliation">${escapeText(site.affiliation)}</p>`,
   );
+  const pageUrl = publicUrl(page.path);
+  const imageUrl = publicUrl(page.image);
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -660,26 +676,28 @@ function shell(site, page) {
 <meta name="referrer" content="no-referrer">
 <title>${escapeText(page.title)}</title>
 <meta name="description" content="${escapeAttr(page.description)}">
+<link rel="canonical" href="${escapeAttr(pageUrl)}">
 <meta property="og:title" content="${escapeAttr(page.title)}">
 <meta property="og:description" content="${escapeAttr(page.description)}">
 <meta property="og:type" content="website">
-<meta property="og:image" content="${escapeAttr(page.image)}">
+<meta property="og:url" content="${escapeAttr(pageUrl)}">
+<meta property="og:image" content="${escapeAttr(imageUrl)}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta property="og:image:alt" content="${escapeAttr(page.imageAlt)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${escapeAttr(page.title)}">
 <meta name="twitter:description" content="${escapeAttr(page.description)}">
-<meta name="twitter:image" content="${escapeAttr(page.image)}">
+<meta name="twitter:image" content="${escapeAttr(imageUrl)}">
 <meta name="twitter:image:alt" content="${escapeAttr(page.imageAlt)}">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/assets/apple-touch.png">
-<link rel="preload" href="/assets/fonts/oswald-latin-700.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/source-sans-3-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/tokens.css">
-<link rel="stylesheet" href="/css/site.css">
-<link rel="stylesheet" href="/css/meters.css">
+<link rel="icon" href="${withBase("/assets/favicon.svg")}" type="image/svg+xml">
+<link rel="icon" href="${withBase("/assets/favicon-32.png")}" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="${withBase("/assets/apple-touch.png")}">
+<link rel="preload" href="${withBase("/assets/fonts/oswald-latin-700.woff2")}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${withBase("/assets/fonts/source-sans-3-latin-400.woff2")}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${withBase("/css/tokens.css")}">
+<link rel="stylesheet" href="${withBase("/css/site.css")}">
+<link rel="stylesheet" href="${withBase("/css/meters.css")}">
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to content</a>

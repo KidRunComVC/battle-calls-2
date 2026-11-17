@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("/assets/fonts/oswald-latin-500.woff2") format("woff2");
+  src: url("/battle-calls-2/assets/fonts/oswald-latin-500.woff2") format("woff2");
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/assets/fonts/oswald-latin-700.woff2") format("woff2");
+  src: url("/battle-calls-2/assets/fonts/oswald-latin-700.woff2") format("woff2");
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/assets/fonts/source-sans-3-latin-400.woff2") format("woff2");
+  src: url("/battle-calls-2/assets/fonts/source-sans-3-latin-400.woff2") format("woff2");
 }
 
 @font-face {
@@ -27,7 +27,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("/assets/fonts/source-sans-3-latin-600.woff2") format("woff2");
+  src: url("/battle-calls-2/assets/fonts/source-sans-3-latin-600.woff2") format("woff2");
 }
 
 *,
@@ -44,7 +44,7 @@ body {
   margin: 0;
   color: var(--color-ink);
   background-color: var(--color-bg);
-  background-image: url("/assets/scuff.svg");
+  background-image: url("/battle-calls-2/assets/scuff.svg");
   background-repeat: repeat;
   font-family: var(--font-text);
   font-size: var(--text-md);

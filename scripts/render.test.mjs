@@ -25,7 +25,11 @@ test("every page carries the required head, footer, and fine-print link", () => 
     assert.match(html, /Skip to content/);
     assert.match(html, /twitter:card" content="summary_large_image"/);
     assert.equal(html.split(data.site.footerLine).length - 1, 1);
-    assert.match(html, /href="\/fine-print\.html"/);
+    assert.match(html, /href="\/battle-calls-2\/fine-print\.html"/);
+    assert.match(html, /rel="canonical" href="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\//);
+    assert.match(html, /property="og:url" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\//);
+    assert.match(html, /property="og:image" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/assets\/og\//);
+    assert.doesNotMatch(html, /(?:href|content)="\/(?!battle-calls-2\/)/);
     assert.doesNotMatch(html, /<script/);
     assert.doesNotMatch(html, /<style/);
     assert.doesNotMatch(html, /\sstyle=/);

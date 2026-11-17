@@ -64,10 +64,10 @@ Do not put a real name, a location, a phone number, or an email address in pages
 
 ## Launch TODO
 
-Hosting is not decided. Do not enable GitHub Pages from this repo until the publisher says so. Do not make the repository public until the publisher says so.
+Published URLs use the base path `/battle-calls-2/` on `https://kidruncomvc.github.io`. Canonical and Open Graph URLs use that origin. `noindex` and `Disallow: /` stay in place.
 
 - [ ] Remove `noindex, nofollow` from every page.
 - [ ] Replace the `Disallow: /` rule in `site/robots.txt` with `Allow: /`, and allow Twitterbot.
-- [ ] Set absolute `og:image` URLs for the chosen domain.
+- [x] Set absolute `og:image` URLs for `https://kidruncomvc.github.io/battle-calls-2/`.
 - [ ] Re-check the privacy scan before anything is public.
 - [ ] Set Pages source to GitHub Actions, then run the workflow.
