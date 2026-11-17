@@ -177,15 +177,18 @@ a:hover {
 }
 
 .header-brand {
-  container-type: inline-size;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
 }
 
 .header-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  max-width: 100%;
   min-width: 0;
-  max-width: 52cqi;
 }
 
 .header-banner-slot {
@@ -200,55 +203,80 @@ a:hover {
   display: block;
   width: auto;
   height: auto;
-  max-width: min(46cqi, 84%);
+  min-width: 0;
+  max-width: min(100%, calc(100% - (var(--space-4) * 2)));
   max-height: 220px;
   object-fit: contain;
   object-position: center center;
 }
 
 @media (max-width: 759px) {
-  .header-brand {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--space-2);
-  }
-
-  .header-copy {
-    max-width: none;
-  }
-
   .site-header {
     padding-block: var(--space-2) 0;
   }
 
   .header-brand {
-    row-gap: var(--space-1);
-  }
-
-  .header-banner {
-    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: max-content;
     max-width: 100%;
-    max-height: 88px;
+    margin-inline: auto;
+    row-gap: var(--space-2);
+    text-align: center;
   }
 
+  .header-copy {
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  .site-name {
+    align-items: center;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  .site-name-sub,
+  .affiliation {
+    margin-top: 0;
+  }
+
+  .affiliation {
+    text-align: center;
+  }
+
+  .header-banner-slot {
+    width: 0;
+    min-width: 100%;
+  }
+
+  .header-banner,
   .page-inner .header-banner {
-    max-height: 64px;
-  }
-
-  .page-inner .site-name-main {
-    font-size: clamp(1.75rem, 7vw, var(--text-xl));
-  }
-
-  .page-inner .site-name-sub {
-    margin-top: 4px;
-    font-size: var(--text-sm);
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    height: auto;
+    margin-inline: auto;
   }
 
   .site-nav {
     margin-top: var(--space-2);
   }
+
+  .site-nav ul {
+    justify-content: center;
+  }
 }
 
 .site-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  width: max-content;
+  max-width: 100%;
   color: inherit;
   text-decoration: none;
 }
@@ -261,7 +289,7 @@ a:hover {
 
 .site-name-sub {
   display: block;
-  margin-top: var(--space-1);
+  margin-top: 0;
   color: var(--color-ink);
   font-family: var(--font-text);
   font-size: var(--text-md);
@@ -277,7 +305,9 @@ a:hover {
 }
 
 .affiliation {
-  max-width: var(--measure);
+  width: 0;
+  min-width: 100%;
+  max-width: 100%;
   margin-top: var(--space-2);
   color: var(--color-muted);
 }
@@ -288,7 +318,7 @@ a:hover {
 
 @media (max-width: 759px) {
   .affiliation {
-    margin-top: var(--space-1);
+    margin-top: 0;
     font-size: var(--text-sm);
     line-height: 1.3;
   }
