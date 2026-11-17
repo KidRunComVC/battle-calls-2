@@ -23,6 +23,8 @@ test("every page carries the required head, footer, and fine-print link", () => 
     assert.match(html, /form-action 'none'/);
     assert.doesNotMatch(html, /web3forms/);
     assert.match(html, /Skip to content/);
+    assert.equal(html.match(/<img\b/gi).length, 1);
+    assert.match(html, /class="header-banner" src="\/battle-calls-2\/assets\/img\/header-banner\.webp" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager"/);
     assert.match(html, /twitter:card" content="summary_large_image"/);
     assert.equal(html.split(data.site.footerLine).length - 1, 1);
     assert.match(html, /href="\/battle-calls-2\/fine-print\.html"/);
@@ -97,7 +99,8 @@ test("launch quotes, numbers, and caveats are verbatim", () => {
     }
   }
   assert.match(official, /Since deleted: Minervini deleted a Nov 16 post and reposted it at 4:58 PM ET to fix a date typo; the repost is linked above\. It isn't used for scoring\./);
-  assert.doesNotMatch(official, /<img/i);
+  assert.equal(official.match(/<img\b/gi).length, 1);
+  assert.match(official, /header-banner\.webp/);
   assert.match(official, /TV CALL: CNBC Squawk Box, Thu Nov 5, 2026, 6:42 AM ET/);
   assert.match(official, /Exact spoken wording pending a tape check\./);
   assert.match(official, /as of Nov 16 close/);
