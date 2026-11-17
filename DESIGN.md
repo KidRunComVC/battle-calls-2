@@ -51,7 +51,7 @@ Layout uses 8, 16, 32, and 64 pixels only: `--space-1` through `--space-4`. The 
 
 - Skip link, revealed on focus
 - Site name, with the non-affiliation line directly under it
-- One blood CTA. Other actions are text links
+- The same blood CTA on every home bout. The tagline is the site line above the card, not one bout's line
 - Tale of the tape as a description list
 - Initials badge. No photo, no logo, no avatar
 - Scorecard stamp for pending, in progress, KO, TKO, decision, draw, and no contest
@@ -65,17 +65,17 @@ Corners are square. There is no entrance animation. Hover changes color, not pos
 
 ## Poster pass
 
-The home page is a fight poster, not a text column. Bear is the left corner, in blood. Bull is the right corner, in gold. Initials are a type badge. The name is set in condensed display type. One line gives the call, and one line gives the KO. VS sits between them, and it stacks between the corners on a phone. Round, bout label, and the instrument are the billing above the corners. First bell and final bell are a billing strip. There is one button.
+The home page is a fight poster, not a text column. Bear is the left corner, in blood. Bull is the right corner, in gold. Initials are a type badge. The name is set in condensed display type. One line gives the call, and one line gives the KO. VS sits between them, and it stacks between the corners on a phone. Round, bout label, and the instrument are the billing above the corners. First bell and final bell are a billing strip. Each home bout has the same button.
 
-Undercard bouts use the same corner structure at a smaller size. The fine-print teaser is once on each poster, not repeated inside it.
+Undercard bouts use the same corner structure at a smaller size, with the same blood CTA as the title fight. The fine-print teaser is once on each poster, not repeated inside it.
 
 The tale of the tape is one table. Rows are the tape labels. Columns are the two corners, with a color bar on the header. A long quote sits in a native disclosure labeled Full quote, so the row stays scannable and the locked wording of a live post is still on the page. A deleted post is noted in one line and is not republished.
 
 The scorecard ring is CSS. Tick positions are percentages written into `css/meters.css` at build time, so the page has no inline style and no script. The latest close, both entries, and the KO or decision lines are marks on one SPX, silver, or bitcoin scale. The words under the ring repeat every mark, so the graphic is not the only way to read it. Exhibitions with no posted close say so.
 
-## Why Round 1 is first
+## Why the title fight leads the home card
 
-The home page lists the bouts from Round 1 upward. Silver is Round 1, Bitcoin is Round 2, and the S&P 500 title fight is Round 3. The title fight keeps its official label. It is not pulled above Round 1. Each poster still has one link to its own card.
+The home page leads with Round 3, the official S&P 500 title fight, then Round 1 and Round 2. The title fight keeps its official label and a heavier frame. The tagline stays the site line above the card. Nav, Methodology, and About still list the rounds from Round 1 upward. Each poster links to its own card.
 
 ## Why a deleted post is only a note
 

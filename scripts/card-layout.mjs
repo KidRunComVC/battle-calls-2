@@ -45,7 +45,8 @@ export function createLayout(h) {
   function renderPoster(fight, { level = "h1", lede = "", extra = "", cta = "", teaserHtml = "" } = {}) {
     const [bear, bull] = ordered(fight);
     const Tag = level;
-    return `<header class="poster${level === "h1" ? " poster-main" : " poster-tile"}">
+    const headliner = fight.role === "main" ? " poster-headliner" : "";
+    return `<header class="poster${level === "h1" ? " poster-main" : " poster-tile"}${headliner}">
       <${Tag} class="billing">
         <span class="billing-round">Round ${fight.round}</span>
         <span class="stamp">${escapeText(fight.label)}</span>
@@ -93,9 +94,10 @@ export function createLayout(h) {
           ${source}`;
       })
       .join("");
+    const spacing = corner.spacingNote ? `<p>${escapeText(corner.spacingNote)}</p>` : "";
     const full = spoken.length
-      ? `<details class="full-quote"><summary>Full quote</summary>${spoken.map(renderQuote).join("")}</details>`
-      : "";
+      ? `<details class="full-quote"><summary>Full quote</summary>${spoken.map(renderQuote).join("")}${spacing}</details>`
+      : spacing;
     const notices = [];
     if (corner.deletedNotice) notices.push(corner.deletedNotice);
     for (const quote of archived) {
@@ -103,7 +105,6 @@ export function createLayout(h) {
     }
     const deleted = notices.map((notice) => `<p class="deleted-note">${escapeText(notice)}</p>`).join("");
     return `<p class="call-line">${escapeText(line)}</p>
-      ${corner.spacingNote ? `<p>${escapeText(corner.spacingNote)}</p>` : ""}
       ${corner.tvLabel ? `<p class="call-label">${escapeText(corner.tvLabel)}</p>` : ""}
       ${notes.filter((note) => !headlines.some((quote) => quote.quoteNote === note)).map((note) => `<p>${escapeText(note)}</p>`).join("")}
       ${asides}
