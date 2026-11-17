@@ -73,9 +73,9 @@ The tale of the tape is one table. Rows are the tape labels. Columns are the two
 
 The scorecard ring is CSS. Tick positions are percentages written into `css/meters.css` at build time, so the page has no inline style and no script. The latest close, both entries, and the KO or decision lines are marks on one SPX, silver, or bitcoin scale. The words under the ring repeat every mark, so the graphic is not the only way to read it. Exhibitions with no posted close say so.
 
-## Why the official bout leads
+## Why Round 1 is first
 
-The home page has one hero and one button: the title fight. The exhibitions sit under it, newest first, as an undercard. They keep the exhibition label. The old empty slot is gone because the belt has a bout.
+The home page lists the bouts from Round 1 upward. Silver is Round 1, Bitcoin is Round 2, and the S&P 500 title fight is Round 3. The title fight keeps its official label. It is not pulled above Round 1. Each poster still has one link to its own card.
 
 ## Why a deleted post is only a note
 

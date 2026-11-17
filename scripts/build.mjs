@@ -14,9 +14,9 @@ const stale = [
   "fine-print.html",
   "404.html",
   "css/meters.css",
-  "fights/round-2-silver.html",
-  "fights/round-3-bitcoin.html",
-  "fights/round-4-spx.html",
+  "fights/round-1-silver.html",
+  "fights/round-2-bitcoin.html",
+  "fights/round-3-spx.html",
 ];
 
 export function build() {

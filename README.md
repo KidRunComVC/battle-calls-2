@@ -6,7 +6,7 @@ The pages a host should publish are only the files in `site/`. README, DESIGN, `
 
 ## Pages
 
-- Home, with the official title fight as the main event and the exhibitions on the undercard
+- Home, listing Round 1, Round 2, and Round 3 in that order
 - One fight card per bout, rendered from `data/fights.json`
 - Methodology
 - Corrections
@@ -45,7 +45,7 @@ That script needs Pillow and fontTools, which are build tools, not part of the s
 ## Add a round
 
 1. Add an object to the `fights` array in `data/fights.json`.
-2. Set `role` to `main` or `undercard`. The home page features the `main` bout. Undercard bouts list newest first.
+2. Set `role` to `main` or `undercard`, and set `round` to the next ascending number. The home page, nav, and card lists show bouts from Round 1 upward.
 3. Use `status` `pending` or `in_progress` until the bell. Later statuses are `ko`, `tko`, `decision`, `draw`, and `no_contest`. A `tko` is the stop-hit finish and needs `result.phrase`.
 4. Quote the person exactly. If a post is deleted, note that fact in one line and do not republish the wording. Do not attach an image of the post.
 5. Run the build, then `python3 scripts/make-assets.py` so the bout gets a 1200×675 share card.

@@ -18,8 +18,8 @@
   },
   "fights": [
     {
-      "id": "round-2-silver",
-      "round": 2,
+      "id": "round-1-silver",
+      "round": 1,
       "role": "undercard",
       "status": "pending",
       "label": "EXHIBITION",
@@ -28,7 +28,7 @@
       "instrumentName": "COMEX silver front-month futures",
       "ogDate": "Nov 16, 2026",
       "ogAlt": "@PeterLBrandt vs. @PeterSchiff, SILVER, Nov 16, 2026",
-      "cardText": "Round 2: @PeterLBrandt vs. @PeterSchiff on SI. Two opposite calls, one chart, scored weekly.",
+      "cardText": "Round 1: @PeterLBrandt vs. @PeterSchiff on SI. Two opposite calls, one chart, scored weekly.",
       "firstBell": "Nov 16, 2026",
       "finalBell": "Dec 31, 2026",
       "finalBellDetail": "Dec 31, 2026 CME daily settle. The horizon was set by Battle Calls. It is arbitrary. Neither man agreed to it.",
@@ -177,8 +177,8 @@
       }
     },
     {
-      "id": "round-3-bitcoin",
-      "round": 3,
+      "id": "round-2-bitcoin",
+      "round": 2,
       "role": "undercard",
       "status": "pending",
       "label": "EXHIBITION",
@@ -187,7 +187,7 @@
       "instrumentName": "Coinbase BTC-USD spot",
       "ogDate": "Nov 16, 2026",
       "ogAlt": "@DrJStrategy vs. @benjamincowen, BITCOIN, Nov 16, 2026",
-      "cardText": "Round 3: @DrJStrategy vs. @benjamincowen on BTC. Two opposite calls, one chart, scored weekly.",
+      "cardText": "Round 2: @DrJStrategy vs. @benjamincowen on BTC. Two opposite calls, one chart, scored weekly.",
       "firstBell": "Nov 14, 2026 and Nov 16, 2026",
       "finalBell": "Dec 12, 2026",
       "finalBellDetail": "The Dec 12, 2026 Coinbase daily close (00:00 UTC, 7 PM ET). That is the date Cowen named. The bout tests only Thorne's near-term call, not his 2027 targets. The horizon and the levels were set by Battle Calls before judging.",
@@ -315,8 +315,8 @@
       }
     },
     {
-      "id": "round-4-spx",
-      "round": 4,
+      "id": "round-3-spx",
+      "round": 3,
       "role": "main",
       "status": "in_progress",
       "label": "OFFICIAL TITLE FIGHT",
@@ -325,7 +325,7 @@
       "instrumentName": "S&P 500",
       "ogDate": "Nov 16, 2026",
       "ogAlt": "@markminervini vs. Ed Yardeni, S&P 500, Nov 16, 2026",
-      "cardText": "Round 4: @markminervini vs. Ed Yardeni on SPX. Two opposite calls, one chart, scored weekly.",
+      "cardText": "Round 3: @markminervini vs. Ed Yardeni on SPX. Two opposite calls, one chart, scored weekly.",
       "firstBell": "Nov 5, 2026 and Nov 11, 2026",
       "finalBell": "Dec 31, 2026",
       "finalBellDetail": "Through the Dec 31, 2026 official SPX close.",
