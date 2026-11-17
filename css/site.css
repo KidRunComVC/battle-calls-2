@@ -298,6 +298,18 @@ a:hover {
   line-height: 1.4;
 }
 
+@media (max-width: 759px) {
+  .site-name {
+    align-items: center;
+    text-align: center;
+  }
+
+  .site-name-sub {
+    align-self: center;
+    text-align: center;
+  }
+}
+
 .site-name:hover .site-name-main {
   color: var(--color-gold);
   text-decoration: underline;
