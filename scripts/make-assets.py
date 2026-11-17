@@ -103,6 +103,20 @@ def icon(path: Path, size: int):
     image.save(path, "PNG", optimize=True)
 
 
+def corner_label(corner):
+    if corner.get("handle"):
+        return "@" + corner["handle"]
+    return corner["name"]
+
+
+def page_order_names(fight):
+    """Bear on the left and bull on the right, matching the poster."""
+    corners = fight["corners"]
+    bear = next((corner for corner in corners if corner.get("side") == "bear"), corners[0])
+    bull = next((corner for corner in corners if corner.get("side") == "bull"), corners[-1])
+    return corner_label(bear), corner_label(bull)
+
+
 def main():
     display = as_ttf(ROOT / "assets/fonts/oswald-latin-700.woff2")
     text = as_ttf(ROOT / "assets/fonts/source-sans-3-latin-600.woff2")
@@ -120,14 +134,14 @@ def main():
         False,
     )
     for fight in data["fights"]:
-        names = [("@" + c["handle"]) if c.get("handle") else c["name"] for c in fight["corners"]]
+        left, right = page_order_names(fight)
         poster(
             ROOT / "assets/og" / f"{fight['id']}.png",
             fight["label"],
-            names[0],
-            names[1],
+            left,
+            right,
             fight["posterWord"],
-            fight["ogDate"],
+            fight.get("firstBell") or fight["ogDate"],
             fight["ogAlt"],
             display,
             text,

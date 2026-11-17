@@ -7,6 +7,7 @@
     "rulesBlurb": "Their words, not ours. The market is the referee. No grudges, no advice, no edits after the bell.",
     "postFight": "Respect to both corners. Putting a number on the record in public takes guts.",
     "affiliation": "Independent commentary. Not affiliated with, endorsed by, or sponsored by X or anyone featured. All names and marks belong to their owners.",
+    "affiliationShort": "Unauthorized. Not affiliated with X or anyone featured.",
     "footerLine": "Unauthorized. Not affiliated with or endorsed by anyone on the card. Entertainment only, not financial advice.",
     "teaser": "Read the fine print before the bell.",
     "unauthorized": "\"Unauthorized\" means the people on the card did not participate in this site and did not agree to be scored here.",
@@ -46,7 +47,7 @@
           "parts": [
             "Hedge to disclose: in a same-day reply Brandt says his long-term target is \"in the hundreds.\" ",
             {
-              "text": "The reply",
+              "text": "Brandt's same-day reply",
               "href": "https://x.com/PeterLBrandt/status/2122399928718885303"
             },
             "."
@@ -99,7 +100,7 @@
             {
               "text": "Hedge to disclose: in a same-day reply he says his long-term target is \"in the hundreds.\"",
               "href": "https://x.com/PeterLBrandt/status/2122399928718885303",
-              "linkText": "The reply"
+              "linkText": "Brandt's same-day reply"
             }
           ],
           "posterCall": "Low $30s is possible",
@@ -185,9 +186,9 @@
       "posterWord": "Bitcoin",
       "ticker": "BTC",
       "instrumentName": "Coinbase BTC-USD spot",
-      "ogDate": "Nov 16, 2026",
-      "ogAlt": "@DrJStrategy vs. @benjamincowen, BITCOIN, Nov 16, 2026",
-      "cardText": "Round 2: @DrJStrategy vs. @benjamincowen on BTC. Two opposite calls, one chart, scored weekly.",
+      "ogDate": "Nov 14, 2026 and Nov 16, 2026",
+      "ogAlt": "@benjamincowen vs. @DrJStrategy, BITCOIN, Nov 14, 2026 and Nov 16, 2026",
+      "cardText": "Round 2: @benjamincowen vs. @DrJStrategy on BTC. Two opposite calls, one chart, scored weekly.",
       "firstBell": "Nov 14, 2026 and Nov 16, 2026",
       "finalBell": "Dec 12, 2026",
       "finalBellDetail": "The Dec 12, 2026 Coinbase daily close (00:00 UTC, 7 PM ET). That is the date Cowen named. The bout tests only Thorne's near-term call, not his 2027 targets. The horizon and the levels were set by Battle Calls before judging.",
@@ -231,7 +232,7 @@
           "calledAtUtc": "2026-11-14T19:43:13Z",
           "calledAtNote": "19:43:13 UTC",
           "quote": "Reclaim $73k. Confirm above $87k. Target $117k by mid-2027 […] Buy the fear. Below $57k, I'm wrong.",
-          "spacingNote": "(spacing normalized)",
+          "spacingNote": "Line breaks in the original post were tightened.",
           "postState": "live",
           "archiveUrl": "",
           "entryDisplay": "$65,715.21",
@@ -323,8 +324,8 @@
       "posterWord": "S&P 500",
       "ticker": "SPX",
       "instrumentName": "S&P 500",
-      "ogDate": "Nov 16, 2026",
-      "ogAlt": "@markminervini vs. Ed Yardeni, S&P 500, Nov 16, 2026",
+      "ogDate": "Nov 5, 2026 and Nov 11, 2026",
+      "ogAlt": "@markminervini vs. Ed Yardeni, S&P 500, Nov 5, 2026 and Nov 11, 2026",
       "cardText": "Round 3: @markminervini vs. Ed Yardeni on SPX. Two opposite calls, one chart, scored weekly.",
       "firstBell": "Nov 5, 2026 and Nov 11, 2026",
       "finalBell": "Dec 31, 2026",
@@ -436,7 +437,7 @@
           ],
           "deletedNotice": "Since deleted: Minervini deleted a Nov 16 post and reposted it at 4:58 PM ET to fix a date typo; the repost is linked above. It isn't used for scoring.",
           "posterCall": "Net short. Stop 769.64.",
-          "posterKo": "No KO"
+          "posterKo": "Wins on points only"
         },
         {
           "side": "bull",

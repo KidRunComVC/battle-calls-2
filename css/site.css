@@ -75,7 +75,7 @@ p {
 }
 
 h1 {
-  font-size: clamp(var(--text-2xl), 12vw, var(--text-3xl));
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
 }
 
 h2 {
@@ -142,6 +142,9 @@ a:hover {
 
 .skip-link:focus,
 .skip-link:focus-visible {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   position: fixed;
   top: var(--space-2);
   left: var(--space-2);
@@ -213,10 +216,35 @@ a:hover {
     max-width: none;
   }
 
+  .site-header {
+    padding-block: var(--space-2) 0;
+  }
+
+  .header-brand {
+    row-gap: var(--space-1);
+  }
+
   .header-banner {
     margin-inline: auto;
     max-width: 100%;
-    max-height: 140px;
+    max-height: 88px;
+  }
+
+  .page-inner .header-banner {
+    max-height: 64px;
+  }
+
+  .page-inner .site-name-main {
+    font-size: clamp(1.75rem, 7vw, var(--text-xl));
+  }
+
+  .page-inner .site-name-sub {
+    margin-top: 4px;
+    font-size: var(--text-sm);
+  }
+
+  .site-nav {
+    margin-top: var(--space-2);
   }
 }
 
@@ -254,8 +282,34 @@ a:hover {
   color: var(--color-muted);
 }
 
+.affiliation-short {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  .affiliation {
+    margin-top: var(--space-1);
+    font-size: var(--text-sm);
+    line-height: 1.3;
+  }
+
+  .affiliation-full {
+    display: none;
+  }
+
+  .affiliation-short {
+    display: inline;
+  }
+}
+
 .site-nav {
   margin-top: var(--space-3);
+}
+
+@media (max-width: 759px) {
+  .site-nav {
+    margin-top: var(--space-2);
+  }
 }
 
 .site-nav ul,
@@ -271,9 +325,12 @@ a:hover {
 
 .site-nav a,
 .footer-links a {
-  display: inline-block;
-  min-height: 24px;
-  padding-block: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px var(--space-1);
   font-weight: 600;
 }
 
@@ -432,12 +489,32 @@ main {
   max-width: var(--measure);
 }
 
-.text-link {
+.text-link,
+.teaser a,
+.round-list a,
+.band a,
+.sheet-copy a {
   display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px var(--space-1);
+}
+
+.text-link {
   margin-top: var(--space-2);
-  min-height: 24px;
-  padding-block: var(--space-1);
   font-weight: 600;
+}
+
+.sheet-copy a {
+  display: inline;
+  padding: 12px 2px;
+  min-width: 0;
+}
+
+.band :is(p, .rules-blurb) {
+  max-width: var(--measure);
 }
 
 .slot h2,
@@ -453,6 +530,55 @@ main {
 .sheet {
   display: grid;
   gap: var(--space-4);
+}
+
+.sheet-copy > * + * {
+  margin-top: var(--space-3);
+}
+
+.sheet-copy > header > * + * {
+  margin-top: var(--space-2);
+}
+
+.sheet-copy h1 {
+  line-height: 1.05;
+  margin-bottom: var(--space-2);
+  overflow-wrap: anywhere;
+}
+
+.sheet-copy :is(p, li, h1, h2, h3, blockquote, .rules-blurb, .empty, .notice) {
+  max-width: var(--measure);
+}
+
+.sheet-copy .notice-frame {
+  max-width: var(--measure);
+}
+
+.why-official {
+  max-width: var(--measure);
+  margin-top: var(--space-2);
+  font-weight: 600;
+}
+
+.card-intro {
+  margin-bottom: var(--space-3);
+}
+
+.card-intro .tagline {
+  margin-top: 0;
+}
+
+.footer-affiliation {
+  max-width: var(--measure);
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+}
+
+#rules-home {
+  max-width: none;
+  font-size: clamp(1.35rem, 8vw, var(--text-xl));
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .corners {
@@ -823,6 +949,17 @@ blockquote {
   box-shadow: 0 0 0 3px var(--color-gold);
 }
 
+.poster-headliner {
+  border-width: 14px;
+  box-shadow: inset 0 0 0 4px var(--color-gold), 0 0 0 3px var(--color-gold);
+}
+
+.poster-headliner .stamp {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-md);
+  letter-spacing: 0.16em;
+}
+
 .poster-main {
   padding: var(--space-3);
 }
@@ -908,6 +1045,10 @@ blockquote {
 }
 
 a.poster-name {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 44px;
   color: var(--color-ink);
 }
 
@@ -1105,8 +1246,14 @@ a.poster-name {
 }
 
 .full-quote summary {
-  min-height: 24px;
-  padding-block: var(--space-1);
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px var(--space-1);
   font-family: var(--font-display);
   letter-spacing: 0.08em;
   text-transform: uppercase;

@@ -56,8 +56,33 @@ function cornerTag(corner) {
   return corner.handle ? `@${corner.handle}` : corner.name;
 }
 
+function pageCorners(fight) {
+  const bear = fight.corners.find((corner) => corner.side === "bear");
+  const bull = fight.corners.find((corner) => corner.side === "bull");
+  const ordered = [bear, bull].filter(Boolean);
+  return ordered.length ? ordered : fight.corners;
+}
+
 function matchup(fight) {
-  return fight.corners.map(cornerTag).join(" vs. ");
+  return pageCorners(fight).map(cornerTag).join(" vs. ");
+}
+
+function officialOneLiner(fight) {
+  if (!fight.officialWhy) return "";
+  const sentences = fight.officialWhy.match(/[^.!?]+[.!?]+/g) || [fight.officialWhy];
+  return sentences.slice(0, 2).join(" ").replace(/\s+/g, " ").trim();
+}
+
+function whyOfficial(fight) {
+  const line = officialOneLiner(fight);
+  return line ? `<p class="why-official">${escapeText(line)}</p>` : "";
+}
+
+function cardDescription(data) {
+  const bouts = orderedFights(data)
+    .map((fight) => `Round ${fight.round} ${fight.label}: ${matchup(fight)} on ${fight.ticker}`)
+    .join(". ");
+  return `${bouts}. ${data.site.tagline}`;
 }
 
 function quotesOf(corner) {
@@ -319,6 +344,7 @@ function renderCaveats(fight) {
   if (!fight.caveats?.length) return "";
   return `<section class="spread" aria-labelledby="${fight.id}-caveats">
     <h2 id="${fight.id}-caveats" class="display-heading">Caveats</h2>
+    ${whyOfficial(fight)}
     <ol class="caveats">${fight.caveats.map((item) => `<li>${rich(item)}</li>`).join("")}</ol>
   </section>`;
 }
@@ -344,6 +370,10 @@ function teaser(site) {
   return `<p class="teaser">${link("/fine-print.html", site.teaser)}</p>`;
 }
 
+function copyBlock(inner) {
+  return `<div class="wrap sheet-copy">${inner}</div>`;
+}
+
 function boutHead(fight, { level = "h1" } = {}) {
   const Tag = level;
   return `<p class="kicker"><span>Round ${fight.round}</span> <span class="stamp">${escapeText(fight.label)}</span></p>
@@ -364,22 +394,23 @@ export function renderMeterCss(data) {
 
 export function renderFight(data, fight) {
   const site = data.site;
+  const why = whyOfficial(fight);
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
-      ${layout.renderPoster(fight, { level: "h1", lede: fight.lede, teaserHtml: teaser(site) })}
+      ${layout.renderPoster(fight, { level: "h1", lede: fight.lede, extra: why, teaserHtml: teaser(site) })}
       ${ropes()}
-      <section class="spread" aria-labelledby="${fight.id}-tape">
+      ${copyBlock(`<section class="spread" aria-labelledby="${fight.id}-tape">
         <h2 id="${fight.id}-tape" class="display-heading">Tale of the Tape</h2>
         ${layout.renderTape(fight)}
-      </section>
+      </section>`)}
       ${ropes()}
-      ${layout.renderScoreBlock(fight, site)}
+      ${copyBlock(layout.renderScoreBlock(fight, site))}
       ${ropes()}
-      ${renderRules(fight, site)}
+      ${copyBlock(renderRules(fight, site))}
       ${ropes()}
-      ${renderCaveats(fight)}
+      ${copyBlock(renderCaveats(fight))}
       ${ropes()}
-      ${renderDisclosures(fight, site)}
+      ${copyBlock(renderDisclosures(fight, site))}
     </article>
   </main>`;
   return document({
@@ -410,42 +441,37 @@ function roundList(data) {
 function renderListedFight(fight, site, { lead = false } = {}) {
   const poster = layout.renderPoster(fight, {
     level: lead ? "h1" : "h2",
-    extra: lead
-      ? `<p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p>`
-      : "",
-    cta: `<p>${link(
-      `/fights/${fight.id}.html`,
-      lead ? "Open the fight card" : `Open the ${fight.posterWord} card`,
-      { className: lead ? "cta" : "text-link" },
-    )}</p>`,
+    cta: `<p>${link(`/fights/${fight.id}.html`, "Open the fight card", { className: "cta" })}</p>`,
     teaserHtml: teaser(site),
   });
-  return `<article class="${lead ? "card-lead" : "undercard-bout"}" id="${fight.id}">${poster}</article>`;
+  const role = lead ? "card-lead card-headliner" : "undercard-bout";
+  return `<article class="${role}" id="${fight.id}">${poster}</article>`;
 }
 
 export function renderHome(data) {
   const site = data.site;
   const ordered = orderedFights(data);
-  const [lead, ...rest] = ordered;
-  const list = lead
-    ? `<section class="card-list" aria-label="The card, in ascending round order">
-        ${renderListedFight(lead, site, { lead: true })}
+  const headliner = ordered.find((fight) => fight.role === "main") || ordered[0];
+  const rest = ordered.filter((fight) => fight !== headliner);
+  const intro = `<div class="wrap card-intro"><p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p></div>`;
+  const list = headliner
+    ? `<section class="card-list" aria-label="The card">
+        ${intro}
+        ${renderListedFight(headliner, site, { lead: true })}
         ${rest.length ? `<div class="undercard">${rest.map((fight) => renderListedFight(fight, site)).join("")}</div>` : ""}
       </section>`
     : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
-  const image = lead ? `/assets/og/${lead.id}.png` : "/assets/og/site.png";
-  const imageAlt = lead ? lead.ogAlt : `${site.fullName}. ${site.tagline}`;
-  const description = lead ? lead.cardText : site.tagline;
+  const description = headliner ? cardDescription(data) : site.tagline;
   return document({
     title: site.fullName,
     description,
     path: "/",
-    image,
-    imageAlt,
+    image: "/assets/og/site.png",
+    imageAlt: `${site.fullName}. ${site.tagline}`,
     main: `<main id="content" tabindex="-1">
       ${list}
-      ${lead ? ropes() : ""}
-      <section class="band" aria-labelledby="rules-home">
+      ${headliner ? ropes() : ""}
+      <section class="band wrap" aria-labelledby="rules-home">
         <h2 id="rules-home" class="display-heading">The rules, in one line</h2>
         <p class="rules-blurb">${escapeText(site.rulesBlurb)}</p>
         <p>${link("/methodology.html", "Methodology")}</p>
@@ -458,6 +484,7 @@ export function renderHome(data) {
 export function renderMethodology(data) {
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
+      <div class="wrap sheet-copy">
       <header>
         <h1>Methodology</h1>
         <p>Battle Calls locks a call before it is judged. The market is the referee. The horizon is chosen before the result, and it is not moved afterward.</p>
@@ -512,6 +539,7 @@ export function renderMethodology(data) {
           <li>The ${link("/fine-print.html", "fine print")} is a separate promotional notice. It does not replace these rules.</li>
         </ul>
       </section>
+      </div>
     </article>
   </main>`;
   return document({
@@ -537,12 +565,14 @@ export function renderCorrections(data, corrections) {
     : `<p class="empty">No corrections yet.</p>`;
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
+      <div class="wrap sheet-copy">
       <h1>Corrections</h1>
       <p>When this site gets a quote, a time, a level, or a print wrong, the change is written here, newest first. An edited or deleted source does not change the locked wording.</p>
       ${list}
       <p>Corrections contact: coming at launch.</p>
       <p>No personal address is published. A correction request should name the bout, the line, and the original post or broadcast. Accepted corrections are added to this page.</p>
       <p>${link("/methodology.html", "Methodology")}</p>
+      </div>
     </article>
   </main>`;
   return document({
@@ -559,6 +589,7 @@ export function renderAbout(data) {
   const site = data.site;
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
+      <div class="wrap sheet-copy">
       <h1>About</h1>
       <p>${escapeText(site.fullName)} puts opposing public market calls on a card and scores them against the chart. The call wins or loses. The person is not the subject.</p>
       ${roundList(data)}
@@ -582,6 +613,7 @@ export function renderAbout(data) {
       <p>Judging rules are on the ${link("/methodology.html", "methodology")} page.</p>
       <h2 class="display-heading">Type</h2>
       <p>Oswald and Source Sans 3 are self-hosted under the SIL Open Font License. ${link("/assets/fonts/OFL-Oswald.txt", "Oswald license")}. ${link("/assets/fonts/OFL-SourceSans3.txt", "Source Sans 3 license")}.</p>
+      </div>
     </article>
   </main>`;
   return document({
@@ -598,9 +630,11 @@ export function renderAbout(data) {
 export function renderFinePrint(data, notice) {
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
+      <div class="wrap sheet-copy">
       <h1>Fine print</h1>
       <div class="notice-frame"><pre class="notice">${escapeText(notice)}</pre></div>
       <p>This notice is in addition to the formal disclaimers. It does not replace them. See ${link("/about.html", "About")}.</p>
+      </div>
     </article>
   </main>`;
   return document({
@@ -616,10 +650,12 @@ export function renderFinePrint(data, notice) {
 export function renderNotFound(data) {
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
+      <div class="wrap sheet-copy">
       <h1>Not on the card</h1>
       <p>That page is not a bout, a rule, or a correction.</p>
       ${roundList(data)}
       <p>${link("/", "Back to the card")}</p>
+      </div>
     </article>
   </main>`;
   return document({
@@ -646,7 +682,7 @@ function header(current, extra = []) {
             <span class="site-name-main">Battle Calls</span>
             <span class="site-name-sub">the unauthorized fight card</span>
           </a>
-          <p class="affiliation">PLACEHOLDER</p>
+          <p class="affiliation"><span class="affiliation-full">AFFILIATION_FULL</span><span class="affiliation-short">AFFILIATION_SHORT</span></p>
         </div>
         <div class="header-banner-slot">
           <img class="header-banner" src="${withBase("/assets/img/header-banner.webp")}" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager">
@@ -673,6 +709,7 @@ function footer(site, current, extra = []) {
     <div class="ropes" aria-hidden="true"></div>
     <div class="wrap">
       <p class="footer-plain">${escapeText(site.footerLine)}</p>
+      <p class="footer-affiliation">${escapeText(site.affiliation)}</p>
       <nav aria-label="Footer"><ul class="footer-links">${links}</ul></nav>
     </div>
   </footer>`;
@@ -684,10 +721,10 @@ function document({ title, description, path, image, imageAlt, main, fights = []
 
 function shell(site, page) {
   const rounds = roundNav({ fights: page.fights || [] });
-  const head = header(page.path, rounds).replace(
-    "<p class=\"affiliation\">PLACEHOLDER</p>",
-    `<p class="affiliation">${escapeText(site.affiliation)}</p>`,
-  );
+  const head = header(page.path, rounds)
+    .replace("AFFILIATION_FULL", escapeText(site.affiliation))
+    .replace("AFFILIATION_SHORT", escapeText(site.affiliationShort || site.affiliation));
+  const bodyClass = page.path === "/" ? "page-home" : "page-inner";
   const pageUrl = publicUrl(page.path);
   const imageUrl = publicUrl(page.image);
   return `<!doctype html>
@@ -725,7 +762,7 @@ function shell(site, page) {
 <link rel="stylesheet" href="${withBase("/css/site.css")}">
 <link rel="stylesheet" href="${withBase("/css/meters.css")}">
 </head>
-<body>
+<body class="${bodyClass}">
 <a class="skip-link" href="#content">Skip to content</a>
 ${head}
 ${page.main}

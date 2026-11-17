@@ -50,8 +50,9 @@ test("fine print is verbatim and additional", () => {
 });
 
 test("home lists rounds in ascending order starting at Round 1", () => {
-  assert.equal(home.split('class="cta"').length - 1, 1);
+  assert.equal(home.split('class="cta"').length - 1, 3);
   assert.match(home, /Open the fight card/);
+  assert.doesNotMatch(home, /class="text-link"/);
   assert.doesNotMatch(home, /coming soon/i);
   assert.doesNotMatch(home, /Undercard/);
   assert.doesNotMatch(all, /Round 4/);
@@ -60,6 +61,13 @@ test("home lists rounds in ascending order starting at Round 1", () => {
   const bitcoinAt = home.indexOf("fights/round-2-bitcoin.html");
   const officialAt = home.indexOf("fights/round-3-spx.html");
   assert.ok(silverAt >= 0 && silverAt < bitcoinAt && bitcoinAt < officialAt);
+  assert.ok(home.indexOf('id="round-3-spx"') < home.indexOf('id="round-1-silver"'));
+  assert.ok(home.indexOf('id="round-1-silver"') < home.indexOf('id="round-2-bitcoin"'));
+  assert.match(home, /property="og:image" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/assets\/og\/site\.png"/);
+  assert.match(home, /Round 1 EXHIBITION: @PeterLBrandt vs\. @PeterSchiff on SI/);
+  assert.match(home, /Round 2 EXHIBITION: @benjamincowen vs\. @DrJStrategy on BTC/);
+  assert.match(home, /Round 3 OFFICIAL TITLE FIGHT: @markminervini vs\. Ed Yardeni on SPX/);
+  assert.match(home, /Two calls enter\. One walks out\./);
   assert.equal(home.split(data.site.teaser).length - 1, 3);
   assert.match(home, /OFFICIAL TITLE FIGHT/);
   assert.match(home, /Round 1/);
@@ -112,6 +120,18 @@ test("launch quotes, numbers, and caveats are verbatim", () => {
   assert.match(silver, /EXHIBITION/);
   assert.match(bitcoin, /EXHIBITION/);
   assert.match(pages.get("corrections.html"), /No corrections yet\./);
+  assert.match(bitcoin, /property="og:image:alt" content="@benjamincowen vs\. @DrJStrategy, BITCOIN, Nov 14, 2026 and Nov 16, 2026"/);
+  assert.match(bitcoin, /<title>Round 2: @benjamincowen vs\. @DrJStrategy on BTC/);
+  assert.doesNotMatch(bitcoin, /@DrJStrategy vs\. @benjamincowen/);
+  assert.match(official, /property="og:image:alt" content="@markminervini vs\. Ed Yardeni, S&amp;P 500, Nov 5, 2026 and Nov 11, 2026"/);
+  assert.equal(official.split('class="why-official"').length - 1, 2);
+  assert.match(official, /Official title fight\. The calls are opposite on the S&amp;P 500, and the horizon runs through the same Dec 31 close\./);
+  assert.match(official, /Wins on points only/);
+  assert.match(bitcoin, /<details class="full-quote"><summary>Full quote<\/summary>[\s\S]*Line breaks in the original post were tightened\./);
+  assert.doesNotMatch(bitcoin, /\(spacing normalized\)/);
+  assert.doesNotMatch(all, />The reply</);
+  assert.match(silver, /Brandt's same-day reply/);
+  assert.match(pages.get("fine-print.html"), /href="\/battle-calls-2\/fine-print\.html" aria-current="page"/);
 });
 
 test("scorecard finishes and edge states", () => {
