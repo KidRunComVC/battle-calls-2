@@ -441,27 +441,26 @@ function roundList(data) {
 function renderListedFight(fight, site, { lead = false } = {}) {
   const poster = layout.renderPoster(fight, {
     level: lead ? "h1" : "h2",
+    tile: true,
     cta: `<p>${link(`/fights/${fight.id}.html`, "Open the fight card", { className: "cta" })}</p>`,
     teaserHtml: teaser(site),
   });
-  const role = lead ? "card-lead card-headliner" : "undercard-bout";
-  return `<article class="${role}" id="${fight.id}">${poster}</article>`;
+  const headliner = fight.role === "main" ? " card-headliner" : "";
+  const role = lead ? "card-lead" : "undercard-bout";
+  return `<article class="${role}${headliner}" id="${fight.id}">${poster}</article>`;
 }
 
 export function renderHome(data) {
   const site = data.site;
   const ordered = orderedFights(data);
-  const headliner = ordered.find((fight) => fight.role === "main") || ordered[0];
-  const rest = ordered.filter((fight) => fight !== headliner);
   const intro = `<div class="wrap card-intro"><p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p></div>`;
-  const list = headliner
-    ? `<section class="card-list" aria-label="The card">
+  const list = ordered.length
+    ? `<section class="card-list" aria-label="The card, in round order">
         ${intro}
-        ${renderListedFight(headliner, site, { lead: true })}
-        ${rest.length ? `<div class="undercard">${rest.map((fight) => renderListedFight(fight, site)).join("")}</div>` : ""}
+        ${ordered.map((fight, index) => renderListedFight(fight, site, { lead: index === 0 })).join("")}
       </section>`
     : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
-  const description = headliner ? cardDescription(data) : site.tagline;
+  const description = ordered.length ? cardDescription(data) : site.tagline;
   return document({
     title: site.fullName,
     description,
@@ -470,7 +469,7 @@ export function renderHome(data) {
     imageAlt: `${site.fullName}. ${site.tagline}`,
     main: `<main id="content" tabindex="-1">
       ${list}
-      ${headliner ? ropes() : ""}
+      ${ordered.length ? ropes() : ""}
       <section class="band wrap" aria-labelledby="rules-home">
         <h2 id="rules-home" class="display-heading">The rules, in one line</h2>
         <p class="rules-blurb">${escapeText(site.rulesBlurb)}</p>

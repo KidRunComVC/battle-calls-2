@@ -73,9 +73,9 @@ The tale of the tape is one table. Rows are the tape labels. Columns are the two
 
 The scorecard ring is CSS. Tick positions are percentages written into `css/meters.css` at build time, so the page has no inline style and no script. The latest close, both entries, and the KO or decision lines are marks on one SPX, silver, or bitcoin scale. The words under the ring repeat every mark, so the graphic is not the only way to read it. Exhibitions with no posted close say so.
 
-## Why the title fight leads the home card
+## Why the exhibitions come before the title fight
 
-The home page leads with Round 3, the official S&P 500 title fight, then Round 1 and Round 2. The title fight keeps its official label and a heavier frame. The tagline stays the site line above the card. Nav, Methodology, and About still list the rounds from Round 1 upward. Each poster links to its own card.
+The home page, the nav, and the round lists go Round 1, Round 2, then Round 3. Silver and Bitcoin are the exhibitions. The S&P 500 bout is last and keeps the heavier main-event frame. The tagline stays the site line above the card. Each poster links to its own card.
 
 ## Why a deleted post is only a note
 

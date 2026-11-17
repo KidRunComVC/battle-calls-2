@@ -61,8 +61,9 @@ test("home lists rounds in ascending order starting at Round 1", () => {
   const bitcoinAt = home.indexOf("fights/round-2-bitcoin.html");
   const officialAt = home.indexOf("fights/round-3-spx.html");
   assert.ok(silverAt >= 0 && silverAt < bitcoinAt && bitcoinAt < officialAt);
-  assert.ok(home.indexOf('id="round-3-spx"') < home.indexOf('id="round-1-silver"'));
   assert.ok(home.indexOf('id="round-1-silver"') < home.indexOf('id="round-2-bitcoin"'));
+  assert.ok(home.indexOf('id="round-2-bitcoin"') < home.indexOf('id="round-3-spx"'));
+  assert.match(home, /id="round-3-spx"[\s\S]*poster-headliner|poster-headliner[\s\S]*id="round-3-spx"/);
   assert.match(home, /property="og:image" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/assets\/og\/site\.png"/);
   assert.match(home, /Round 1 EXHIBITION: @PeterLBrandt vs\. @PeterSchiff on SI/);
   assert.match(home, /Round 2 EXHIBITION: @benjamincowen vs\. @DrJStrategy on BTC/);
