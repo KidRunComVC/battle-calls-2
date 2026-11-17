@@ -640,11 +640,16 @@ function header(current, extra = []) {
   }).join("");
   return `<header class="site-header">
     <div class="wrap">
-      <a class="site-name" href="${withBase("/")}">
-        <span class="site-name-main">Battle Calls</span>
-        <span class="site-name-sub">the unauthorized fight card</span>
-      </a>
-      <p class="affiliation">PLACEHOLDER</p>
+      <div class="header-brand">
+        <div class="header-copy">
+          <a class="site-name" href="${withBase("/")}">
+            <span class="site-name-main">Battle Calls</span>
+            <span class="site-name-sub">the unauthorized fight card</span>
+          </a>
+          <p class="affiliation">PLACEHOLDER</p>
+        </div>
+        <img class="header-banner" src="${withBase("/assets/img/header-banner.webp")}" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager">
+      </div>
       <nav class="site-nav" aria-label="Primary"><ul>${items}</ul></nav>
     </div>
     <div class="ropes" aria-hidden="true"></div>
