@@ -42,11 +42,12 @@ export function createLayout(h) {
     </p>`;
   }
 
-  function renderPoster(fight, { level = "h1", lede = "", extra = "", cta = "", teaserHtml = "" } = {}) {
+  function renderPoster(fight, { level = "h1", lede = "", extra = "", cta = "", teaserHtml = "", tile = false } = {}) {
     const [bear, bull] = ordered(fight);
     const Tag = level;
     const headliner = fight.role === "main" ? " poster-headliner" : "";
-    return `<header class="poster${level === "h1" ? " poster-main" : " poster-tile"}${headliner}">
+    const size = tile && fight.role !== "main" ? " poster-tile" : " poster-main";
+    return `<header class="poster${size}${headliner}">
       <${Tag} class="billing">
         <span class="billing-round">Round ${fight.round}</span>
         <span class="stamp">${escapeText(fight.label)}</span>
