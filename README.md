@@ -54,7 +54,7 @@ That script needs Pillow and fontTools, which are build tools, not part of the s
 
 ## Privacy
 
-Commits use a noreply identity. `.githooks/pre-push` runs `scripts/privacy-scan.mjs`. The term list lives in `.privacy-terms.local`, which is not committed. Copy `.privacy-terms.example` to that name and replace the placeholders. If the local file is missing, the term check skips. Install the hook with:
+Commits use a noreply identity. `.githooks/pre-push` runs `scripts/privacy-scan.mjs`. The term list is not committed. Copy `.privacy-terms.example` to `.privacy-terms.local`, or set `PRIVACY_TERMS` (one term per line) or `PRIVACY_TERMS_FILE` (a path). If none of those is set, the scan exits with an error. `node scripts/privacy-scan.mjs --allow-missing` skips only the denylist. Install the hook with:
 
 ```sh
 git config core.hooksPath .githooks

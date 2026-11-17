@@ -186,12 +186,16 @@ test("archive lists weeks and keeps the original bout URLs", () => {
   const archive = pages.get("archive/index.html");
   const week = pages.get("archive/2026-11-16/index.html");
   assert.match(archive, /href="\/battle-calls-2\/archive\/2026-11-16\/"/);
-  assert.match(archive, /Current card/);
-  assert.match(archive, /Round 1: Silver/);
-  assert.match(week, /Public result/);
-  assert.match(week, />Pending</);
+  assert.match(archive, /Week of Nov 16, 2026/);
+  assert.match(archive, /Every week's fight card, newest first/);
+  assert.doesNotMatch(archive, /current pointer/);
+  assert.match(archive, /Silver: @PeterLBrandt vs @PeterSchiff/);
+  assert.match(week, /This week's card/);
+  assert.doesNotMatch(week, /also listed here/);
+  assert.match(week, /Result: pending, final bell Dec 31, 2026/);
+  assert.doesNotMatch(week, />Pending</);
   assert.match(week, /href="\/battle-calls-2\/fights\/round-1-silver\.html"/);
-  assert.match(silver, /Public result/);
+  assert.match(silver, /Result: pending, final bell Dec 31, 2026/);
   assert.match(home, /href="\/battle-calls-2\/archive\/"/);
   const fake = structuredClone(data);
   fake.weeks = [

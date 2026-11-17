@@ -400,23 +400,34 @@ export function renderMeterCss(data) {
   return layout.renderMeterCss(fights);
 }
 
-function publicField(value) {
-  const text = value == null ? "" : String(value).trim();
-  return text || "Pending";
+function filled(value) {
+  return value != null && String(value).trim() !== "";
+}
+
+function resultRows(fight) {
+  const result = fight.publicResult || {};
+  return [
+    ["Winner", result.winner],
+    ["Final price", result.finalPrice],
+    ["Why", result.why],
+  ].filter(([, value]) => filled(value));
+}
+
+function pendingLine(fight) {
+  const bell = filled(fight.finalBell) ? `, final bell ${fight.finalBell}` : "";
+  return `Result: pending${bell}`;
 }
 
 function publicResult(fight) {
-  const result = fight.publicResult || {};
-  const rows = [
-    ["Winner", publicField(result.winner)],
-    ["Final price", publicField(result.finalPrice)],
-    ["Why", publicField(result.why)],
-  ];
+  const rows = resultRows(fight);
+  const body = rows.length
+    ? `<dl class="rules">${rows
+        .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
+        .join("")}</dl>`
+    : `<p>${escapeText(pendingLine(fight))}</p>`;
   return `<section class="public-result" aria-labelledby="${fight.id}-public-result">
-    <h2 id="${fight.id}-public-result" class="display-heading">Public result</h2>
-    <dl class="rules">${rows
-      .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
-      .join("")}</dl>
+    <h2 id="${fight.id}-public-result" class="display-heading">Result</h2>
+    ${body}
   </section>`;
 }
 
@@ -805,31 +816,97 @@ export function renderDocument(site, page) {
   return shell(site, page);
 }
 
-function weekLabel(week) {
-  return `Week of ${week.week}`;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function humanDate(iso) {
+  const [year, month, day] = String(iso).split("-").map(Number);
+  if (!year || !month || !day) return String(iso);
+  return `${MONTHS[month - 1]} ${day}, ${year}`;
 }
 
-function boutLine(fight) {
-  return `Round ${fight.round}: ${fight.posterWord || fight.ticker || "Bout"}`;
+function weekLabel(week) {
+  return `Week of ${humanDate(week.week)}`;
+}
+
+function cornerWho(corner) {
+  return corner.handle ? `@${corner.handle}` : corner.name || "";
+}
+
+function orderedCorners(fight) {
+  const bear = (fight.corners || []).find((corner) => corner.side === "bear");
+  const bull = (fight.corners || []).find((corner) => corner.side === "bull");
+  const ordered = [bear, bull].filter(Boolean);
+  return ordered.length ? ordered : fight.corners || [];
+}
+
+function matchupLine(fight) {
+  const names = orderedCorners(fight).map(cornerWho).filter(Boolean);
+  const word = fight.posterWord ? `${fight.posterWord}: ` : "";
+  return `${word}${names.join(" vs ")}`;
+}
+
+function cardTag(fight) {
+  const title = fight.role === "main" || /title/i.test(fight.label || "");
+  return title
+    ? { text: "Title fight", className: "stamp stamp-title" }
+    : { text: "Exhibition", className: "stamp" };
+}
+
+function weekStatus(week, currentWeek) {
+  if (week.week === currentWeek) return "This week's card";
+  if (!week.fights.length) return "No bouts yet";
+  if (week.fights.some((fight) => resultRows(fight).length)) return "Results posted";
+  return "No results yet";
+}
+
+function callerBlock(fight) {
+  const corners = orderedCorners(fight);
+  const lines = corners
+    .map((corner) => {
+      const quote = corner.posterCall || corner.koLine || "";
+      return `<p class="archive-caller"><span class="who">${escapeText(cornerWho(corner))}</span> ${escapeText(quote)}</p>`;
+    })
+    .join(`<p class="archive-vs">vs</p>`);
+  const names = corners.map(cornerWho).filter(Boolean).join(" vs ");
+  return `<p class="archive-matchup">${escapeText(names)}</p><div class="archive-callers">${lines}</div>`;
+}
+
+function archiveResult(fight) {
+  const rows = resultRows(fight);
+  if (!rows.length) {
+    return `<div class="archive-result"><p class="archive-result-line">${escapeText(pendingLine(fight))}</p></div>`;
+  }
+  return `<div class="archive-result">
+    <h3 class="archive-result-label">Result</h3>
+    <dl class="rules">${rows
+      .map(([label, text]) => `<div><dt>${escapeText(label)}</dt><dd>${escapeText(text)}</dd></div>`)
+      .join("")}</dl>
+  </div>`;
 }
 
 export function renderArchiveIndex(data) {
   const weeks = [...(data.weeks || [])].sort((a, b) => b.week.localeCompare(a.week));
   const items = weeks.length
-    ? `<ol class="archive-list">${weeks
+    ? `<div class="archive-index">${weeks
         .map((week) => {
-          const names = week.fights.map((fight) => boutLine(fight)).join(". ");
-          const mark = week.week === data.currentWeek ? " Current card." : "";
-          const summary = names || "No bouts filed for this week yet.";
-          return `<li><p>${link(`/archive/${week.week}/`, weekLabel(week))}${escapeText(mark)}</p><p>${escapeText(summary)}</p></li>`;
+          const bouts = week.fights.length
+            ? `<ul class="week-card-bouts">${week.fights
+                .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
+                .join("")}</ul>`
+            : `<p>No bouts filed for this week yet.</p>`;
+          return `<a class="week-card" href="${withBase(`/archive/${week.week}/`)}">
+            <h2 class="week-card-title">${escapeText(weekLabel(week))}</h2>
+            ${bouts}
+            <p class="week-card-status">${escapeText(weekStatus(week, data.currentWeek))}</p>
+          </a>`;
         })
-        .join("")}</ol>`
+        .join("")}</div>`
     : `<p class="empty">No weeks on file.</p>`;
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
       <div class="wrap sheet-copy">
       <h1>Archive</h1>
-      <p>Cards on file, newest week first. The live card is the week named in the current pointer. A finished bout shows its public result. Empty fields stay Pending.</p>
+      <p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>
       ${items}
       <p>${link("/", "Back to the card")}</p>
       </div>
@@ -837,7 +914,7 @@ export function renderArchiveIndex(data) {
   </main>`;
   return document({
     title: "Archive — Battle Calls",
-    description: "Past Battle Calls cards, newest week first.",
+    description: "Every week's fight card, newest first.",
     path: "/archive/",
     image: "/assets/og/site.png",
     imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
@@ -848,31 +925,26 @@ export function renderArchiveIndex(data) {
 
 export function renderArchiveWeek(data, week) {
   const current = week.week === data.currentWeek;
+  const badge = current ? `<p class="stamp stamp-title">This week's card</p>` : `<p>An earlier card.</p>`;
   const cards = week.fights.length
     ? week.fights
         .map((fight) => {
-          const calls = (fight.corners || [])
-            .map((corner) => {
-              const who = corner.handle ? `@${corner.handle}` : corner.name;
-              const line = corner.posterCall || corner.koLine || "";
-              return `<p>${escapeText(who)}: ${escapeText(line)}</p>`;
-            })
-            .join("");
-          return `<section class="archive-bout" aria-labelledby="${fight.id}-archive">
-            <h2 id="${fight.id}-archive" class="display-heading">${escapeText(boutLine(fight))}</h2>
-            <p>${escapeText(fight.label || "")}</p>
-            ${calls}
-            ${publicResult(fight)}
-            <p>${link(fightPath(fight), "Open the fight card")}</p>
-          </section>`;
+          const tag = cardTag(fight);
+          return `<article class="archive-card" aria-labelledby="${fight.id}-archive">
+            <p class="kicker"><span>Round ${fight.round}</span> <span class="${tag.className}">${escapeText(tag.text)}</span></p>
+            <h2 id="${fight.id}-archive" class="archive-round-title">${escapeText(fight.posterWord || boutWord(fight))}</h2>
+            ${callerBlock(fight)}
+            ${archiveResult(fight)}
+            <p class="archive-open">${link(fightPath(fight), "Open the fight card")}</p>
+          </article>`;
         })
         .join("")
     : `<p class="empty">No bouts filed for this week yet.</p>`;
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
       <div class="wrap sheet-copy">
-      <h1>${escapeText(weekLabel(week))}</h1>
-      <p>${current ? "This is the current card. It is also listed here." : "This card has left the homepage."}</p>
+      <h1 class="archive-week-title">${escapeText(weekLabel(week))}</h1>
+      ${badge}
       ${cards}
       <p>${link("/archive/", "All weeks")}</p>
       </div>
@@ -887,6 +959,10 @@ export function renderArchiveWeek(data, week) {
     main,
     fights: data.fights,
   });
+}
+
+function boutWord(fight) {
+  return fight.ticker || "Bout";
 }
 
 export function renderPages(data, finePrint, corrections = { entries: [] }) {
