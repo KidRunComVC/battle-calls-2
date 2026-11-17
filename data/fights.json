@@ -8,7 +8,7 @@
     "postFight": "Respect to both corners. Putting a number on the record in public takes guts.",
     "affiliation": "Independent commentary. Not affiliated with, endorsed by, or sponsored by X or anyone featured. All names and marks belong to their owners.",
     "affiliationShort": "Unauthorized. Not affiliated with X or anyone featured.",
-    "footerLine": "Unauthorized. Not affiliated with or endorsed by anyone on the card. Entertainment only, not financial advice.",
+    "footerLine": "Independent commentary, entertainment only, not financial advice. Not affiliated with, endorsed by, or sponsored by X or anyone on the card. All names and marks belong to their owners.",
     "teaser": "Read the fine print before the bell.",
     "unauthorized": "\"Unauthorized\" means the people on the card did not participate in this site and did not agree to be scored here.",
     "advice": "Entertainment and education only. This is not financial, investment, or trading advice.",
@@ -269,7 +269,7 @@
               "text": "The post is a historical analog to the average of 7 past shutdowns. It names no price level."
             }
           ],
-          "posterCall": "potentially December 12th; normally drops before the shutdown",
+          "posterCall": "Next shutdown potentially Dec 12th. Bitcoin normally drops before it.",
           "posterKo": "Close below $57,000"
         }
       ],

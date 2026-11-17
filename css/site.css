@@ -610,12 +610,6 @@ main {
   margin-top: 0;
 }
 
-.footer-affiliation {
-  max-width: var(--measure);
-  margin-top: var(--space-2);
-  color: var(--color-muted);
-}
-
 #rules-home {
   max-width: none;
   font-size: clamp(1.35rem, 8vw, var(--text-xl));

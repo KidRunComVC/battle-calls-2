@@ -709,7 +709,6 @@ function footer(site, current, extra = []) {
     <div class="ropes" aria-hidden="true"></div>
     <div class="wrap">
       <p class="footer-plain">${escapeText(site.footerLine)}</p>
-      <p class="footer-affiliation">${escapeText(site.affiliation)}</p>
       <nav aria-label="Footer"><ul class="footer-links">${links}</ul></nav>
     </div>
   </footer>`;
