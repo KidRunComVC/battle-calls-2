@@ -9,10 +9,10 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer">
 <title>Methodology — Battle Calls</title>
-<meta name="description" content="How Battle Calls locks a call, names a price, and scores a bout. Entertainment and education only, not advice.">
+<meta name="description" content="How a Battle Calls bout is scored. One public caller against THE MARKET, with the caller&#39;s own entry, target, and deadline.">
 <link rel="canonical" href="https://kidruncomvc.github.io/battle-calls-2/methodology.html">
 <meta property="og:title" content="Methodology — Battle Calls">
-<meta property="og:description" content="How Battle Calls locks a call, names a price, and scores a bout. Entertainment and education only, not advice.">
+<meta property="og:description" content="How a Battle Calls bout is scored. One public caller against THE MARKET, with the caller&#39;s own entry, target, and deadline.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kidruncomvc.github.io/battle-calls-2/methodology.html">
 <meta property="og:image" content="https://kidruncomvc.github.io/battle-calls-2/assets/og/site.png">
@@ -21,7 +21,7 @@
 <meta property="og:image:alt" content="Battle Calls: the unauthorized fight card. Two calls enter. One walks out.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Methodology — Battle Calls">
-<meta name="twitter:description" content="How Battle Calls locks a call, names a price, and scores a bout. Entertainment and education only, not advice.">
+<meta name="twitter:description" content="How a Battle Calls bout is scored. One public caller against THE MARKET, with the caller&#39;s own entry, target, and deadline.">
 <meta name="twitter:image" content="https://kidruncomvc.github.io/battle-calls-2/assets/og/site.png">
 <meta name="twitter:image:alt" content="Battle Calls: the unauthorized fight card. Two calls enter. One walks out.">
 <link rel="icon" href="/battle-calls-2/assets/favicon.svg" type="image/svg+xml">
@@ -31,6 +31,7 @@
 <link rel="preload" href="/battle-calls-2/assets/fonts/source-sans-3-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/battle-calls-2/css/tokens.css">
 <link rel="stylesheet" href="/battle-calls-2/css/site.css">
+<link rel="stylesheet" href="/battle-calls-2/css/fight-card.css">
 <link rel="stylesheet" href="/battle-calls-2/css/meters.css">
 </head>
 <body class="page-inner">
@@ -58,40 +59,41 @@
       <div class="wrap sheet-copy">
       <header>
         <h1>Methodology</h1>
-        <p>Battle Calls locks a call before it is judged. The market is the referee. The horizon is chosen before the result, and it is not moved afterward.</p>
+        <p>A bout is one public caller against THE MARKET. The entry, the target, and the deadline come from the caller's own post. Those three lines are the fight.</p>
       </header>
-      
-      <section aria-labelledby="lock">
-        <h2 id="lock" class="display-heading">Lock the call</h2>
-        <p>Each call is archived before judging: the URL when one exists, the post ID, the time in UTC and in ET, and the wording copied exactly. If the post is edited later, the locked wording is what gets judged. A deleted post is noted on the card and is not republished. The note says it was deleted, and it is not used for scoring in place of the repost.</p>
+      <section aria-labelledby="call-size">
+        <h2 id="call-size" class="display-heading">The call size</h2>
+        <p>The call size is the percent move from the entry to the target. If a caller gives a range, only the lower number counts. A call from $100 to $120–$140 is a 20% call.</p>
       </section>
-      <section aria-labelledby="entry">
-        <h2 id="entry" class="display-heading">Entry price</h2>
-        <p>Posted during regular hours: the open of the first 1-minute bar after the post. Posted outside regular hours: the next regular-session open. For a venue that trades through the weekend, the card names the bar it used. Each person is scored from that person's own entry.</p>
+      <section aria-labelledby="win-ko">
+        <h2 id="win-ko" class="display-heading">A win, and a KO</h2>
+        <p>Hitting the call on the penny is a win. One penny past it is a knockout. A long from $100 to $120 wins at $120.00 and is a KO at $120.01.</p>
+        <p>THE MARKET is the mirror. On that same call, $80.00 is a win for THE MARKET, and $79.99 is a KO. The level is the call distance taken the other way from the entry. The KO is one penny past that level.</p>
+        <p>The against-distance is the smaller of the call distance and 50% of the entry, rounded down to the cent. The KO is one more penny past that. A call for a 100% move is not answered 100% the other way.</p>
+        <p>There is no stop on the card. THE MARKET's KO is what ends a bout the hard way. A stop a caller named is not used for now. A side condition in the post, such as "after hitting my $130 target," is ignored. Only the main target is scored.</p>
       </section>
-      <section aria-labelledby="source">
-        <h2 id="source" class="display-heading">Price source and timestamp</h2>
-        <p>Every bout names its price source and the timestamp of the print. A locked historical print is labeled as such. It is not a live quote. For crypto, one venue is named before judging. The default reference is the official close. A call that names a target or a stop is a touch call, judged on the intraday high or low, and the first to touch wins, unless the bout says it uses daily settles or daily closes only.</p>
+      <section aria-labelledby="touch">
+        <h2 id="touch" class="display-heading">A touch</h2>
+        <p>A level is hit when price trades there, or when the market gaps open at or past it. Pre-market and after-hours count, along with the regular session. It does not have to be the close.</p>
+        <p>The first touch of either side's level ends the bout. A later move cannot change the result. If both sides' levels are touched in the same minute, the bout is Under review.</p>
       </section>
-      <section aria-labelledby="horizon">
-        <h2 id="horizon" class="display-heading">Horizons</h2>
-        <p>Today means that day's close. This week means Friday's close. When no horizon is stated, the horizon is five trading days, and that choice is announced before judging. The horizon is never picked after the fact. When Battle Calls sets the horizon, the card says so.</p>
+      <section aria-labelledby="endings">
+        <h2 id="endings" class="display-heading">How it ends</h2>
+        <ul class="endings">
+          <li><strong>Win.</strong> Price hits the target on the penny, and does not go one penny past it.</li>
+          <li><strong>Win by KO.</strong> Price trades one penny past the target.</li>
+          <li><strong>Win by decision.</strong> No level is touched, and the deadline-day regular-session close is at or past the entry in the caller's direction. A close exactly at the entry goes to the caller.</li>
+          <li><strong>Loss.</strong> Price hits THE MARKET's level on the penny, and does not go one penny past it.</li>
+          <li><strong>Loss by KO.</strong> Price trades one penny past THE MARKET's level.</li>
+          <li><strong>Loss by decision.</strong> No level is touched, and the deadline close is on THE MARKET's side of the entry.</li>
+        </ul>
+        <p class="rule-call">The Price Decided and THE MARKET won.</p>
       </section>
-      <section aria-labelledby="types">
-        <h2 id="types" class="display-heading">Call types</h2>
-        <p>A call is a direction, a target, or a relative comparison. A clean opposite is the same asset, an overlapping horizon, and opposite directions. A hedged or untimed call cannot be an official bout. It may run as a labeled EXHIBITION, with the rules set in advance. No contest is the result when a bout cannot be judged, for example when the data is unavailable or a call is withdrawn before the first bell.</p>
-        <p>When a bout defines a stop-hit that ends it before the bell, that finish is a TKO, not a KO. The card lists the checks in order, before any of them can hit. KO, TKO (stop hit), and decision are separate finishes.</p>
-      </section>
-      <section aria-labelledby="scoring">
-        <h2 id="scoring" class="display-heading">How a result is named</h2>
-        <p>Results are reported in percent and in points, to two decimals. A KO is the level named on the card. A decision is the bigger favorable move from each entry when no KO lands, using the rule that bout locked. A draw is a move smaller than the larger of 0.25% and half the 20-day average daily move, unless the bout has already published a tighter or wider band. The band on the card is the band that is used. If both targets hit, the first to touch wins, unless the bout is settle-only or close-only.</p>
-        <p>The scorecard is updated on a weekly check-in until the final bell. A lead on a check-in is not a winner.</p>
-      </section>
-      <section aria-labelledby="tape-rules">
-        <h2 id="tape-rules" class="display-heading">Tale of the tape</h2>
-        <p>The tape shows the corner, the name, the handle as text when there is a public handle, a profile link when there is one, the exact call, the link to the original post or broadcast, the time in ET, the price at the first bell, the KO line, the final bell, and a site-only record that starts at 0-0-0.</p>
-        <p>Account age and follower counts are shown only when a primary-source figure was archived with a timestamp. This launch card does not show them, because those figures were not archived that way. They are not estimated. A credential is shown only when it is verifiable at a primary source: the CMT directory, the CFA designation, BrokerCheck, or IAPD. Claimed returns, hit rates, and AUM are not shown.</p>
-        <p>A television call with no post is labeled as a TV call. The card quotes only the wording it has, and it says when the spoken wording is still pending a tape check. No profile link is invented.</p>
+      <section aria-labelledby="clock">
+        <h2 id="clock" class="display-heading">The clock</h2>
+        <p>Entry is the official closing price of the last regular session before the post. Prices are never adjusted for dividends or splits. The percent on the card is rounded half-up to one decimal.</p>
+        <p>If no level is touched, the deadline-day regular-session close decides the bout.</p>
+        <p>This is commentary and entertainment, not investment advice.</p>
       </section>
       <section aria-labelledby="corrections-method">
         <h2 id="corrections-method" class="display-heading">Corrections</h2>

@@ -1,0 +1,808 @@
+/* Caller versus THE MARKET. Colors are the site tokens.
+   Status is the word, the icon shape, and the box border. */
+
+.fight-cards {
+  margin-top: var(--space-3);
+}
+
+.fight-cards > h2 {
+  margin-bottom: var(--space-1);
+}
+
+.fight-card + .fight-card {
+  margin-top: var(--space-3);
+}
+
+.fight-card {
+  margin: 0;
+  padding: var(--space-2);
+  background: var(--color-bg-raised);
+  color: var(--color-ink);
+  border: var(--space-1) solid var(--color-blood);
+  box-shadow: 0 0 0 3px var(--color-gold);
+}
+
+.fight-corners {
+  display: grid;
+  align-items: center;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.fight-side {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.fight-side-market {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.fight-badge,
+.fight-market-mark {
+  display: grid;
+  place-items: center;
+  width: var(--space-4);
+  height: var(--space-4);
+  flex: none;
+  border: 1px solid var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  line-height: 1;
+}
+
+.fight-badge {
+  background: var(--color-blood);
+  color: var(--color-on-blood);
+}
+
+.fight-market-mark {
+  background: var(--color-bg);
+}
+
+.fight-market-mark::before {
+  content: "";
+  width: var(--space-2);
+  height: var(--space-2);
+  background: var(--color-gold);
+  transform: rotate(45deg);
+}
+
+.fight-id {
+  min-width: 0;
+}
+
+.fight-handle,
+.fight-market-name {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.fight-handle {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  text-transform: none;
+}
+
+.fight-market-name {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  letter-spacing: 0.06em;
+}
+
+.fight-followers,
+.fight-date {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-family: var(--font-text);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+.fight-vs {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  line-height: 0;
+}
+
+.fight-vs-logo {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  /* The round badge sits inside the square file. This clips the mat. */
+  clip-path: circle(43%);
+}
+
+.fight-method,
+.fight-rule-link {
+  margin: var(--space-1) 0 0;
+}
+
+.fight-method a,
+.fight-rule-link a,
+.fight-source a,
+.fight-scored a {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 10px var(--space-1);
+}
+
+.fight-source a,
+.fight-method a,
+.fight-rule-link a {
+  color: var(--color-gold);
+  font-weight: 600;
+  text-underline-offset: 0.18em;
+}
+
+.fight-source a:hover,
+.fight-source a:focus-visible,
+.fight-method a:hover,
+.fight-method a:focus-visible,
+.fight-rule-link a:hover,
+.fight-rule-link a:focus-visible {
+  color: var(--color-focus);
+}
+
+.fight-quote {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2);
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border: 3px solid var(--color-bg);
+}
+
+.fight-quote p {
+  margin: 0;
+  max-width: none;
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  quotes: "\201C" "\201D";
+}
+
+.fight-quote p::before {
+  content: open-quote;
+}
+
+.fight-quote p::after {
+  content: close-quote;
+}
+
+.fight-source {
+  margin: 0;
+}
+
+.fight-kicker {
+  margin: 0;
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.fight-tape-title {
+  margin-top: var(--space-3);
+}
+
+.fight-tape {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 11.5rem) minmax(0, 1fr);
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-2) 0 0;
+}
+
+.fight-tape dt {
+  margin: 0;
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.fight-tape dd {
+  margin: 0;
+  min-width: 0;
+  color: var(--color-ink);
+  font-size: 1rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.fight-note {
+  color: var(--color-muted);
+}
+
+.fight-result {
+  margin-top: var(--space-3);
+  padding: var(--space-2);
+  background: var(--color-gold);
+  color: var(--color-bg);
+  border: 3px solid var(--color-bg);
+}
+
+.fight-result[data-status="open"],
+.fight-result[data-status="unknown"],
+.fight-result[data-status="loss-by-decision"] {
+  border-style: dashed;
+}
+
+.fight-result[data-status="expired"],
+.fight-result[data-status="under-review"] {
+  border-style: dotted;
+}
+
+.fight-result[data-status="win-by-decision"] {
+  border-style: double;
+}
+
+.fight-result .fight-kicker,
+.fight-result-when,
+.fight-result-detail,
+.fight-scored {
+  color: var(--color-bg);
+}
+
+.fight-result-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.fight-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+}
+
+.fight-status-icon {
+  position: relative;
+  width: var(--space-2);
+  height: var(--space-2);
+  flex: none;
+}
+
+.fight-status-icon-open,
+.fight-status-icon-unknown {
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.fight-status-icon-expired {
+  border: 2px dotted currentColor;
+  border-radius: 50%;
+}
+
+.fight-status-icon-win::before {
+  content: "";
+  position: absolute;
+  left: 0.42rem;
+  top: 0.12rem;
+  bottom: 0.12rem;
+  border-left: 2px solid currentColor;
+}
+
+.fight-status-icon-loss::before {
+  content: "";
+  position: absolute;
+  left: 0.12rem;
+  right: 0.12rem;
+  top: 0.42rem;
+  border-top: 2px solid currentColor;
+}
+
+.fight-status-icon-won::before,
+.fight-status-icon-win-by-ko::before,
+.fight-status-icon-win-by-decision::before {
+  content: "";
+  position: absolute;
+  left: 0.14rem;
+  top: 0.28rem;
+  width: 0.55rem;
+  height: 0.28rem;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.fight-status-icon-win-by-decision::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-bottom: 2px solid currentColor;
+}
+
+.fight-status-icon-under-review {
+  border: 2px dashed currentColor;
+  border-radius: 50%;
+}
+
+.fight-status-icon-under-review::before {
+  content: "";
+  position: absolute;
+  left: 0.42rem;
+  top: 0.12rem;
+  height: 0.42rem;
+  border-left: 2px solid currentColor;
+}
+
+.fight-status-icon-lost::before,
+.fight-status-icon-lost::after,
+.fight-status-icon-loss-by-ko::before,
+.fight-status-icon-loss-by-ko::after,
+.fight-status-icon-loss-by-decision::before,
+.fight-status-icon-loss-by-decision::after {
+  content: "";
+  position: absolute;
+  left: 0.45rem;
+  top: 0;
+  height: 1rem;
+  border-left: 2px solid currentColor;
+}
+
+.fight-status-icon-lost::before,
+.fight-status-icon-loss-by-ko::before,
+.fight-status-icon-loss-by-decision::before {
+  transform: rotate(45deg);
+}
+
+.fight-status-icon-lost::after,
+.fight-status-icon-loss-by-ko::after,
+.fight-status-icon-loss-by-decision::after {
+  transform: rotate(-45deg);
+}
+
+.fight-result-when,
+.fight-result-detail {
+  margin: var(--space-1) 0 0;
+  max-width: none;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.fight-result-when {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.fight-print {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-ink);
+  border: 2px solid var(--color-ink);
+}
+
+.fight-print-date,
+.fight-ohlc,
+.fight-ohlc dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: var(--text-md);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+
+.fight-print-date {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fight-ohlc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+}
+
+.fight-ohlc div {
+  display: flex;
+}
+
+.fight-scored {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-1);
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.fight-scored a {
+  gap: var(--space-1);
+  color: var(--color-bg);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.fight-scored a:visited,
+.fight-scored a:hover,
+.fight-scored a:focus-visible {
+  color: var(--color-bg);
+}
+
+.fight-result a:focus-visible,
+.fight-quote a:focus-visible {
+  outline: 3px solid var(--color-bg);
+  outline-offset: 3px;
+}
+
+.fight-scored svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.fight-tug {
+  margin: var(--space-3) 0 0;
+}
+
+.fight-tug-visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 0;
+  align-items: end;
+}
+
+.fight-tug-visual.has-caller-over {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 1.85rem;
+}
+
+.fight-tug-visual.has-market-over {
+  grid-template-columns: 1.85rem minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.fight-tug-visual.has-caller-over.has-market-over {
+  grid-template-columns: 1.85rem minmax(0, 1fr) minmax(0, 1fr) 1.85rem;
+}
+
+.fight-tug-row,
+.fight-tug-caps,
+.fight-tug-extremes {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+}
+
+.fight-tug-top {
+  grid-column: 1 / -1;
+  margin-bottom: var(--space-1);
+  text-align: center;
+}
+
+.fight-tug-start,
+.fight-tug-caps,
+.fight-tug-extremes {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+
+.fight-tug-half {
+  position: relative;
+  height: var(--space-2);
+  border: 2px solid var(--color-ink);
+}
+
+.fight-tug-market {
+  background: color-mix(in srgb, var(--color-blood) 16%, var(--color-bg));
+  border-right-width: 0;
+}
+
+.fight-tug-caller {
+  background: color-mix(in srgb, var(--color-gold) 14%, var(--color-bg));
+  border-left-width: 0;
+}
+
+.fight-tug-caller::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: -7px;
+  bottom: -7px;
+  width: 2px;
+  background: var(--color-ink);
+  z-index: 2;
+}
+
+.fight-tug-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.fight-tug-market .fight-tug-fill {
+  right: 0;
+  background-color: var(--color-blood);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.28) 3px,
+    rgba(0, 0, 0, 0.28) 5px
+  );
+}
+
+.fight-tug-caller .fight-tug-fill {
+  left: 0;
+  background-color: var(--color-gold);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.22) 3px,
+    rgba(0, 0, 0, 0.22) 5px
+  );
+}
+
+.fight-tug-burst {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  padding: 2px var(--space-1);
+  background: var(--color-blood);
+  color: var(--color-on-blood);
+  border: 2px solid var(--color-gold);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.fight-tug-market .fight-tug-burst {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.fight-tug-caller .fight-tug-burst {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.fight-tug-burst::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -5px;
+  background: var(--color-blood);
+  border: 2px solid var(--color-gold);
+  transform: rotate(45deg);
+}
+
+.fight-tug-over {
+  position: relative;
+  min-height: var(--space-2);
+}
+
+.fight-tug-pin {
+  position: absolute;
+  left: 0.45rem;
+  top: 50%;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--color-gold);
+  border: 2px solid var(--color-ink);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.fight-tug-pin-left {
+  left: auto;
+  right: 0.45rem;
+}
+
+.fight-tug-caps,
+.fight-tug-extremes {
+  margin-top: var(--space-1);
+}
+
+.fight-tug-extremes {
+  margin-top: 0;
+}
+
+.fight-tug-cap-market,
+.fight-tug-cap-caller,
+.fight-tug-extreme {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.fight-tug-caps > span:first-child,
+.fight-tug-extremes > span:first-child {
+  grid-column: 1;
+  justify-self: start;
+  text-align: left;
+}
+
+.fight-tug-visual.has-market-over .fight-tug-caps > span:first-child,
+.fight-tug-visual.has-market-over .fight-tug-extremes > span:first-child {
+  grid-column: 2;
+}
+
+.fight-tug-caps > span:last-child,
+.fight-tug-extremes > span:last-child {
+  grid-column: 2;
+  justify-self: end;
+  text-align: right;
+}
+
+.fight-tug-visual.has-market-over .fight-tug-caps > span:last-child,
+.fight-tug-visual.has-market-over .fight-tug-extremes > span:last-child {
+  grid-column: 3;
+}
+
+.fight-tug-visual.has-caller-over .fight-tug-caps > span:last-child,
+.fight-tug-visual.has-caller-over .fight-tug-extremes > span:last-child {
+  grid-column: 2;
+}
+
+.fight-tug-visual.has-caller-over.has-market-over .fight-tug-caps > span:last-child,
+.fight-tug-visual.has-caller-over.has-market-over .fight-tug-extremes > span:last-child {
+  grid-column: 3;
+}
+
+.fight-tug-caption {
+  margin: var(--space-2) 0 0;
+  max-width: none;
+  color: var(--color-ink);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.fight-disclaimer {
+  margin: var(--space-2) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-line);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.rule-call {
+  padding: var(--space-2);
+  background: var(--color-gold);
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+}
+
+.endings {
+  margin: 0;
+  padding-left: var(--space-3);
+}
+
+.endings li + li {
+  margin-top: var(--space-2);
+}
+
+@media (min-width: 40rem) {
+  .fight-card {
+    padding: var(--space-3);
+  }
+
+  .fight-corners {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .fight-vs-logo {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .fight-tug-caps,
+  .fight-tug-extremes,
+  .fight-tug-start {
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .fight-card,
+  .fight-quote,
+  .fight-result,
+  .fight-print,
+  .fight-badge,
+  .fight-market-mark,
+  .fight-tug-half {
+    border-width: 3px;
+  }
+}
+
+@media (forced-colors: active) {
+  .fight-card,
+  .fight-quote,
+  .fight-result,
+  .fight-print,
+  .fight-badge,
+  .fight-market-mark,
+  .fight-tug-half,
+  .fight-tug-burst,
+  .rule-call {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .fight-tug-fill,
+  .fight-market-mark::before,
+  .fight-tug-pin,
+  .fight-tug-burst::before {
+    background: CanvasText;
+    background-image: none;
+  }
+
+  .fight-result a,
+  .fight-quote,
+  .fight-quote p,
+  .fight-scored,
+  .fight-result .fight-kicker,
+  .rule-call {
+    color: CanvasText;
+  }
+}

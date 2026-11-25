@@ -21,8 +21,14 @@ test("every page carries the required head, footer, and fine-print link", () => 
     assert.match(html, /form-action 'none'/);
     assert.doesNotMatch(html, /web3forms/);
     assert.match(html, /Skip to content/);
-    assert.equal(html.match(/<img\b/gi).length, 1);
     assert.match(html, /class="header-banner" src="\/battle-calls-2\/assets\/img\/header-banner\.webp" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager"/);
+    const images = [...html.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
+    assert.equal(images.filter((tag) => tag.includes("header-banner")).length, 1);
+    for (const tag of images) {
+      assert.match(tag, /\balt="[^"]+"/);
+      assert.match(tag, /\bsrc="\/battle-calls-2\//);
+    }
+    assert.equal(images.length, 1 + images.filter((tag) => tag.includes("fight-vs-logo")).length);
     assert.match(html, /twitter:card" content="summary_large_image"/);
     assert.equal(html.split(data.site.footerLine).length - 1, 1);
     assert.match(html, /href="\/battle-calls-2\/fine-print\.html"/);
@@ -52,9 +58,30 @@ test("fine print is verbatim and additional", () => {
   assert.match(page, /This notice is in addition to the formal disclaimers/);
 });
 
-test("the card, archive, and standing pages have no bouts", () => {
-  assert.match(home, /<h1 id="empty-card">The card<\/h1>/);
-  assert.match(home, /No bout scheduled yet\. New fights are coming\./);
+test("the card shows the caller bout, and archive stays empty", () => {
+  assert.match(home, /<h1 id="the-card">The card<\/h1>/);
+  assert.doesNotMatch(home, /No bout scheduled yet/);
+  assert.match(home, /Caller vs\. THE MARKET/);
+  assert.match(home, /@MentoviaX versus THE MARKET/);
+  assert.match(home, /WIN BY KO/);
+  assert.match(home, /Mon Nov 23, 9:25 AM ET pre-market/);
+  assert.match(home, /<span aria-hidden="true">O <\/span>167\.035/);
+  assert.match(home, /<span aria-hidden="true">H <\/span>171\.50/);
+  assert.match(home, /<span aria-hidden="true">L <\/span>156\.93/);
+  assert.match(home, /<span aria-hidden="true">C <\/span>165\.05/);
+  assert.match(home, /\$166\.00 target, \$166\.01 KO \(\+32\.2%\)/);
+  assert.match(home, /\$85\.06 level, \$85\.05 KO \(-32\.2%\)/);
+  assert.match(home, /THE MARKET KO \$85\.05/);
+  assert.match(home, /CALLER KO \$166\.01/);
+  assert.match(home, /HIGH \$171\.50/);
+  assert.match(home, /Scored by HLK IV Quant/);
+  assert.match(home, /a Grok Bot/);
+  assert.match(home, /href="https:\/\/x\.ai\/bot" aria-label="Grok Bot website \(opens in a new tab\)" target="_blank" rel="noopener noreferrer"/);
+  assert.match(home, /href="https:\/\/x\.com\/MentoviaX\/status\/2123988433618207160" target="_blank" rel="noopener noreferrer"/);
+  assert.match(home, /alt="Battle Calls logo: crossed BC boxing gloves with VS"/);
+  assert.match(home, /class="fight-tug-fill tug-pct-1000"/);
+  assert.match(home, /class="fight-tug-fill tug-pct-0"/);
+  assert.doesNotMatch(home, /The Market|the market/);
   assert.doesNotMatch(home, /Open the fight card|coming soon|Undercard|\/fights\//i);
   assert.match(home, /property="og:image" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/assets\/og\/site\.png"/);
   assert.match(home, /Two calls enter\. One walks out\./);
@@ -167,8 +194,16 @@ test("scorecard finishes and edge states", () => {
   assert.doesNotMatch(deleted, /Archive of the original post/);
   assert.ok(deleted.includes("A".repeat(80)));
   assert.throws(() => page("retired"));
-  const empty = renderDocument(data.site, renderHome({ ...data, fights: [] }));
+  const empty = renderDocument(data.site, renderHome({ ...data, fights: [], fightCards: [] }));
   assert.match(empty, /No bout scheduled yet\. New fights are coming\./);
+  assert.match(pages.get("methodology.html"), /one public caller against THE MARKET/);
+  assert.match(pages.get("methodology.html"), /50% of the entry, rounded down to the cent/);
+  assert.match(pages.get("methodology.html"), /\$79\.99 is a KO/);
+  assert.match(pages.get("methodology.html"), /Win by KO/);
+  assert.match(pages.get("methodology.html"), /Loss by decision/);
+  assert.match(pages.get("methodology.html"), /The Price Decided and THE MARKET won/);
+  assert.match(pages.get("methodology.html"), /official closing price of the last regular session/);
+  assert.doesNotMatch(pages.get("methodology.html"), /five trading days|stop-hit|next regular-session open/);
   const logged = renderDocument(
     data.site,
     renderCorrections(data, {

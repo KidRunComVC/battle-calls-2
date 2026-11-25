@@ -35,6 +35,7 @@ export function build() {
   writeFileSync(join(out, "css/meters.css"), renderMeterCss(data));
   cpSync(join(root, "css/tokens.css"), join(out, "css/tokens.css"));
   cpSync(join(root, "css/site.css"), join(out, "css/site.css"));
+  cpSync(join(root, "css/fight-card.css"), join(out, "css/fight-card.css"));
   cpSync(join(root, "assets"), join(out, "assets"), { recursive: true });
   cpSync(join(root, "robots.txt"), join(out, "robots.txt"));
   for (const rel of stale) rmSync(join(root, rel), { force: true });

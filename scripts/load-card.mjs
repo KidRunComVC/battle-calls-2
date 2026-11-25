@@ -59,11 +59,14 @@ export function loadCard(root) {
   const weeks = loadWeeks(root);
   const current = weeks.find((week) => week.week === pointer.week);
   if (!current) throw new Error(`Current week ${pointer.week} has no file`);
+  const fightCards = JSON.parse(readFileSync(join(root, "data/fight-cards.json"), "utf8"));
+  if (!Array.isArray(fightCards)) throw new Error("data/fight-cards.json must be an array");
   return {
     site,
     currentWeek: pointer.week,
     weeks,
     fights: current.fights,
+    fightCards,
   };
 }
 

@@ -6,12 +6,12 @@ The pages a host should publish are only the files in `site/`. README, DESIGN, `
 
 ## Pages
 
-- Home, listing Round 1, Round 2, and Round 3 in that order
-- One fight card per bout, rendered from the current week in `data/weeks/`
-- Methodology
+- The card: one public call versus THE MARKET, from `data/fight-cards.json`
+- Methodology, the scoring rules for that card
 - Corrections
 - About
-- Fine print
+- Archive, for a week file in `data/weeks/` once it has bouts
+- Fine print, linked from the footer
 - 404
 
 ## Build
@@ -51,6 +51,18 @@ That script needs Pillow and fontTools, which are build tools, not part of the s
 5. Run the build, then `python3 scripts/make-assets.py` so the bout gets a 1200×675 share card.
 
 `npm run check` should pass before a commit.
+
+## Add a fight card
+
+The card page reads `data/fight-cards.json`, newest first. Each object is one public call versus THE MARKET. The build draws it. There is no browser script. The right corner stays THE MARKET. Do not add an avatar image.
+
+1. Copy the first object and paste the copy above it.
+2. Use the caller's handle, follower line, date, and exact quote. Set `sourceUrl` to the original post.
+3. Fill the tape from what they actually said. Do not invent a number. There is no stop field. If they gave a range, put only the lower number in `progress.target`, and do not mention the range on the card.
+4. Set `status` to `OPEN`, `WIN`, `WIN BY KO`, `WIN BY DECISION`, `LOSS`, `LOSS BY KO`, `LOSS BY DECISION`, `UNDER REVIEW`, or `EXPIRED`. `WIN` is an exact touch of the target. `WIN BY KO` is a penny past it. `LOSS` is an exact touch of THE MARKET's level. `LOSS BY KO` is a penny past that level. Add `result` when there is something to report.
+5. On `progress`, set `entry` and `target`. `target` is the price that wins, not the KO. The build works in cents. A touch of the target is a win. Caller's KO is one penny past it. THE MARKET's level is the same distance the other way from entry, and a touch there is a loss. THE MARKET's KO is one penny past that level. The against-distance is the smaller of the call distance and 50% of entry, rounded down to the cent, then one more penny. The percent on the card is rounded half-up to one decimal. It is not used to price the levels. Entry is the official unadjusted close of the last regular session. Set `result.caption` when the bar sentence should use the card's own words. The bar is a tug-of-war centered on the entry: THE MARKET's KO is the left end, Caller's KO is the right end, and each half is scaled to its own distance.
+6. On `result`, set `scorerName`, `scorerLabel`, and `scorerUrl` when someone should get the credit. The card writes "Scored by", then the name, then links the label and a small robot icon to `scorerUrl`.
+7. Run `node scripts/build.mjs`. How a bout is scored is the Methodology page.
 
 ## Privacy
 
