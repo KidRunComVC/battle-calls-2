@@ -25,6 +25,8 @@ const NAV = [
   ["/archive/", "Archive"],
 ];
 
+const EMPTY_CARD_LINE = "No bout scheduled yet. New fights are coming.";
+
 function navCurrent(href, current) {
   if (href === current) return true;
   return href === "/archive/" && current.startsWith("/archive");
@@ -474,10 +476,13 @@ function roundNav(data) {
 }
 
 function roundList(data) {
-  const items = orderedFights(data)
+  const fights = orderedFights(data);
+  if (!fights.length) return "";
+  const items = fights
     .map((fight) => `<li>${link(fightPath(fight), `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
     .join("");
-  return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list">${items}</ol></section>`;
+  const start = fights[0].round > 1 ? ` start="${fights[0].round}"` : "";
+  return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list"${start}>${items}</ol></section>`;
 }
 
 function renderListedFight(fight, site, { lead = false } = {}) {
@@ -501,7 +506,7 @@ export function renderHome(data) {
         ${intro}
         ${ordered.map((fight, index) => renderListedFight(fight, site, { lead: index === 0 })).join("")}
       </section>`
-    : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
+    : `<div class="wrap"><section class="slot" aria-labelledby="empty-card"><h1 id="empty-card">The card</h1><p>${escapeText(EMPTY_CARD_LINE)}</p></section></div>`;
   const description = ordered.length ? cardDescription(data) : site.tagline;
   return document({
     title: site.fullName,
@@ -884,16 +889,20 @@ function archiveResult(fight) {
   </div>`;
 }
 
+function filedWeeks(data) {
+  return [...(data.weeks || [])]
+    .filter((week) => (week.fights || []).length)
+    .sort((a, b) => b.week.localeCompare(a.week));
+}
+
 export function renderArchiveIndex(data) {
-  const weeks = [...(data.weeks || [])].sort((a, b) => b.week.localeCompare(a.week));
+  const weeks = filedWeeks(data);
   const items = weeks.length
     ? `<div class="archive-index">${weeks
         .map((week) => {
-          const bouts = week.fights.length
-            ? `<ul class="week-card-bouts">${week.fights
-                .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
-                .join("")}</ul>`
-            : `<p>No bouts filed for this week yet.</p>`;
+          const bouts = `<ul class="week-card-bouts">${week.fights
+            .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
+            .join("")}</ul>`;
           return `<a class="week-card" href="${withBase(`/archive/${week.week}/`)}">
             <h2 class="week-card-title">${escapeText(weekLabel(week))}</h2>
             ${bouts}
@@ -901,12 +910,15 @@ export function renderArchiveIndex(data) {
           </a>`;
         })
         .join("")}</div>`
-    : `<p class="empty">No weeks on file.</p>`;
+    : `<p class="empty">${escapeText(EMPTY_CARD_LINE)}</p>`;
+  const intro = weeks.length
+    ? `<p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>`
+    : "";
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
       <div class="wrap sheet-copy">
       <h1>Archive</h1>
-      <p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>
+      ${intro}
       ${items}
       <p>${link("/", "Back to the card")}</p>
       </div>
@@ -976,7 +988,7 @@ export function renderPages(data, finePrint, corrections = { entries: [] }) {
   pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: navFights }));
   pages.set("404.html", shell(site, renderNotFound(data)));
   pages.set("archive/index.html", shell(site, renderArchiveIndex(data)));
-  for (const week of data.weeks || []) {
+  for (const week of filedWeeks(data)) {
     pages.set(`archive/${week.week}/index.html`, shell(site, renderArchiveWeek(data, week)));
     for (const fight of week.fights) {
       pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
