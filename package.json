@@ -4,6 +4,6 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/render.test.mjs && node scripts/week.test.mjs && node scripts/privacy-scan.mjs && node scripts/contrast.mjs"
+    "check": "node scripts/render.test.mjs && node scripts/fight-card.test.mjs && node scripts/week.test.mjs && node scripts/privacy-scan.mjs && node scripts/contrast.mjs"
   }
 }

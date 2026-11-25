@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 import { loadCard } from "./load-card.mjs";
-import { escapeText, renderArchiveIndex, renderCorrections, renderDocument, renderFight, renderHome, renderPages } from "./render.mjs";
+import { renderArchiveIndex, renderCorrections, renderDocument, renderFight, renderHome, renderPages } from "./render.mjs";
 
 const root = join(import.meta.dirname, "..");
 const data = loadCard(root);
@@ -12,9 +12,6 @@ const finePrint = readFileSync(join(root, "data/fine-print.txt"), "utf8");
 const pages = renderPages(data, finePrint, corrections);
 const all = [...pages.values()].join("\n");
 const home = pages.get("index.html");
-const official = pages.get("fights/round-3-spx.html");
-const silver = pages.get("fights/round-1-silver.html");
-const bitcoin = pages.get("fights/round-2-bitcoin.html");
 
 test("every page carries the required head, footer, and fine-print link", () => {
   for (const html of pages.values()) {
@@ -24,8 +21,14 @@ test("every page carries the required head, footer, and fine-print link", () => 
     assert.match(html, /form-action 'none'/);
     assert.doesNotMatch(html, /web3forms/);
     assert.match(html, /Skip to content/);
-    assert.equal(html.match(/<img\b/gi).length, 1);
     assert.match(html, /class="header-banner" src="\/battle-calls-2\/assets\/img\/header-banner\.webp" width="1200" height="500" alt="Bull and bear boxers squared off in a spotlit ring" loading="eager"/);
+    const images = [...html.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
+    assert.equal(images.filter((tag) => tag.includes("header-banner")).length, 1);
+    for (const tag of images) {
+      assert.match(tag, /\balt="[^"]+"/);
+      assert.match(tag, /\bsrc="\/battle-calls-2\//);
+    }
+    assert.equal(images.length, 1 + images.filter((tag) => tag.includes("fight-vs-logo")).length);
     assert.match(html, /twitter:card" content="summary_large_image"/);
     assert.equal(html.split(data.site.footerLine).length - 1, 1);
     assert.match(html, /href="\/battle-calls-2\/fine-print\.html"/);
@@ -39,6 +42,12 @@ test("every page carries the required head, footer, and fine-print link", () => 
     for (const tag of html.matchAll(/<a\s[^>]*target="_blank"[^>]*>/g)) {
       assert.match(tag[0], /rel="noopener noreferrer"/);
     }
+    const nav = html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0];
+    assert.match(nav, /The card[\s\S]*Methodology[\s\S]*Corrections[\s\S]*About[\s\S]*Archive/);
+    assert.doesNotMatch(nav, /Round [123]|\/fights\//);
+    const footer = html.match(/<nav aria-label="Footer"[\s\S]*?<\/nav>/)[0];
+    assert.match(footer, /The card[\s\S]*Methodology[\s\S]*Corrections[\s\S]*About[\s\S]*Archive[\s\S]*Fine print/);
+    assert.doesNotMatch(footer, /Round [123]|\/fights\//);
   }
 });
 
@@ -47,102 +56,123 @@ test("fine print is verbatim and additional", () => {
   assert.ok(page.includes(finePrint.trimEnd()));
   assert.match(page, /^------ THE MANAGEMENT$/m);
   assert.match(page, /This notice is in addition to the formal disclaimers/);
-  assert.match(all, new RegExp(data.site.teaser.replace(/[.]/g, "\\.")));
 });
 
-test("home lists rounds in ascending order starting at Round 1", () => {
-  assert.equal(home.split('class="cta"').length - 1, 3);
-  assert.match(home, /Open the fight card/);
-  assert.doesNotMatch(home, /class="text-link"/);
-  assert.doesNotMatch(home, /coming soon/i);
-  assert.doesNotMatch(home, /Undercard/);
-  assert.doesNotMatch(all, /Round 4/);
-  assert.doesNotMatch(all, /round-4-spx|round-2-silver|round-3-bitcoin/);
-  const silverAt = home.indexOf("fights/round-1-silver.html");
-  const bitcoinAt = home.indexOf("fights/round-2-bitcoin.html");
-  const officialAt = home.indexOf("fights/round-3-spx.html");
-  assert.ok(silverAt >= 0 && silverAt < bitcoinAt && bitcoinAt < officialAt);
-  assert.ok(home.indexOf('id="round-1-silver"') < home.indexOf('id="round-2-bitcoin"'));
-  assert.ok(home.indexOf('id="round-2-bitcoin"') < home.indexOf('id="round-3-spx"'));
-  assert.match(home, /id="round-3-spx"[\s\S]*poster-headliner|poster-headliner[\s\S]*id="round-3-spx"/);
+test("the card shows the caller bout, and archive stays empty", () => {
+  assert.match(home, /<h1 id="the-card">The card<\/h1>/);
+  assert.doesNotMatch(home, /No bout scheduled yet/);
+  assert.match(home, /Caller vs\. THE MARKET/);
+  assert.match(home, /@MentoviaX versus THE MARKET/);
+  assert.match(home, /WIN BY KO/);
+  assert.match(home, /Mon Nov 23, 9:25 AM ET pre-market/);
+  assert.match(home, /\$130\.01<span class="fight-note"> \(1-min close, 7:59 PM ET, Schwab\)/);
+  assert.match(home, /2123988433618207160/);
+  assert.match(home, /<span aria-hidden="true">O <\/span>164\.77/);
+  assert.match(home, /<span aria-hidden="true">H <\/span>166\.30/);
+  assert.match(home, /<span aria-hidden="true">L <\/span>164\.76/);
+  assert.match(home, /<span aria-hidden="true">C <\/span>165\.38/);
+  assert.doesNotMatch(home, /Yahoo/);
+  assert.match(home, /\$166\.00 target, \$166\.01 KO \(\+27\.7%\)/);
+  assert.match(home, /\$94\.02 level, \$94\.01 KO \(-27\.7%\)/);
+  assert.match(home, /THE MARKET KO \$94\.01/);
+  assert.match(home, /CALLER KO \$166\.01/);
+  assert.match(home, /HIGH \$166\.30/);
+  assert.doesNotMatch(home, /125\.53|85\.06|167\.035/);
+  assert.match(home, /Scored by HLK IV Quant/);
+  assert.match(home, /a Grok Bot/);
+  assert.match(home, /href="https:\/\/x\.ai\/bot" aria-label="Grok Bot website \(opens in a new tab\)" target="_blank" rel="noopener noreferrer"/);
+  assert.match(home, /href="https:\/\/x\.com\/MentoviaX\/status\/2123988433618207160" target="_blank" rel="noopener noreferrer"/);
+  assert.match(home, /alt="Battle Calls logo: crossed BC boxing gloves with VS"/);
+  assert.match(home, /class="fight-tug-fill tug-pct-1000"/);
+  assert.match(home, /class="fight-tug-fill tug-pct-0"/);
+  assert.doesNotMatch(home, /The Market|the market/);
+  assert.doesNotMatch(home, /Open the fight card|coming soon|Undercard|\/fights\//i);
   assert.match(home, /property="og:image" content="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/assets\/og\/site\.png"/);
-  assert.match(home, /Round 1 EXHIBITION: @PeterLBrandt vs\. @PeterSchiff on SI/);
-  assert.match(home, /Round 2 EXHIBITION: @benjamincowen vs\. @DrJStrategy on BTC/);
-  assert.match(home, /Round 3 OFFICIAL TITLE FIGHT: @markminervini vs\. Ed Yardeni on SPX/);
   assert.match(home, /Two calls enter\. One walks out\./);
-  assert.equal(home.split(data.site.teaser).length - 1, 3);
-  assert.match(home, /OFFICIAL TITLE FIGHT/);
-  assert.match(home, /Round 1/);
-  assert.match(home, new RegExp(data.site.tagline));
-  assert.match(home, new RegExp(data.site.referee));
   assert.match(home, new RegExp(data.site.rulesBlurb));
-  for (const html of [pages.get("methodology.html"), pages.get("about.html"), pages.get("404.html")]) {
-    const one = html.indexOf("Round 1: Silver");
-    const two = html.indexOf("Round 2: Bitcoin");
-    const three = html.indexOf("Round 3: S&amp;P 500");
-    assert.ok(one >= 0 && one < two && two < three);
+  assert.match(home, /href="\/battle-calls-2\/archive\/"/);
+  assert.match(home, /href="\/battle-calls-2\/methodology\.html"/);
+  const archive = pages.get("archive/index.html");
+  assert.equal(pages.get("archive/2026-11-16/index.html"), undefined);
+  assert.equal(pages.get("fights/round-1-silver.html"), undefined);
+  assert.equal(pages.get("fights/round-2-bitcoin.html"), undefined);
+  assert.equal(pages.get("fights/round-3-spx.html"), undefined);
+  assert.match(archive, /<h1>Archive<\/h1>/);
+  assert.match(archive, /No bout scheduled yet\. New fights are coming\./);
+  assert.doesNotMatch(archive, /Week of Nov 16|Open the fight card|\/fights\//);
+  for (const html of [pages.get("methodology.html"), pages.get("about.html"), pages.get("404.html"), pages.get("corrections.html")]) {
+    assert.doesNotMatch(html, /On this card|round-list|\/fights\//);
   }
-  assert.match(home, /href="\/battle-calls-2\/fights\/round-1-silver\.html"/);
-  assert.match(silver, /rel="canonical" href="https:\/\/kidruncomvc\.github\.io\/battle-calls-2\/fights\/round-1-silver\.html"/);
+  assert.match(pages.get("corrections.html"), /No corrections yet\./);
+  assert.match(pages.get("fine-print.html"), /href="\/battle-calls-2\/fine-print\.html" aria-current="page"/);
+  assert.doesNotMatch(
+    all,
+    /PeterLBrandt|PeterSchiff|benjamincowen|DrJStrategy|markminervini|Yardeni|Minervini|Brandt|Schiff|Cowen|Thorne|round-1-silver|round-2-bitcoin|round-3-spx/,
+  );
 });
 
-test("launch quotes, numbers, and caveats are verbatim", () => {
-  for (const fight of data.fights) {
-    const html = pages.get(`fights/${fight.id}.html`);
-    assert.match(html, new RegExp(fight.label));
-    assert.match(html, /0-0-0/);
-    assert.ok(html.includes(escapeText(fight.instrumentDetail)));
-    if (fight.entriesSentence) assert.ok(html.includes(escapeText(fight.entriesSentence)));
-    if (fight.koSummary) assert.ok(html.includes(escapeText(fight.koSummary)));
-    if (fight.tkoSummary) assert.ok(html.includes(escapeText(fight.tkoSummary)));
-    if (fight.decisionSummary) assert.ok(html.includes(escapeText(fight.decisionSummary)));
-    assert.match(html, /Tale of the Tape/);
-    assert.match(html, /Rules of the Ring/);
-    assert.match(html, new RegExp(fight.cardText.replace(/[.]/g, "\\.")));
-    for (const corner of fight.corners) {
-      for (const quote of corner.quotes || [{ texts: [corner.quote] }]) {
-        for (const text of quote.texts || [quote.text]) assert.ok(html.includes(escapeText(text)), text);
-      }
-    }
-    for (const caveat of fight.caveats) {
-      if (typeof caveat === "string") assert.ok(html.includes(escapeText(caveat)), caveat);
-    }
-  }
-  assert.match(official, /Since deleted: Minervini deleted a Nov 16 post and reposted it at 4:58 PM ET to fix a date typo; the repost is linked above\. It isn't used for scoring\./);
-  assert.equal(official.match(/<img\b/gi).length, 1);
-  assert.match(official, /header-banner\.webp/);
-  assert.match(official, /TV CALL: CNBC Squawk Box, Thu Nov 5, 2026, 6:42 AM ET/);
-  assert.match(official, /Exact spoken wording pending a tape check\./);
-  assert.match(official, /as of Nov 16 close/);
-  assert.match(official, /Minervini leads on the scorecard\./);
-  assert.match(official, /TKO \(stop hit\)/);
-  assert.match(official, /miniscule/);
-  assert.doesNotMatch(official, /x\.com\/[^"']*yardeni/i);
-  assert.match(official, /https:\/\/www\.cnbc\.com\/video\/2026\/11\/05\/ed-yardeni-on-his-7900-sp-500-year-end-target-santa-is-coming\.html/);
-  assert.match(silver, /EXHIBITION/);
-  assert.match(bitcoin, /EXHIBITION/);
-  assert.match(pages.get("corrections.html"), /No corrections yet\./);
-  assert.match(bitcoin, /property="og:image:alt" content="@benjamincowen vs\. @DrJStrategy, BITCOIN, Nov 14, 2026 and Nov 16, 2026"/);
-  assert.match(bitcoin, /<title>Round 2: @benjamincowen vs\. @DrJStrategy on BTC/);
-  assert.doesNotMatch(bitcoin, /@DrJStrategy vs\. @benjamincowen/);
-  assert.match(official, /property="og:image:alt" content="@markminervini vs\. Ed Yardeni, S&amp;P 500, Nov 5, 2026 and Nov 11, 2026"/);
-  assert.equal(official.split('class="why-official"').length - 1, 2);
-  assert.match(official, /Official title fight\. The calls are opposite on the S&amp;P 500, and the horizon runs through the same Dec 31 close\./);
-  assert.match(official, /Wins on points only/);
-  assert.match(bitcoin, /<details class="full-quote"><summary>Full quote<\/summary>[\s\S]*Line breaks in the original post were tightened\./);
-  assert.doesNotMatch(bitcoin, /\(spacing normalized\)/);
-  assert.doesNotMatch(all, />The reply</);
-  assert.match(silver, /Brandt's same-day reply/);
-  assert.match(pages.get("fine-print.html"), /href="\/battle-calls-2\/fine-print\.html" aria-current="page"/);
-});
+function sampleCorner(side, handle) {
+  return {
+    side,
+    cornerLabel: side === "bear" ? "Bear corner" : "Bull corner",
+    handle,
+    name: handle,
+    initials: handle.slice(0, 2).toUpperCase(),
+    profileUrl: `https://x.com/${handle}`,
+    postUrl: `https://x.com/${handle}/status/1`,
+    postId: "1",
+    calledAtEt: "1:00 PM ET, Nov 16, 2026",
+    calledAtUtc: "2026-11-16T18:00:00Z",
+    calledAtNote: "18:00:00 UTC",
+    quote: "A sample call for the renderer.",
+    postState: "live",
+    entryDisplay: "$1.00",
+    entryNote: "Sample print.",
+    targetInWords: "A sample target.",
+    koLine: "A sample line.",
+    record: "0-0-0",
+    asides: [],
+    posterCall: "Sample call",
+    posterKo: "Sample line",
+  };
+}
+
+function sampleFight(patch = {}) {
+  return {
+    id: "sample-bout",
+    weekId: "2026-11-16",
+    round: 1,
+    role: "undercard",
+    status: "pending",
+    label: "SAMPLE",
+    posterWord: "Sample",
+    ticker: "TEST",
+    cardText: "A sample bout.",
+    firstBell: "Nov 16, 2026",
+    finalBell: "Dec 31, 2026",
+    finalBellDetail: "Dec 31, 2026 close.",
+    lede: "A sample lede.",
+    instrumentDetail: "A sample instrument.",
+    dataSource: "A sample source.",
+    koSummary: "A sample KO.",
+    decisionSummary: "A sample decision.",
+    drawDetail: "A sample draw.",
+    exhibitionWhy: "A sample exhibition.",
+    caveats: ["A sample caveat."],
+    finishStates: ["KO", "Decision"],
+    corners: [sampleCorner("bear", "SampleBear"), sampleCorner("bull", "SampleBull")],
+    publicResult: { winner: "", finalPrice: "", why: "" },
+    ...patch,
+  };
+}
 
 test("scorecard finishes and edge states", () => {
   function page(status, phrase, cornerPatch) {
-    const fight = structuredClone(data.fights[0]);
+    const fight = sampleFight();
     fight.status = status;
     if (phrase) fight.result = { phrase };
     if (cornerPatch) cornerPatch(fight.corners[0]);
-    return renderDocument(data.site, renderFight(data, fight));
+    return renderDocument(data.site, renderFight({ ...data, fights: [fight] }, fight));
   }
   const ko = page("ko", "the $34.00 SI call");
   assert.match(ko, /WINNER BY KO: the \$34\.00 SI call\./);
@@ -155,7 +185,7 @@ test("scorecard finishes and edge states", () => {
   assert.match(decision, /WINNER BY DECISION: the BULL call\./);
   assert.match(page("draw"), /DRAW\. The move finished inside the draw band/);
   assert.match(page("no_contest"), /NO CONTEST\.\.\. still undefeated, the market\./);
-  assert.doesNotMatch(silver, /Respect to both corners/);
+  assert.doesNotMatch(home, /Respect to both corners/);
   const deleted = page("pending", null, (corner) => {
     corner.handle = "A".repeat(80);
     corner.postState = "deleted";
@@ -168,8 +198,23 @@ test("scorecard finishes and edge states", () => {
   assert.doesNotMatch(deleted, /Archive of the original post/);
   assert.ok(deleted.includes("A".repeat(80)));
   assert.throws(() => page("retired"));
-  const empty = renderDocument(data.site, renderHome({ ...data, fights: [] }));
-  assert.match(empty, /No bouts on the card yet\./);
+  const empty = renderDocument(data.site, renderHome({ ...data, fights: [], fightCards: [] }));
+  assert.match(empty, /No bout scheduled yet\. New fights are coming\./);
+  assert.match(pages.get("methodology.html"), /one public caller against THE MARKET/);
+  assert.match(pages.get("methodology.html"), /50% of the entry, rounded down to the cent/);
+  assert.match(pages.get("methodology.html"), /\$79\.99 is a KO/);
+  assert.match(pages.get("methodology.html"), /Win by KO/);
+  assert.match(pages.get("methodology.html"), /Loss by decision/);
+  assert.match(pages.get("methodology.html"), /The Price Decided and THE MARKET won/);
+  assert.match(pages.get("methodology.html"), /1288834974657/);
+  assert.match(pages.get("methodology.html"), /Schwab, then Yahoo/);
+  assert.match(pages.get("methodology.html"), /the call is VOID/);
+  assert.match(pages.get("methodology.html"), /the bout is a DRAW/);
+  assert.match(pages.get("methodology.html"), /deleted by caller/);
+  assert.match(pages.get("methodology.html"), /never cherry-picked by outcome/);
+  assert.match(pages.get("methodology.html"), /seven days after the result is posted/);
+  assert.match(pages.get("methodology.html"), /href="\/battle-calls-2\/corrections\.html"/);
+  assert.doesNotMatch(pages.get("methodology.html"), /official closing price of the last regular session|five trading days|stop-hit|next regular-session open/);
   const logged = renderDocument(
     data.site,
     renderCorrections(data, {
@@ -182,48 +227,38 @@ test("scorecard finishes and edge states", () => {
   assert.ok(logged.indexOf("Later") < logged.indexOf("Earlier"));
 });
 
-test("archive lists weeks and keeps the original bout URLs", () => {
-  const archive = pages.get("archive/index.html");
-  const week = pages.get("archive/2026-11-16/index.html");
-  assert.match(archive, /href="\/battle-calls-2\/archive\/2026-11-16\/"/);
-  assert.match(archive, /Week of Nov 16, 2026/);
-  assert.match(archive, /Every week's fight card, newest first/);
-  assert.doesNotMatch(archive, /current pointer/);
-  assert.match(archive, /Silver: @PeterLBrandt vs @PeterSchiff/);
-  assert.match(week, /This week's card/);
-  assert.doesNotMatch(week, /also listed here/);
-  assert.match(week, /Result: pending, final bell Dec 31, 2026/);
-  assert.doesNotMatch(week, />Pending</);
-  assert.match(week, /href="\/battle-calls-2\/fights\/round-1-silver\.html"/);
-  assert.match(silver, /Result: pending, final bell Dec 31, 2026/);
-  assert.match(home, /href="\/battle-calls-2\/archive\/"/);
-  const fake = structuredClone(data);
-  fake.weeks = [
-    {
-      week: "2026-11-09",
-      fights: [
-        {
-          ...structuredClone(data.fights[0]),
-          id: "fake-week-round-1",
-          weekId: "2026-11-09",
-          round: 1,
-          label: "FAKE WEEK",
-          posterWord: "Not a real bout",
-          publicResult: { winner: "Nobody", finalPrice: "Not a price", why: "Test fixture only." },
-        },
-      ],
-    },
-    ...data.weeks,
-  ];
+test("archive lists filed weeks newest first and skips an empty week", () => {
+  const older = sampleFight({
+    id: "older-bout",
+    weekId: "2026-11-09",
+    posterWord: "Older sample",
+  });
+  const newer = sampleFight({
+    id: "newer-bout",
+    weekId: "2026-11-23",
+    posterWord: "Newer sample",
+    publicResult: { winner: "Nobody", finalPrice: "Not a price", why: "Test fixture only." },
+  });
+  const fake = {
+    ...data,
+    currentWeek: "2026-11-23",
+    fights: [newer],
+    weeks: [
+      { week: "2026-11-23", fights: [newer] },
+      { week: "2026-11-16", fights: [] },
+      { week: "2026-11-09", fights: [older] },
+    ],
+  };
   const rendered = renderPages(fake, finePrint, corrections);
-  assert.match(rendered.get("archive/index.html"), /2026-11-16/);
-  assert.ok(
-    rendered.get("archive/index.html").indexOf("2026-11-16") <
-      rendered.get("archive/index.html").indexOf("2026-11-09"),
-  );
-  assert.match(rendered.get("fights/2026-11-09/round-1.html"), /Not a real bout/);
-  assert.match(rendered.get("fights/round-1-silver.html"), /Silver/);
-  assert.doesNotMatch(rendered.get("fights/round-1-silver.html"), /Not a real bout/);
+  const archive = rendered.get("archive/index.html");
+  assert.match(archive, /Every week's fight card, newest first/);
+  assert.doesNotMatch(archive, /2026-11-16|current pointer/);
+  assert.ok(archive.indexOf("2026-11-23") < archive.indexOf("2026-11-09"));
+  assert.equal(rendered.get("archive/2026-11-16/index.html"), undefined);
+  assert.match(rendered.get("fights/2026-11-23/round-1.html"), /Newer sample/);
+  assert.match(rendered.get("archive/2026-11-09/index.html"), /Older sample/);
+  assert.match(rendered.get("archive/2026-11-09/index.html"), /Result: pending, final bell Dec 31, 2026/);
+  assert.doesNotMatch(rendered.get("archive/2026-11-09/index.html"), />Pending</);
   const indexOnly = renderDocument(data.site, renderArchiveIndex(fake));
-  assert.match(indexOnly, /FAKE WEEK|Not a real bout/);
+  assert.match(indexOnly, /Newer sample/);
 });

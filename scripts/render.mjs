@@ -1,4 +1,5 @@
 import { createLayout } from "./card-layout.mjs";
+import { renderFightFillCss, renderFightSection } from "./fight-card.mjs";
 import { fightPageRel, fightPath, ORIGINAL_WEEK } from "./load-card.mjs";
 
 const CSP =
@@ -24,6 +25,8 @@ const NAV = [
   ["/about.html", "About"],
   ["/archive/", "Archive"],
 ];
+
+const EMPTY_CARD_LINE = "No bout scheduled yet. New fights are coming.";
 
 function navCurrent(href, current) {
   if (href === current) return true;
@@ -83,13 +86,6 @@ function officialOneLiner(fight) {
 function whyOfficial(fight) {
   const line = officialOneLiner(fight);
   return line ? `<p class="why-official">${escapeText(line)}</p>` : "";
-}
-
-function cardDescription(data) {
-  const bouts = orderedFights(data)
-    .map((fight) => `Round ${fight.round} ${fight.label}: ${matchup(fight)} on ${fight.ticker}`)
-    .join(". ");
-  return `${bouts}. ${data.site.tagline}`;
 }
 
 function quotesOf(corner) {
@@ -397,7 +393,9 @@ function ropes() {
 
 export function renderMeterCss(data) {
   const fights = data.weeks ? data.weeks.flatMap((week) => week.fights) : data.fights;
-  return layout.renderMeterCss(fights);
+  const fills = renderFightFillCss(data.fightCards || []);
+  const meters = layout.renderMeterCss(fights);
+  return fills ? `${meters}\n${fills}\n` : meters;
 }
 
 function filled(value) {
@@ -474,35 +472,38 @@ function roundNav(data) {
 }
 
 function roundList(data) {
-  const items = orderedFights(data)
+  const fights = orderedFights(data);
+  if (!fights.length) return "";
+  const items = fights
     .map((fight) => `<li>${link(fightPath(fight), `Round ${fight.round}: ${fight.posterWord}`)}</li>`)
     .join("");
-  return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list">${items}</ol></section>`;
+  const start = fights[0].round > 1 ? ` start="${fights[0].round}"` : "";
+  return `<section aria-labelledby="card-order"><h2 id="card-order" class="display-heading">On this card</h2><ol class="round-list"${start}>${items}</ol></section>`;
 }
 
-function renderListedFight(fight, site, { lead = false } = {}) {
-  const poster = layout.renderPoster(fight, {
-    level: lead ? "h1" : "h2",
-    tile: true,
-    cta: `<p>${link(fightPath(fight), "Open the fight card", { className: "cta" })}</p>`,
-    teaserHtml: teaser(site),
-  });
-  const headliner = fight.role === "main" ? " card-headliner" : "";
-  const role = lead ? "card-lead" : "undercard-bout";
-  return `<article class="${role}${headliner}" id="${fight.id}">${poster}</article>`;
+function cardIntro(site) {
+  return `<header class="card-intro"><h1 id="the-card">The card</h1><p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p></header>`;
+}
+
+function fightCardDescription(site, cards) {
+  const bouts = cards
+    .map((card) => {
+      const handle = card.handle || "Caller";
+      const asset = card.tape && card.tape.asset ? card.tape.asset : "the tape";
+      return `${handle} versus THE MARKET on ${asset}`;
+    })
+    .join(". ");
+  return `${bouts}. ${site.tagline}`;
 }
 
 export function renderHome(data) {
   const site = data.site;
-  const ordered = orderedFights(data);
-  const intro = `<div class="wrap card-intro"><p class="tagline">${escapeText(site.tagline)}</p><p class="referee">${escapeText(site.referee)}</p></div>`;
-  const list = ordered.length
-    ? `<section class="card-list" aria-label="The card, in round order">
-        ${intro}
-        ${ordered.map((fight, index) => renderListedFight(fight, site, { lead: index === 0 })).join("")}
-      </section>`
-    : `<section class="slot"><h1>No bouts on the card yet.</h1></section>`;
-  const description = ordered.length ? cardDescription(data) : site.tagline;
+  const cards = Array.isArray(data.fightCards) ? data.fightCards : [];
+  const section = renderFightSection(cards);
+  const list = section
+    ? `<div class="wrap">${cardIntro(site)}${section}</div>`
+    : `<div class="wrap"><section class="slot" aria-labelledby="empty-card"><h1 id="empty-card">The card</h1><p>${escapeText(EMPTY_CARD_LINE)}</p></section></div>`;
+  const description = section ? fightCardDescription(site, cards) : site.tagline;
   return document({
     title: site.fullName,
     description,
@@ -511,7 +512,6 @@ export function renderHome(data) {
     imageAlt: `${site.fullName}. ${site.tagline}`,
     main: `<main id="content" tabindex="-1">
       ${list}
-      ${ordered.length ? ropes() : ""}
       <section class="band wrap" aria-labelledby="rules-home">
         <h2 id="rules-home" class="display-heading">The rules, in one line</h2>
         <p class="rules-blurb">${escapeText(site.rulesBlurb)}</p>
@@ -528,44 +528,58 @@ export function renderMethodology(data) {
       <div class="wrap sheet-copy">
       <header>
         <h1>Methodology</h1>
-        <p>Battle Calls locks a call before it is judged. The market is the referee. The horizon is chosen before the result, and it is not moved afterward.</p>
+        <p>A bout is one public caller against THE MARKET. The entry, the target, and the deadline come from the caller's own post. Those three lines are the fight.</p>
       </header>
-      ${roundList(data)}
-      <section aria-labelledby="lock">
-        <h2 id="lock" class="display-heading">Lock the call</h2>
-        <p>Each call is archived before judging: the URL when one exists, the post ID, the time in UTC and in ET, and the wording copied exactly. If the post is edited later, the locked wording is what gets judged. A deleted post is noted on the card and is not republished. The note says it was deleted, and it is not used for scoring in place of the repost.</p>
+      <section aria-labelledby="call-size">
+        <h2 id="call-size" class="display-heading">The call size</h2>
+        <p>The call size is the percent move from the entry to the target. If a caller gives a range, only the lower number counts. A call from $100 to $120–$140 is a 20% call.</p>
       </section>
-      <section aria-labelledby="entry">
-        <h2 id="entry" class="display-heading">Entry price</h2>
-        <p>Posted during regular hours: the open of the first 1-minute bar after the post. Posted outside regular hours: the next regular-session open. For a venue that trades through the weekend, the card names the bar it used. Each person is scored from that person's own entry.</p>
+      <section aria-labelledby="win-ko">
+        <h2 id="win-ko" class="display-heading">A win, and a KO</h2>
+        <p>Hitting the call on the penny is a win. One penny past it is a knockout. A long from $100 to $120 wins at $120.00 and is a KO at $120.01.</p>
+        <p>THE MARKET is the mirror. On that same call, $80.00 is a win for THE MARKET, and $79.99 is a KO. The level is the call distance taken the other way from the entry. The KO is one penny past that level.</p>
+        <p>The against-distance is the smaller of the call distance and 50% of the entry, rounded down to the cent. The KO is one more penny past that. A call for a 100% move is not answered 100% the other way.</p>
+        <p>There is no stop on the card. THE MARKET's KO is what ends a bout the hard way. A stop a caller named is not used for now. A side condition in the post, such as "after hitting my $130 target," is ignored. Only the main target is scored.</p>
       </section>
-      <section aria-labelledby="source">
-        <h2 id="source" class="display-heading">Price source and timestamp</h2>
-        <p>Every bout names its price source and the timestamp of the print. A locked historical print is labeled as such. It is not a live quote. For crypto, one venue is named before judging. The default reference is the official close. A call that names a target or a stop is a touch call, judged on the intraday high or low, and the first to touch wins, unless the bout says it uses daily settles or daily closes only.</p>
+      <section aria-labelledby="touch">
+        <h2 id="touch" class="display-heading">A touch</h2>
+        <p>A level is hit when price trades there, or when the market gaps open at or past it. Pre-market, after-hours, and a gap open count, along with the regular session. It does not have to be the close.</p>
+        <p>Only trades after the post minute count. The candle that sets the entry is not a touch. If the target is already reached at post time, the call is VOID.</p>
+        <p>The first touch of either side's level ends the bout. A later move cannot change the result. If both sides are touched in the same minute, the tie is broken with finer tick or second data. If that finer data still cannot tell which side was first, the bout is a DRAW.</p>
       </section>
-      <section aria-labelledby="horizon">
-        <h2 id="horizon" class="display-heading">Horizons</h2>
-        <p>Today means that day's close. This week means Friday's close. When no horizon is stated, the horizon is five trading days, and that choice is announced before judging. The horizon is never picked after the fact. When Battle Calls sets the horizon, the card says so.</p>
+      <section aria-labelledby="endings">
+        <h2 id="endings" class="display-heading">How it ends</h2>
+        <ul class="endings">
+          <li><strong>Win.</strong> Price hits the target on the penny, and does not go one penny past it.</li>
+          <li><strong>Win by KO.</strong> Price trades one penny past the target.</li>
+          <li><strong>Win by decision.</strong> No level is touched, and the deadline-day regular-session close is at or past the entry in the caller's direction. A close exactly at the entry goes to the caller.</li>
+          <li><strong>Loss.</strong> Price hits THE MARKET's level on the penny, and does not go one penny past it.</li>
+          <li><strong>Loss by KO.</strong> Price trades one penny past THE MARKET's level.</li>
+          <li><strong>Loss by decision.</strong> No level is touched, and the deadline close is on THE MARKET's side of the entry.</li>
+          <li><strong>Void.</strong> The target is already reached at post time. The bout is not scored.</li>
+          <li><strong>Draw.</strong> Both sides are touched in the same minute, and finer data cannot tell which side was first.</li>
+        </ul>
+        <p class="rule-call">The Price Decided and THE MARKET won.</p>
       </section>
-      <section aria-labelledby="types">
-        <h2 id="types" class="display-heading">Call types</h2>
-        <p>A call is a direction, a target, or a relative comparison. A clean opposite is the same asset, an overlapping horizon, and opposite directions. A hedged or untimed call cannot be an official bout. It may run as a labeled EXHIBITION, with the rules set in advance. No contest is the result when a bout cannot be judged, for example when the data is unavailable or a call is withdrawn before the first bell.</p>
-        <p>When a bout defines a stop-hit that ends it before the bell, that finish is a TKO, not a KO. The card lists the checks in order, before any of them can hit. KO, TKO (stop hit), and decision are separate finishes.</p>
+      <section aria-labelledby="clock">
+        <h2 id="clock" class="display-heading">The clock</h2>
+        <p>Entry is the close of the 1-minute candle that contains the post. If that minute has no trade, including extended hours, entry is the close of the last 1-minute candle traded before it. The post time comes from the post ID: shift the ID right by 22 bits and add 1288834974657. That sum is the UTC time in milliseconds. Convert it to Eastern Time and use that minute.</p>
+        <p>The price source is Schwab, then Yahoo, then another named source. The card names the source that was used. Prices are never adjusted for dividends or splits. The percent on the card is rounded half-up to one decimal.</p>
+        <p>If no level is touched, the deadline-day regular-session close decides the bout.</p>
+        <p>This is commentary and entertainment, not investment advice.</p>
       </section>
-      <section aria-labelledby="scoring">
-        <h2 id="scoring" class="display-heading">How a result is named</h2>
-        <p>Results are reported in percent and in points, to two decimals. A KO is the level named on the card. A decision is the bigger favorable move from each entry when no KO lands, using the rule that bout locked. A draw is a move smaller than the larger of 0.25% and half the 20-day average daily move, unless the bout has already published a tighter or wider band. The band on the card is the band that is used. If both targets hit, the first to touch wins, unless the bout is settle-only or close-only.</p>
-        <p>The scorecard is updated on a weekly check-in until the final bell. A lead on a check-in is not a winner.</p>
+      <section aria-labelledby="post-proof">
+        <h2 id="post-proof" class="display-heading">Post proof</h2>
+        <p>Each bout keeps the post ID, the UTC time from that ID, and the same time in Eastern Time. An archived copy is saved through archive.today or the Wayback Machine. A timestamped screenshot of the post is kept, and its SHA-256 hash is stored in the repo.</p>
+        <p>An edited post is scored from the original version, and the card notes the edit. A deleted post is scored from the archive and labeled "deleted by caller".</p>
       </section>
-      <section aria-labelledby="tape-rules">
-        <h2 id="tape-rules" class="display-heading">Tale of the tape</h2>
-        <p>The tape shows the corner, the name, the handle as text when there is a public handle, a profile link when there is one, the exact call, the link to the original post or broadcast, the time in ET, the price at the first bell, the KO line, the final bell, and a site-only record that starts at 0-0-0.</p>
-        <p>Account age and follower counts are shown only when a primary-source figure was archived with a timestamp. This launch card does not show them, because those figures were not archived that way. They are not estimated. A credential is shown only when it is verifiable at a primary source: the CMT directory, the CFA designation, BrokerCheck, or IAPD. Claimed returns, hit rates, and AUM are not shown.</p>
-        <p>A television call with no post is labeled as a TV call. The card quotes only the wording it has, and it says when the spoken wording is still pending a tape check. No profile link is invented.</p>
+      <section aria-labelledby="selection">
+        <h2 id="selection" class="display-heading">How calls are picked</h2>
+        <p>Every qualifying call from a tracked caller in a set window goes on the card. A call is never cherry-picked by outcome. The wording stays neutral. The card scores only what the post said.</p>
       </section>
       <section aria-labelledby="corrections-method">
         <h2 id="corrections-method" class="display-heading">Corrections</h2>
-        <p>Mistakes by this site are listed on the ${link("/corrections.html", "corrections log")}, newest first. A correction names the bout, what changed, and why. An edit or deletion at the source does not rewrite the locked call.</p>
+        <p>A caller can ask for a correction for seven days after the result is posted. The request names the bout, the line, and the post. No personal address is published. Accepted corrections are written on the public ${link("/corrections.html", "corrections log")}, newest first. An edit or deletion at the source does not rewrite the locked call.</p>
       </section>
       <section aria-labelledby="method-disclosures">
         <h2 id="method-disclosures" class="display-heading">Disclosures</h2>
@@ -585,7 +599,7 @@ export function renderMethodology(data) {
   </main>`;
   return document({
     title: "Methodology — Battle Calls",
-    description: "How Battle Calls locks a call, names a price, and scores a bout. Entertainment and education only, not advice.",
+    description: "How a Battle Calls bout is scored. One public caller against THE MARKET, with the caller's own entry, target, and deadline.",
     path: "/methodology.html",
     image: "/assets/og/site.png",
     imageAlt: `${data.site.fullName}. ${data.site.tagline}`,
@@ -608,10 +622,9 @@ export function renderCorrections(data, corrections) {
     <article class="sheet">
       <div class="wrap sheet-copy">
       <h1>Corrections</h1>
-      <p>When this site gets a quote, a time, a level, or a print wrong, the change is written here, newest first. An edited or deleted source does not change the locked wording.</p>
+      <p>When this site gets a quote, a time, a level, or a print wrong, the change is written here, newest first. An edited or deleted source does not rewrite the locked call.</p>
       ${list}
-      <p>Corrections contact: coming at launch.</p>
-      <p>No personal address is published. A correction request should name the bout, the line, and the original post or broadcast. Accepted corrections are added to this page.</p>
+      <p>A caller can ask for a correction for seven days after the result is posted. No personal address is published. Name the bout, the line, and the post. Accepted corrections are added to this page.</p>
       <p>${link("/methodology.html", "Methodology")}</p>
       </div>
     </article>
@@ -800,6 +813,7 @@ function shell(site, page) {
 <link rel="preload" href="${withBase("/assets/fonts/source-sans-3-latin-400.woff2")}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${withBase("/css/tokens.css")}">
 <link rel="stylesheet" href="${withBase("/css/site.css")}">
+<link rel="stylesheet" href="${withBase("/css/fight-card.css")}">
 <link rel="stylesheet" href="${withBase("/css/meters.css")}">
 </head>
 <body class="${bodyClass}">
@@ -884,16 +898,20 @@ function archiveResult(fight) {
   </div>`;
 }
 
+function filedWeeks(data) {
+  return [...(data.weeks || [])]
+    .filter((week) => (week.fights || []).length)
+    .sort((a, b) => b.week.localeCompare(a.week));
+}
+
 export function renderArchiveIndex(data) {
-  const weeks = [...(data.weeks || [])].sort((a, b) => b.week.localeCompare(a.week));
+  const weeks = filedWeeks(data);
   const items = weeks.length
     ? `<div class="archive-index">${weeks
         .map((week) => {
-          const bouts = week.fights.length
-            ? `<ul class="week-card-bouts">${week.fights
-                .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
-                .join("")}</ul>`
-            : `<p>No bouts filed for this week yet.</p>`;
+          const bouts = `<ul class="week-card-bouts">${week.fights
+            .map((fight) => `<li>${escapeText(matchupLine(fight))}</li>`)
+            .join("")}</ul>`;
           return `<a class="week-card" href="${withBase(`/archive/${week.week}/`)}">
             <h2 class="week-card-title">${escapeText(weekLabel(week))}</h2>
             ${bouts}
@@ -901,12 +919,15 @@ export function renderArchiveIndex(data) {
           </a>`;
         })
         .join("")}</div>`
-    : `<p class="empty">No weeks on file.</p>`;
+    : `<p class="empty">${escapeText(EMPTY_CARD_LINE)}</p>`;
+  const intro = weeks.length
+    ? `<p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>`
+    : "";
   const main = `<main id="content" tabindex="-1">
     <article class="sheet">
       <div class="wrap sheet-copy">
       <h1>Archive</h1>
-      <p>Every week's fight card, newest first. Tap a week to see how the calls landed.</p>
+      ${intro}
       ${items}
       <p>${link("/", "Back to the card")}</p>
       </div>
@@ -976,7 +997,7 @@ export function renderPages(data, finePrint, corrections = { entries: [] }) {
   pages.set("fine-print.html", shell(site, { ...renderFinePrint(data, finePrint), fights: navFights }));
   pages.set("404.html", shell(site, renderNotFound(data)));
   pages.set("archive/index.html", shell(site, renderArchiveIndex(data)));
-  for (const week of data.weeks || []) {
+  for (const week of filedWeeks(data)) {
     pages.set(`archive/${week.week}/index.html`, shell(site, renderArchiveWeek(data, week)));
     for (const fight of week.fights) {
       pages.set(fightPageRel(fight), shell(site, { ...renderFight(data, fight), fights: navFights }));
