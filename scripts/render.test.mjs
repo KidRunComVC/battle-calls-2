@@ -65,12 +65,13 @@ test("the card shows the caller bout, and archive stays empty", () => {
   assert.match(home, /@MentoviaX versus THE MARKET/);
   assert.match(home, /WIN BY KO/);
   assert.match(home, /Mon Nov 23, 9:25 AM ET pre-market/);
-  assert.match(home, /\$130\.01<span class="fight-note"> \(1-min close, 7:59 PM ET, Yahoo\)/);
+  assert.match(home, /\$130\.01<span class="fight-note"> \(1-min close, 7:59 PM ET, Schwab\)/);
   assert.match(home, /2123988433618207160/);
   assert.match(home, /<span aria-hidden="true">O <\/span>164\.77/);
   assert.match(home, /<span aria-hidden="true">H <\/span>166\.30/);
   assert.match(home, /<span aria-hidden="true">L <\/span>164\.76/);
-  assert.match(home, /<span aria-hidden="true">C <\/span>165\.46/);
+  assert.match(home, /<span aria-hidden="true">C <\/span>165\.38/);
+  assert.doesNotMatch(home, /Yahoo/);
   assert.match(home, /\$166\.00 target, \$166\.01 KO \(\+27\.7%\)/);
   assert.match(home, /\$94\.02 level, \$94\.01 KO \(-27\.7%\)/);
   assert.match(home, /THE MARKET KO \$94\.01/);

@@ -13,7 +13,7 @@ test("the NVDA card prices the penny KOs from entry and target", () => {
   assert.equal(levels.callerText, "$166.00 target, $166.01 KO (+27.7%)");
   assert.equal(levels.marketText, "$94.02 level, $94.01 KO (-27.7%)");
   assert.equal(card.tape.entry, "$130.01");
-  assert.equal(card.tape.entryNote, "1-min close, 7:59 PM ET, Yahoo");
+  assert.equal(card.tape.entryNote, "1-min close, 7:59 PM ET, Schwab");
   assert.equal(card.tape.asset, "NVDA");
   assert.equal(card.status, "WIN BY KO");
   const meter = meterState(card, levels);
@@ -24,7 +24,8 @@ test("the NVDA card prices the penny KOs from entry and target", () => {
   assert.equal(meter.highLabel, "HIGH $166.30");
   assert.equal(meter.lowLabel, "");
   assert.match(meter.caption, /traded to \$166\.30/);
-  assert.match(meter.caption, /Yahoo 1-minute bars/);
+  assert.match(meter.caption, /Schwab 1-minute bars/);
+  assert.equal(card.result.bar.close, "165.38");
 });
 
 test("a long from 100 to 120 mirrors THE MARKET at 80.00 and 79.99", () => {

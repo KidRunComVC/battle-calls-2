@@ -11,17 +11,17 @@
       "postId": "2123988433618207160",
       "direction": "Bullish",
       "entry": "$130.01",
-      "entryNote": "1-min close, 7:59 PM ET, Yahoo",
+      "entryNote": "1-min close, 7:59 PM ET, Schwab",
       "deadline": "Dec 31, 2026 close",
       "winRule": "A touch at $166.00 or higher wins; $166.01 or higher is a win by KO, before the Dec 31, 2026 close. Only trades after the 10:54 PM ET post minute count. Pre-market, after-hours, and a gap open count. The first touch ends the bout."
     },
     "status": "WIN BY KO",
     "result": {
       "when": "Mon Nov 23, 9:25 AM ET pre-market",
-      "detail": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Yahoo 1-minute bars.",
-      "caption": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Yahoo 1-minute bars.",
+      "detail": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Schwab 1-minute bars.",
+      "caption": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Schwab 1-minute bars.",
       "barLabel": "Nov 23",
-      "bar": { "open": "164.77", "high": "166.30", "low": "164.76", "close": "165.46" },
+      "bar": { "open": "164.77", "high": "166.30", "low": "164.76", "close": "165.38" },
       "scorerName": "HLK IV Quant",
       "scorerLabel": "a Grok Bot",
       "scorerUrl": "https://x.ai/bot"
