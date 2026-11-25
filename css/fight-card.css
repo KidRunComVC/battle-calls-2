@@ -259,8 +259,13 @@
   border-style: dotted;
 }
 
-.fight-result[data-status="win-by-decision"] {
+.fight-result[data-status="win-by-decision"],
+.fight-result[data-status="draw"] {
   border-style: double;
+}
+
+.fight-result[data-status="void"] {
+  border-style: dashed;
 }
 
 .fight-result .fight-kicker,
@@ -349,6 +354,38 @@
   right: 0;
   bottom: 0;
   border-bottom: 2px solid currentColor;
+}
+
+.fight-status-icon-void {
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.fight-status-icon-void::before {
+  content: "";
+  position: absolute;
+  left: 0.42rem;
+  top: 0;
+  height: 1rem;
+  border-left: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.fight-status-icon-draw::before,
+.fight-status-icon-draw::after {
+  content: "";
+  position: absolute;
+  left: 0.12rem;
+  right: 0.12rem;
+  border-top: 2px solid currentColor;
+}
+
+.fight-status-icon-draw::before {
+  top: 0.28rem;
+}
+
+.fight-status-icon-draw::after {
+  top: 0.62rem;
 }
 
 .fight-status-icon-under-review {

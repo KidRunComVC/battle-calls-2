@@ -65,15 +65,18 @@ test("the card shows the caller bout, and archive stays empty", () => {
   assert.match(home, /@MentoviaX versus THE MARKET/);
   assert.match(home, /WIN BY KO/);
   assert.match(home, /Mon Nov 23, 9:25 AM ET pre-market/);
-  assert.match(home, /<span aria-hidden="true">O <\/span>167\.035/);
-  assert.match(home, /<span aria-hidden="true">H <\/span>171\.50/);
-  assert.match(home, /<span aria-hidden="true">L <\/span>156\.93/);
-  assert.match(home, /<span aria-hidden="true">C <\/span>165\.05/);
-  assert.match(home, /\$166\.00 target, \$166\.01 KO \(\+32\.2%\)/);
-  assert.match(home, /\$85\.06 level, \$85\.05 KO \(-32\.2%\)/);
-  assert.match(home, /THE MARKET KO \$85\.05/);
+  assert.match(home, /\$130\.01<span class="fight-note"> \(1-min close, 7:59 PM ET, Yahoo\)/);
+  assert.match(home, /2123988433618207160/);
+  assert.match(home, /<span aria-hidden="true">O <\/span>164\.77/);
+  assert.match(home, /<span aria-hidden="true">H <\/span>166\.30/);
+  assert.match(home, /<span aria-hidden="true">L <\/span>164\.76/);
+  assert.match(home, /<span aria-hidden="true">C <\/span>165\.46/);
+  assert.match(home, /\$166\.00 target, \$166\.01 KO \(\+27\.7%\)/);
+  assert.match(home, /\$94\.02 level, \$94\.01 KO \(-27\.7%\)/);
+  assert.match(home, /THE MARKET KO \$94\.01/);
   assert.match(home, /CALLER KO \$166\.01/);
-  assert.match(home, /HIGH \$171\.50/);
+  assert.match(home, /HIGH \$166\.30/);
+  assert.doesNotMatch(home, /125\.53|85\.06|167\.035/);
   assert.match(home, /Scored by HLK IV Quant/);
   assert.match(home, /a Grok Bot/);
   assert.match(home, /href="https:\/\/x\.ai\/bot" aria-label="Grok Bot website \(opens in a new tab\)" target="_blank" rel="noopener noreferrer"/);
@@ -202,8 +205,15 @@ test("scorecard finishes and edge states", () => {
   assert.match(pages.get("methodology.html"), /Win by KO/);
   assert.match(pages.get("methodology.html"), /Loss by decision/);
   assert.match(pages.get("methodology.html"), /The Price Decided and THE MARKET won/);
-  assert.match(pages.get("methodology.html"), /official closing price of the last regular session/);
-  assert.doesNotMatch(pages.get("methodology.html"), /five trading days|stop-hit|next regular-session open/);
+  assert.match(pages.get("methodology.html"), /1288834974657/);
+  assert.match(pages.get("methodology.html"), /Schwab, then Yahoo/);
+  assert.match(pages.get("methodology.html"), /the call is VOID/);
+  assert.match(pages.get("methodology.html"), /the bout is a DRAW/);
+  assert.match(pages.get("methodology.html"), /deleted by caller/);
+  assert.match(pages.get("methodology.html"), /never cherry-picked by outcome/);
+  assert.match(pages.get("methodology.html"), /seven days after the result is posted/);
+  assert.match(pages.get("methodology.html"), /href="\/battle-calls-2\/corrections\.html"/);
+  assert.doesNotMatch(pages.get("methodology.html"), /official closing price of the last regular session|five trading days|stop-hit|next regular-session open/);
   const logged = renderDocument(
     data.site,
     renderCorrections(data, {

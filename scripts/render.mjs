@@ -543,8 +543,9 @@ export function renderMethodology(data) {
       </section>
       <section aria-labelledby="touch">
         <h2 id="touch" class="display-heading">A touch</h2>
-        <p>A level is hit when price trades there, or when the market gaps open at or past it. Pre-market and after-hours count, along with the regular session. It does not have to be the close.</p>
-        <p>The first touch of either side's level ends the bout. A later move cannot change the result. If both sides' levels are touched in the same minute, the bout is Under review.</p>
+        <p>A level is hit when price trades there, or when the market gaps open at or past it. Pre-market, after-hours, and a gap open count, along with the regular session. It does not have to be the close.</p>
+        <p>Only trades after the post minute count. The candle that sets the entry is not a touch. If the target is already reached at post time, the call is VOID.</p>
+        <p>The first touch of either side's level ends the bout. A later move cannot change the result. If both sides are touched in the same minute, the tie is broken with finer tick or second data. If that finer data still cannot tell which side was first, the bout is a DRAW.</p>
       </section>
       <section aria-labelledby="endings">
         <h2 id="endings" class="display-heading">How it ends</h2>
@@ -555,18 +556,30 @@ export function renderMethodology(data) {
           <li><strong>Loss.</strong> Price hits THE MARKET's level on the penny, and does not go one penny past it.</li>
           <li><strong>Loss by KO.</strong> Price trades one penny past THE MARKET's level.</li>
           <li><strong>Loss by decision.</strong> No level is touched, and the deadline close is on THE MARKET's side of the entry.</li>
+          <li><strong>Void.</strong> The target is already reached at post time. The bout is not scored.</li>
+          <li><strong>Draw.</strong> Both sides are touched in the same minute, and finer data cannot tell which side was first.</li>
         </ul>
         <p class="rule-call">The Price Decided and THE MARKET won.</p>
       </section>
       <section aria-labelledby="clock">
         <h2 id="clock" class="display-heading">The clock</h2>
-        <p>Entry is the official closing price of the last regular session before the post. Prices are never adjusted for dividends or splits. The percent on the card is rounded half-up to one decimal.</p>
+        <p>Entry is the close of the 1-minute candle that contains the post. If that minute has no trade, including extended hours, entry is the close of the last 1-minute candle traded before it. The post time comes from the post ID: shift the ID right by 22 bits and add 1288834974657. That sum is the UTC time in milliseconds. Convert it to Eastern Time and use that minute.</p>
+        <p>The price source is Schwab, then Yahoo, then another named source. The card names the source that was used. Prices are never adjusted for dividends or splits. The percent on the card is rounded half-up to one decimal.</p>
         <p>If no level is touched, the deadline-day regular-session close decides the bout.</p>
         <p>This is commentary and entertainment, not investment advice.</p>
       </section>
+      <section aria-labelledby="post-proof">
+        <h2 id="post-proof" class="display-heading">Post proof</h2>
+        <p>Each bout keeps the post ID, the UTC time from that ID, and the same time in Eastern Time. An archived copy is saved through archive.today or the Wayback Machine. A timestamped screenshot of the post is kept, and its SHA-256 hash is stored in the repo.</p>
+        <p>An edited post is scored from the original version, and the card notes the edit. A deleted post is scored from the archive and labeled "deleted by caller".</p>
+      </section>
+      <section aria-labelledby="selection">
+        <h2 id="selection" class="display-heading">How calls are picked</h2>
+        <p>Every qualifying call from a tracked caller in a set window goes on the card. A call is never cherry-picked by outcome. The wording stays neutral. The card scores only what the post said.</p>
+      </section>
       <section aria-labelledby="corrections-method">
         <h2 id="corrections-method" class="display-heading">Corrections</h2>
-        <p>Mistakes by this site are listed on the ${link("/corrections.html", "corrections log")}, newest first. A correction names the bout, what changed, and why. An edit or deletion at the source does not rewrite the locked call.</p>
+        <p>A caller can ask for a correction for seven days after the result is posted. The request names the bout, the line, and the post. No personal address is published. Accepted corrections are written on the public ${link("/corrections.html", "corrections log")}, newest first. An edit or deletion at the source does not rewrite the locked call.</p>
       </section>
       <section aria-labelledby="method-disclosures">
         <h2 id="method-disclosures" class="display-heading">Disclosures</h2>
@@ -609,10 +622,9 @@ export function renderCorrections(data, corrections) {
     <article class="sheet">
       <div class="wrap sheet-copy">
       <h1>Corrections</h1>
-      <p>When this site gets a quote, a time, a level, or a print wrong, the change is written here, newest first. An edited or deleted source does not change the locked wording.</p>
+      <p>When this site gets a quote, a time, a level, or a print wrong, the change is written here, newest first. An edited or deleted source does not rewrite the locked call.</p>
       ${list}
-      <p>Corrections contact: coming at launch.</p>
-      <p>No personal address is published. A correction request should name the bout, the line, and the original post or broadcast. Accepted corrections are added to this page.</p>
+      <p>A caller can ask for a correction for seven days after the result is posted. No personal address is published. Name the bout, the line, and the post. Accepted corrections are added to this page.</p>
       <p>${link("/methodology.html", "Methodology")}</p>
       </div>
     </article>

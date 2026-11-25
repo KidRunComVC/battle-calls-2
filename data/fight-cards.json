@@ -2,35 +2,36 @@
   {
     "handle": "@MentoviaX",
     "followers": "~31.6K followers",
-    "date": "Fri Nov 20, 2026, 10:54 PM ET",
-    "dateTime": "2026-11-20T22:54:00-05:00",
+    "date": "Fri Nov 20, 2026, 10:54:39 PM ET",
+    "dateTime": "2026-11-20T22:54:39.028-05:00",
     "quote": "PREDICTION: NVIDIA $NVDA WILL SEE $166-172 BY YEAR END AFTER HITTING MY $130 TARGET.",
     "sourceUrl": "https://x.com/MentoviaX/status/2123988433618207160",
     "tape": {
       "asset": "NVDA",
+      "postId": "2123988433618207160",
       "direction": "Bullish",
-      "entry": "$125.53",
-      "entryNote": "official unadjusted Nov 20 close",
+      "entry": "$130.01",
+      "entryNote": "1-min close, 7:59 PM ET, Yahoo",
       "deadline": "Dec 31, 2026 close",
-      "winRule": "A touch at $166.00 or higher wins; $166.01 or higher is a win by KO, before the Dec 31, 2026 close. Pre-market, after-hours, and a gap open count. The first touch ends the bout."
+      "winRule": "A touch at $166.00 or higher wins; $166.01 or higher is a win by KO, before the Dec 31, 2026 close. Only trades after the 10:54 PM ET post minute count. Pre-market, after-hours, and a gap open count. The first touch ends the bout."
     },
     "status": "WIN BY KO",
     "result": {
       "when": "Mon Nov 23, 9:25 AM ET pre-market",
-      "detail": "Traded $166.01 in pre-market, past the Caller's KO. Opened $167.035; regular-session high $171.50 at 10:25 AM ET.",
-      "caption": "Traded $166.01 in pre-market, past the Caller's KO. Opened $167.035; regular-session high $171.50 at 10:25 AM ET.",
+      "detail": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Yahoo 1-minute bars.",
+      "caption": "The 9:25 AM ET pre-market minute traded to $166.30, past the Caller's KO at $166.01. Yahoo 1-minute bars.",
       "barLabel": "Nov 23",
-      "bar": { "open": "167.035", "high": "171.50", "low": "156.93", "close": "165.05" },
+      "bar": { "open": "164.77", "high": "166.30", "low": "164.76", "close": "165.46" },
       "scorerName": "HLK IV Quant",
       "scorerLabel": "a Grok Bot",
       "scorerUrl": "https://x.ai/bot"
     },
     "progress": {
-      "entry": 125.53,
-      "entryLabel": "Entry $125.53",
+      "entry": 130.01,
+      "entryLabel": "Entry $130.01",
       "target": 166,
-      "mark": 171.5,
-      "markLabel": "High $171.50"
+      "mark": 166.3,
+      "markLabel": "High $166.30"
     }
   }
 ]

@@ -10,6 +10,8 @@ const STATUSES = {
   "LOSS BY KO": "loss-by-ko",
   "LOSS BY DECISION": "loss-by-decision",
   "UNDER REVIEW": "under-review",
+  VOID: "void",
+  DRAW: "draw",
   WON: "won",
   LOST: "lost",
 };
@@ -264,6 +266,7 @@ function renderTape(tape, levels) {
   const data = tape || {};
   return `<dl class="fight-tape">
     ${tapeRow("Asset", data.asset)}
+    ${tapeRow("Post ID", data.postId)}
     ${tapeRow("Direction", data.direction)}
     ${tapeRow("Entry", data.entry, note(data.entryNote))}
     ${levels ? tapeRow("Caller", levels.callerText) : ""}
