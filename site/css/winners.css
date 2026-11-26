@@ -1,0 +1,237 @@
+/* Winners page (mockup) */
+.champ {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  background: var(--color-bg-raised);
+  border: var(--space-1) solid var(--color-blood);
+  box-shadow: 0 0 0 3px var(--color-gold);
+}
+@media (min-width: 860px) {
+  .champ { grid-template-columns: 5fr 6fr; align-items: start; padding: var(--space-3); }
+}
+.champ-tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: 0; }
+.champ-tags .stamp { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; }
+.champ-name {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 9vw, var(--text-2xl));
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+.champ-record {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  color: var(--color-gold);
+  line-height: 1;
+}
+.champ-record span { font-size: var(--text-md); font-weight: 500; color: var(--color-muted); letter-spacing: 0.08em; }
+.champ-stats, .counters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-1);
+  margin: var(--space-3) 0;
+  padding: 0;
+  list-style: none;
+}
+.counters { grid-template-columns: repeat(4, 1fr); margin: var(--space-2) 0; }
+.champ-stats li, .counters li {
+  padding: var(--space-2) var(--space-1);
+  background: var(--color-bg);
+  border-top: 3px solid var(--color-blood);
+  text-align: center;
+}
+.champ-stats strong, .counters strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, var(--text-xl));
+  line-height: 1;
+  color: var(--color-gold);
+}
+.champ-stats span, .counters span {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+.champ-bout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--space-2);
+  margin: var(--space-1) 0 0;
+}
+.champ-bout div { padding: var(--space-1) 0; border-bottom: 1px dashed var(--color-line); }
+.champ-bout dt { color: var(--color-muted); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.08em; }
+.champ-bout dd { margin: 0; font-weight: 600; }
+.champ-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+.champ-links .cta { margin-top: 0; }
+
+.lineage, .records { margin-top: var(--space-4); }
+.lineage-list { margin: 0; padding: 0; list-style: none; }
+.lineage-row {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr auto auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+}
+.lineage-row.is-current { background: var(--color-bg-band); border-left: 6px solid var(--color-gold); }
+.lineage-row.is-open { grid-template-columns: 3.5rem 1fr; border: 1px dashed var(--color-line); border-top: 0; color: var(--color-muted); }
+.lineage-no { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); color: var(--color-gold); }
+.is-open .lineage-no { color: var(--color-line); }
+.lineage-who strong { display: block; font-family: var(--font-display); font-size: var(--text-lg); letter-spacing: 0.03em; }
+.lineage-who span { color: var(--color-muted); font-size: var(--text-sm); }
+.lineage-when { color: var(--color-muted); }
+.lineage-row .stamp { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; }
+@media (max-width: 639px) {
+  .lineage-row { grid-template-columns: 2.75rem 1fr; }
+  .lineage-row.is-current .lineage-when, .lineage-row.is-current .stamp { grid-column: 2; justify-self: start; }
+  .counters { grid-template-columns: repeat(2, 1fr); }
+  .champ-bout { grid-template-columns: 1fr; }
+}
+
+.records-scroll { overflow-x: auto; margin-top: var(--space-2); }
+.records-table { width: 100%; border-collapse: collapse; }
+.records-table th, .records-table td { padding: var(--space-1) var(--space-2); text-align: left; border-bottom: 1px solid var(--color-line); }
+.records-table thead th { background: var(--color-blood); color: var(--color-on-blood); font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; }
+.records-table abbr { text-decoration: none; }
+.records-table td:nth-child(2), .records-table td:nth-child(3), .records-table td:nth-child(4), .records-table td:nth-child(5),
+.records-table thead th:nth-child(2), .records-table thead th:nth-child(3), .records-table thead th:nth-child(4), .records-table thead th:nth-child(5) { text-align: center; font-family: var(--font-display); font-size: var(--text-lg); }
+.records-table thead th { font-size: var(--text-md) !important; }
+.records-table tbody th { font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-gold); white-space: nowrap; }
+.records-table .is-house th { color: var(--color-ink); }
+.records-table .is-empty td { color: var(--color-muted); font-style: italic; text-align: left; font-family: var(--font-text); font-size: var(--text-md); border-bottom: 1px dashed var(--color-line); }
+.records-key { margin-top: var(--space-1); color: var(--color-muted); font-size: var(--text-sm); }
+@media (max-width: 639px) {
+  .records-table th, .records-table td { padding: var(--space-1); }
+  .records-table td:last-child, .records-table thead th:last-child { display: none; }
+  .records-table .is-empty td { display: table-cell; }
+}
+/* v1 fixes */
+.lineage-row { border-left: 6px solid transparent; }
+.lineage-row.is-open { grid-template-columns: 3.5rem 1fr; border-left: 6px solid transparent; }
+@media (max-width: 639px) { .lineage-row.is-open { grid-template-columns: 2.75rem 1fr; } }
+.records-method { margin-top: var(--space-1); }
+.records-method a.text-link { padding-left: 0; }
+
+/* v2: shield trophy fills its column */
+.champ-trophy { margin: 0; border: 3px solid var(--color-gold); background: #0c0b0a; overflow: hidden; }
+.champ-trophy img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: center; }
+@media (min-width: 860px) {
+  .champ { grid-template-columns: 4fr 6fr; align-items: stretch; }
+  .champ-trophy { position: relative; min-height: 100%; }
+  .champ-trophy img { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+}
+@media (max-width: 859px) {
+  .champ-trophy img { max-height: 520px; }
+}
+.mini-trophy { display: block; width: 48px; height: 64px; }
+img.mini-trophy { border: 1px solid var(--color-gold); }
+.mini-trophy-open { color: var(--color-line); }
+.lineage-row { grid-template-columns: 3.5rem 48px 1fr auto auto; }
+.lineage-row.is-open { grid-template-columns: 3.5rem 48px 1fr; }
+@media (max-width: 639px) {
+  .lineage-row, .lineage-row.is-open { grid-template-columns: 2.25rem 48px 1fr; gap: var(--space-1) var(--space-2); }
+  .lineage-row.is-current .lineage-when, .lineage-row.is-current .stamp { grid-column: 3; }
+  .lineage-row.is-current .mini-trophy { grid-row: 1 / span 3; align-self: start; }
+  .lineage-row.is-current .lineage-no { grid-row: 1 / span 3; align-self: start; }
+}
+/* v3: bot credit link (same markup as the live card), on the dark card */
+.champ-bout .fight-scored { margin: 0; color: var(--color-ink); font-size: var(--text-md); line-height: 1.4; }
+.champ-bout .fight-scored a,
+.champ-bout .fight-scored a:visited,
+.champ-bout .fight-scored a:hover { color: var(--color-gold); min-height: 0; padding: 0; }
+.champ-bout .fight-scored a:focus-visible { color: var(--color-gold); outline: 3px solid var(--color-focus); outline-offset: 3px; }
+/* v3: bigger #1 thumbnail */
+img.mini-trophy { width: 64px; height: 86px; }
+.lineage-row { grid-template-columns: 3.5rem 64px 1fr auto auto; }
+.lineage-row.is-open { grid-template-columns: 3.5rem 64px 1fr; }
+.mini-trophy-open { justify-self: center; }
+@media (max-width: 639px) {
+  .lineage-row, .lineage-row.is-open { grid-template-columns: 2.25rem 64px 1fr; }
+}
+.champ-links a.text-link { padding-left: 0; }
+.champ-bout .champ-bout-wide { grid-column: 1 / -1; }
+
+/* v7: engraved plaque text over the trophy's blank plaque.
+   The stage is always the image's exact 3:4 box ("cover" sizing done with
+   container units), so % offsets always land on the plaque. */
+.champ-trophy { position: relative; overflow: hidden; container-type: size; container-name: trophy; aspect-ratio: 3 / 4; }
+.trophy-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, 75cqh);
+  aspect-ratio: 3 / 4;
+  transform: translate(-50%, -50%);
+  container-type: inline-size;
+}
+.champ-trophy .trophy-stage img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: fill; max-height: none; }
+@media (min-width: 860px) {
+  .champ-trophy { aspect-ratio: auto; min-height: 100%; }
+}
+@media (max-width: 859px) {
+  .champ-trophy { width: 100%; max-height: 520px; }
+}
+@media (max-width: 859px) {
+  /* show the whole trophy (no crop) so the plaque is always visible */
+  .champ-trophy { width: min(100%, 400px); max-height: none; margin-inline: auto; }
+}
+
+/* v8: plaque text follows the plaque's real perspective.
+   Corners measured in trophy-shield.jpg (864x1152 px):
+   TL 225.1,846.8  TR 500.2,871.0  BR 497.7,999.4  BL 223.9,968.9
+   Text box = 560x224 design px, mapped onto the plaque's inner face
+   (8% side / 13% top-bottom inset) by a homography. */
+.plaque {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560px;
+  height: 224px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  transform: scale(var(--plaque-scale, 0)) matrix3d(0.376369507, -0.0292366175, 0, -7.53872118e-05, -0.000793445977, 0.418543217, 0, 1.42233575e-05, 0, 0, 1, 0, 245.920883, 864.641663, 0, 1);
+  visibility: hidden;
+  pointer-events: none;
+}
+.plaque-ready .plaque { visibility: visible; }
+.plaque span { display: block; }
+.plaque-l1 { font-size: 76px; font-weight: 700; letter-spacing: 0.03em; }
+.plaque-l2, .plaque-l3 { font-size: 44px; font-weight: 500; letter-spacing: 0.08em; }
+/* dark recessed letters; multiply lets the brushed metal show through */
+.plaque-ink { color: rgba(52, 34, 8, 0.92); mix-blend-mode: multiply; }
+/* light catch on the lower edge of each cut */
+.plaque-shine { color: rgba(255, 238, 190, 0.55); mix-blend-mode: screen; transform: scale(var(--plaque-scale, 0)) matrix3d(0.376369507, -0.0292366175, 0, -7.53872118e-05, -0.000793445977, 0.418543217, 0, 1.42233575e-05, 0, 0, 1, 0, 245.920883, 864.641663, 0, 1) translate(0, 3px); filter: blur(0.4px); }
+/* v9: four plaque lines */
+.plaque { gap: 7px; }
+.plaque-l1 { font-size: 64px; }
+.plaque-l2, .plaque-l3, .plaque-l4 { font-size: 36px; font-weight: 500; letter-spacing: 0.08em; }
+.called-date{display:inline-block;margin-left:.75rem;font-size:.9rem;color:rgba(247,241,230,.7);letter-spacing:.02em}
+.winners-logo{display:flex;justify-content:center;align-items:center;margin:2.5rem auto 1rem;width:100%}
+.winners-logo img{display:block;width:min(420px,80%);height:auto;margin:0 auto}
+/* logo centered between "How bouts are scored" and footer ropes (equal 92px gaps) */
+.winners-logo{margin:92px auto -36px}
+
+/* v15: neutral ticker tag + single-call note */
+.stamp-ticker { background: transparent; color: var(--color-ink); border: 1px solid var(--color-muted); }
+.champ-note { margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-sm); font-style: italic; }
