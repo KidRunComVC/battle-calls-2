@@ -1,0 +1,232 @@
+/* Winners page: "Sponsorships available" ringside billboard under the intro. */
+.winners-intro { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "intro" "video" "board"; }
+.winners-intro > .card-intro { grid-area: intro; }
+.winners-intro > .winners-video { grid-area: video; }
+.winners-intro > .billboard { grid-area: board; }
+@media (min-width: 1000px) {
+  .winners-intro {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "intro video" "board video";
+    row-gap: 20px;
+  }
+}
+
+.billboard {
+  --bulb: rgba(255, 225, 163, 0.95);
+  position: relative;
+  margin: 0 0 var(--space-3);
+  border: 4px solid var(--color-gold);
+  border-radius: 12px;
+  box-shadow: 0 0 0 4px var(--color-blood), 0 12px 32px rgba(0, 0, 0, 0.55);
+  background:
+    radial-gradient(ellipse 70% 90% at 50% -20%, rgba(232, 197, 106, 0.22), transparent 70%),
+    var(--color-bg-raised);
+  padding: 14px 8px;
+  overflow: hidden;
+}
+/* marquee bulbs along the top and bottom edges */
+.billboard::before,
+.billboard::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 8px;
+  background: radial-gradient(circle, var(--bulb) 0 2.5px, rgba(232, 197, 106, 0.25) 3.5px, transparent 4.5px) 0 0 / 22px 8px repeat-x;
+  filter: drop-shadow(0 0 3px rgba(255, 210, 120, 0.6));
+  animation: billboard-glow 4s ease-in-out infinite;
+}
+.billboard::before { top: 5px; }
+.billboard::after { bottom: 5px; animation-delay: -2s; }
+@keyframes billboard-glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@media (prefers-reduced-motion: reduce) {
+  .billboard::before, .billboard::after { animation: none; }
+}
+
+.billboard-inner {
+  position: relative;
+  padding: 10px 20px 10px;
+  border-top: 2px solid var(--color-blood);
+  border-bottom: 2px solid var(--color-blood);
+}
+.billboard-jar {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  width: 84px;
+  height: auto;
+  opacity: 0.95;
+}
+.billboard p { margin: 0; max-width: none; }
+.billboard-kicker {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.billboard-title {
+  margin: 0 0 4px;
+  padding-right: 104px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-shadow: 0 0 18px rgba(232, 197, 106, 0.25);
+}
+.billboard-line { padding-right: 104px; font-size: var(--text-lg); color: var(--color-ink); }
+.billboard-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 8px; }
+.billboard-row .billboard-fair { margin-top: 0 !important; flex: 1 1 14rem; }
+.billboard-fair { margin-top: 10px !important; font-size: var(--text-sm); color: var(--color-muted); font-style: italic; }
+.billboard-tips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-line); }
+.billboard-tips-label { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-ink); }
+.billboard-tip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.billboard-note { flex-basis: 100%; }
+.billboard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 14px;
+  border: 2px solid var(--color-gold);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-md);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.billboard .billboard-btn-ask { background: var(--color-blood-hot); color: var(--color-on-blood); }
+.billboard .tip-btn-x { background: #000; color: #fff; }
+.billboard .tip-btn-zec { background: var(--color-gold); color: #1a1714; }
+.billboard-btn img { width: 14px; height: 14px; }
+.zec-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1714;
+  color: var(--color-gold);
+  font-size: 12px;
+  line-height: 1;
+}
+.billboard-btn:hover { border-color: var(--color-focus); filter: brightness(1.08); }
+.billboard-btn:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.billboard-note { margin-top: 0 !important; font-size: 0.8125rem; color: var(--color-muted); }
+.billboard-note a { color: var(--color-gold); }
+@media (max-width: 520px) {
+  .billboard-jar { width: 64px; }
+  .billboard-title, .billboard-line { padding-right: 64px; }
+  .billboard-inner { padding: 12px 14px 10px; }
+}
+@media (min-width: 1000px) { .billboard { margin: 0; align-self: start; } }
+
+/* ---------- Roadside sign (option B): vintage motel-style arrow sign on a short two-post support ---------- */
+.winners-intro > .bb-sign { grid-area: board; }
+.bb-sign { position: relative; margin: 0 0 var(--space-3); }
+.bb-sign .billboard { margin: 0; }
+@media (min-width: 1000px) { .bb-sign { margin: 0; align-self: start; } }
+.bb-sign .billboard-title { font-size: clamp(1.8rem, 3.8vw, 2.25rem); }
+/* ---------- B: vintage motel-style arrow sign ---------- */
+.bb-sign-B { filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55)); }
+.bb-sign-B .billboard {
+  --arrow: 44px;
+  border: 0; border-radius: 0; box-shadow: none;
+  padding: 14px;
+  background: var(--color-blood);
+  clip-path: polygon(0 0, calc(100% - var(--arrow)) 0, 100% 50%, calc(100% - var(--arrow)) 100%, 0 100%);
+}
+.bb-sign-B .billboard::before, .bb-sign-B .billboard::after { left: 12px; right: calc(var(--arrow) + 8px); }
+.bb-sign-B .billboard::before { top: 3px; }
+.bb-sign-B .billboard::after { bottom: 3px; }
+.bb-sign-B .billboard-inner {
+  border: 0;
+  padding: 10px calc(var(--arrow) + 14px) 8px 18px;
+  clip-path: polygon(0 0, calc(100% - var(--arrow) + 6px) 0, 100% 50%, calc(100% - var(--arrow) + 6px) 100%, 0 100%);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(90deg, transparent calc(33% - 1px), rgba(90, 70, 50, 0.18) 33%, transparent calc(33% + 1px), transparent calc(66% - 1px), rgba(90, 70, 50, 0.18) 66%, transparent calc(66% + 1px)),
+    radial-gradient(ellipse at 30% 20%, #f7f1e6, #e9dcc3 80%);
+  color: #2a221b;
+}
+.bb-sign-B .billboard-jar { right: calc(var(--arrow) + 6px); }
+.bb-sign-B .billboard-title { color: var(--color-blood); text-shadow: none; }
+.bb-sign-B .billboard-line, .bb-sign-B .billboard-tips-label { color: #2a221b; }
+.bb-sign-B .billboard-fair, .bb-sign-B .billboard-note { color: #5a4c3e; }
+.bb-sign-B .billboard-note a { color: var(--color-blood); }
+.bb-sign-B .billboard-tips { border-top-color: rgba(90, 70, 50, 0.4); }
+.bb-sign-B .tip-btn-zec { border-color: #b8963d; }
+
+/* short steel support: two I-beam posts, brackets at the sign, a cross brace and small footings */
+.bb-post {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 34px;
+  padding: 0 calc(18% + var(--arrow-pad, 0px)) 0 14%;
+}
+.bb-post::after { /* soft ground shadow */
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 14%;
+  bottom: -3px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), transparent 70%);
+}
+.bb-leg { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: 34px; }
+.bb-bracket { /* plate where the post meets the sign */
+  width: 34px;
+  height: 6px;
+  background: linear-gradient(#7d7369, #4e4740);
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
+}
+.bb-beam { /* I-beam: flanges on both sides, darker web in the middle */
+  flex: 1;
+  width: 14px;
+  background:
+    linear-gradient(90deg, #8a8075 0 3px, #4a433c 3px 11px, #8a8075 11px 14px);
+  box-shadow: 1px 0 0 #2b2722, -1px 0 0 #2b2722;
+}
+.bb-foot { /* small footing at the ground */
+  width: 30px;
+  height: 6px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(#6b6259, #3f3933);
+}
+.bb-brace {
+  position: absolute;
+  z-index: 0;
+  left: calc(14% + 17px);
+  right: calc(18% + 17px);
+  top: 15px;
+  height: 4px;
+  background: linear-gradient(#7d7369, #4a433c);
+}
+@media (max-width: 520px) {
+  .bb-post { height: 30px; padding: 0 22% 0 12%; }
+  .bb-brace { left: calc(12% + 17px); right: calc(22% + 17px); top: 13px; }
+}
+
+/* X Money tip: not live yet. Same look, no link, no hover/focus. */
+.billboard-btn.is-soon { cursor: default; }
+.billboard-btn.is-soon:hover { border-color: inherit; filter: none; }
+.tip-soon {
+  margin-left: 6px;
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.62em;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+}
