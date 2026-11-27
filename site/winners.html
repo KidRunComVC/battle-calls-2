@@ -34,7 +34,10 @@
 <link rel="stylesheet" href="/battle-calls-2/css/fight-card.css">
 <link rel="stylesheet" href="/battle-calls-2/css/meters.css">
 <link rel="stylesheet" href="/battle-calls-2/css/winners.css">
+<link rel="stylesheet" href="/battle-calls-2/css/about-video.css">
+<link rel="stylesheet" href="/battle-calls-2/css/billboard.css">
 <script src="/battle-calls-2/js/plaque.js" defer></script>
+<script src="/battle-calls-2/js/about-video.js" defer></script>
 </head>
 <body class="page-winners">
 <a class="skip-link" href="#content">Skip to content</a>
@@ -56,11 +59,73 @@
   </header>
 <main id="content" tabindex="-1">
 <div class="wrap">
+  <div class="winners-intro">
   <header class="card-intro">
     <h1>Winners</h1>
     <p class="tagline">Every caller who beat THE MARKET.</p>
     <p class="referee">A Battle Call scores one public caller's own posted target against THE MARKET. The caller wins if price touches their target before the deadline. THE MARKET wins if price reaches the same distance the other way first (capped at 50% of entry). The first touch ends the bout. If nothing is touched, the deadline-day close decides it: at or past the entry in the caller's direction is a WIN BY DECISION, and a close exactly at the entry goes to the caller. DRAW and VOID are explained on the <a href="/battle-calls-2/methodology.html" target="_blank" rel="noopener noreferrer">Methodology page<span class="visually-hidden"> (opens in a new tab)</span></a>. Every winner gets their own trophy and a spot in the hall.</p>
   </header>
+      <div class="bb-sign bb-sign-B">
+    <section class="billboard" aria-labelledby="billboard-title">
+      <div class="billboard-inner">
+        <img class="billboard-jar" src="/battle-calls-2/assets/img/tips/tip-jar.svg" width="200" height="188" alt="" decoding="async">
+        <h2 id="billboard-title" class="billboard-title">Sponsorships available</h2>
+        <p class="billboard-line">Your name here, ringside. Sponsor the next bout.</p>
+        <div class="billboard-row">
+          <p class="billboard-cta"><a class="billboard-btn billboard-btn-ask" href="https://kidruncomvc.github.io/contact/" target="_blank" rel="noopener noreferrer">Ask about sponsoring<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+          <p class="billboard-fair">Sponsors never touch the scorecard. Price is the referee.</p>
+        </div>
+        <div class="billboard-tips">
+          <p class="billboard-tips-label">Or just tip the ring crew:</p>
+          <p class="billboard-tip-row">
+            <span class="billboard-btn tip-btn tip-btn-x is-soon" aria-disabled="true"><img src="/battle-calls-2/assets/img/tips/x-logo-white.svg" width="14" height="14" alt="" aria-hidden="true">Tip with X Money<span class="tip-soon">soon</span></span>
+            <a class="billboard-btn tip-btn tip-btn-zec" href="zcash:u1pgdz9j26aulc9z7u98nst7ehu453hqnv5m303s5x2mglrcle2pu2vyn6n5ll4ga2elvwnyg4e4qnenfu7625q0zk6ayelrephkcsx4q40u8qendex0l84peamcegemw5d453tyha6r0sh690f7esnxv5k0qup5xqku9m772xnyp66dr5" target="_blank" rel="noopener noreferrer"><span class="zec-mark" aria-hidden="true">Z</span>Tip with Zodl (Zcash)<span class="visually-hidden"> (opens your Zcash wallet)</span></a>
+          </p>
+          <p class="billboard-note">Zcash opens a wallet app like <a href="https://zodl.com/download/" target="_blank" rel="noopener noreferrer">Zodl<span class="visually-hidden"> (opens in a new tab)</span></a>. No wallet? The <a href="https://kidruncomvc.github.io/contact/thanks/" target="_blank" rel="noopener noreferrer">tip page<span class="visually-hidden"> (opens in a new tab)</span></a> has a QR code.</p>
+        </div>
+      </div>
+    </section>
+    <div class="bb-post" aria-hidden="true">
+      <span class="bb-leg"><span class="bb-bracket"></span><span class="bb-beam"></span><span class="bb-foot"></span></span>
+      <span class="bb-brace"></span>
+      <span class="bb-leg"><span class="bb-bracket"></span><span class="bb-beam"></span><span class="bb-foot"></span></span>
+    </div>
+  </div>
+  <aside class="about-video winners-video" aria-labelledby="about-video-title">
+    <p class="about-video-kicker" id="about-video-title">Fight night replay: NVDA</p>
+    <div class="about-video-frame">
+      <video id="bc-fight-video" src="/battle-calls-2/assets/video/bc-about-fightnight-v2.3.mp4" poster="/battle-calls-2/assets/video/bc-about-fightnight-v2.3-poster.webp" width="1280" height="720" autoplay muted loop playsinline preload="metadata" aria-describedby="about-video-cap"></video>
+      <div class="about-video-controls">
+        <div class="tv-knob" aria-hidden="true">
+          <span class="tv-knob-label">Channel</span>
+          <span class="tv-knob-dial"><span class="tv-knob-nums"><span>BC</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></span><span class="tv-knob-cap" data-tv-knob><img src="/battle-calls-2/assets/img/bc-vs-logo-256.webp" alt="" width="256" height="256" decoding="async"></span></span>
+        </div>
+        <button type="button" class="about-video-btn" data-video-play>Pause</button>
+        <button type="button" class="about-video-btn is-sound" data-video-sound aria-pressed="false">Tap for sound</button>
+      </div>
+    </div>
+    <p class="about-video-cap" id="about-video-cap">A 33-second cartoon replay of the NVDA bout: The Call vs THE MARKET, with Price as the referee. Only the labeled prices are real; the dotted line is not the price path. Entertainment and commentary only, not financial advice, not affiliated with anyone or anything featured. Voices and sound effects: Battle Calls.</p>
+    <p class="about-video-cap about-video-sponsor">Sponsorships available. Sponsors can be featured in future videos and voiceover clips. Or tell us what you’re interested in here: <a class="about-video-msg" href="https://kidruncomvc.github.io/contact/" target="_blank" rel="noopener noreferrer">Message us<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+    <details class="about-video-script">
+      <summary>Read the script</summary>
+      <ol>
+        <li>Announcer: Ladies and gentlemen... welcome to Battle Calls!</li>
+        <li>Announcer: In the gold corner... The Call! NVIDIA, to one sixty-six by year end!</li>
+        <li>Announcer: And in the red corner... The Market! It needs a drop to ninety-four.</li>
+        <li>Announcer: Your referee tonight... PRICE! No judges. No appeals.</li>
+        <li>The Referee (bot voice): “Hold it right there!”</li>
+        <li>The Call (bot voice): “Look at the chart! It’s moving, right now!”</li>
+        <li>The Market (bot voice): “Whoa, whoa, whoa!”</li>
+        <li>Announcer: Down goes The Market!</li>
+        <li>The Referee (bot voice): “Target touched. That’s the bout!”</li>
+        <li>Announcer: “It’s over!”</li>
+        <li>The Market (bot voice): “Wait, what?”</li>
+        <li>The Call (bot voice): “Called it from day one. And you all laughed!”</li>
+        <li>Announcer: Winner, by K.O.... The Call! Entertainment and commentary only. Not financial advice.</li>
+      </ol>
+    </details>
+  </aside>
+  </div>
 
   <!-- 1. Winner card -->
   <section class="champ" aria-labelledby="champ-heading">
